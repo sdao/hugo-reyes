@@ -2,7 +2,7 @@ package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.geom.{DiceInfo, SplitSurface, Surface}
 import scala.collection.mutable
-import edu.utexas.cs.sdao.reyes.core.{Color, Camera}
+import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Camera}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 import java.awt.image.BufferedImage
 
@@ -51,7 +51,7 @@ object Renderer {
     diceInfos.map(diceInfo => {
       println(s"Rendering $diceInfo")
       val dicedGrid = diceInfo.dice
-      val shadedGrid = dicedGrid.shade(DisplacementShaders.noDisplace, ColorShaders.checker(Color.RED, Color.WHITE))
+      val shadedGrid = dicedGrid.shade(DisplacementShaders.noDisplace, ColorShaders.diffuse(Color.RED, Vector3(1.0f, 0.0f, 0.0f)))
       val projectedGrid = shadedGrid.project(cam)
       cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
     })

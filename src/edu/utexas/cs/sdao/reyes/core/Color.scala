@@ -50,7 +50,7 @@ case class Color(r: Float, g: Float, b: Float) {
    * Adjusts any component that is greater than 1.0 down to 1.0.
    */
   def clamp: Color = {
-    Color(min(r, 1.0f), min(g, 1.0f), min(b, 1.0f))
+    Color(max(min(r, 1.0f), 0.0f), max(min(g, 1.0f), 0.0f), max(min(b, 1.0f), 0.0f))
   }
 
   def rgb: Int = {

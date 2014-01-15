@@ -30,7 +30,7 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
           val yy = max(min(buffer.getWidth, y), 0).toInt
 
           if (zBuffer.tryPaint(xx, yy, v1.z))
-            buffer.setRGB(xx, yy, color.rgb)
+            buffer.setRGB(xx, yy, color.clamp.rgb)
         }
       }
     }

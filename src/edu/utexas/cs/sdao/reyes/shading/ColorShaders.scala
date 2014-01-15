@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Color, Vector2}
+import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Vector2}
 
 object ColorShaders {
 
@@ -22,8 +22,8 @@ object ColorShaders {
     }
   }
 
-  def checker(c: Color, d: Color): Vector2 => Color = {
-    (uv) => {
+  def checker(c: Color, d: Color): (Vector3, Vector2) => Color = {
+    (norm, uv) => {
       val uOff = (uv.x * 100.0f).toInt
       val vOff = (uv.y * 100.0f).toInt
 

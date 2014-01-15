@@ -1,6 +1,9 @@
 package edu.utexas.cs.sdao.reyes.core
 
 import math._
+import java.awt.image.BufferedImage
+import java.io.File
+import javax.imageio.ImageIO
 
 /**
  * A pinhole camera projection.
@@ -29,6 +32,11 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
 
   val xform = cameraToScreen * worldToCamera
 
+  private val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+  private val zBuffer = new ZBuffer(width, height)
+
+  private val lock : AnyRef = new Object()
+
   /**
    * Projects a point into the square defined by u=-1..1 and v=-1..1.
    * @param u the vector to project
@@ -45,6 +53,24 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
    */
   def project(u: Vector3): Vector2 = {
     (projectNormalized(u) + Camera.PROJECT_OFFSET) * Vector2(width.toFloat/2.0f, height.toFloat/2.0f)
+  }
+
+  /**
+   * Renders part of the image using a rendering function.
+   * A lock will be acquired before the rendering function begins in
+   * order to keep the image buffer and z-buffer thread-safe.
+   * It is thus best to limit the amount of time spent in the rendering function.
+   * @param func a function that takes an image buffer and z-buffer and renders to them
+   * @return the result of the inner function
+   */
+  def render(func: (BufferedImage, ZBuffer) => Any) = {
+    lock.synchronized { func(buffer, zBuffer) }
+  }
+
+  def writeImageFile(name: String) = {
+    val f = new File(name)
+    f.createNewFile()
+    ImageIO.write(buffer, "png", f)
   }
 }
 

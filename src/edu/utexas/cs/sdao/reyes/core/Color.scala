@@ -5,6 +5,8 @@ import scala.math._
 /**
  * Defines a floating-point color in the RGB color space,
  * with 32-bit precision for each component.
+ *
+ * Each component should be in the range 0..1.
  */
 case class Color(r: Float, g: Float, b: Float) {
 
@@ -51,4 +53,13 @@ case class Color(r: Float, g: Float, b: Float) {
     Color(min(r, 1.0f), min(g, 1.0f), min(b, 1.0f))
   }
 
+  def rgb: Int = {
+    new java.awt.Color(r, g, b).getRGB
+  }
+
+}
+
+object Color {
+  val BLACK = Color(0.0f, 0.0f, 0.0f)
+  val RED = Color(1.0f, 0.0f, 0.0f)
 }

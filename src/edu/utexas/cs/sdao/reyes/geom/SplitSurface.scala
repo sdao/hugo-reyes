@@ -1,6 +1,7 @@
 package edu.utexas.cs.sdao.reyes.geom
 
 import math._
+import edu.utexas.cs.sdao.reyes.core.{Color, Vector2}
 
 /**
  * Represents a split surface that is a portion of a parameterized surface.
@@ -51,11 +52,11 @@ case class SplitSurface(surface: Surface,
         (0 until vDivisions).map(vIndex => {
           val v = startV + height * vIndex.toFloat / (vDivisions - 1).toFloat
 
-          (surface.getVertex(u, v), surface.getNormal(u, v))
+          (surface.getVertex(u, v), surface.getNormal(u, v), Vector2(u, v), Color.BLACK)
         })
       }).toArray
 
-    new MicropolygonGrid(uDivisions, vDivisions, data)
+    new MicropolygonGrid(uDivisions, vDivisions, this, data)
   }
 
   override def toString: String = {

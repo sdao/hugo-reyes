@@ -1,61 +1,51 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{Vector3, Color}
-import scala.math._
-import scala.Some
+import edu.utexas.cs.sdao.reyes.core._
 
-class MicropolygonGrid(width: Int, height: Int) {
+/**
+ * A grid of micropolygons on a UV surface.
+ * @param width the number of U segments
+ * @param height the number of V segments
+ * @param data an array of tuples, the first element being the vertex and the second being the normal;
+ *             this array is arranged in U-major order, i.e. all elements with the same U-index are contiguous.
+ */
+class MicropolygonGrid(width: Int,
+                       height: Int,
+                       data: Array[(Vector3, Vector3)]) {
 
-  val vertices = Array.ofDim[Vector3](width, height)
-  val normals = Array.ofDim[Vector3](width, height)
-
-  def setVertex(u: Int, v: Int, vertex: Vector3) = {
-    vertices(u)(v) = vertex
+  if (data.length != width * height) {
+    throw new IllegalArgumentException("length of data array != width * height")
   }
 
-  def getVertex(u: Int, v: Int) = vertices(u)(v)
+  private def idx(u: Int, v: Int) = u * width + v
 
-  def setNormal(u: Int, v: Int, normal: Vector3) = {
-    vertices(u)(v) = normal
-  }
+  def getVertex(u: Int, v: Int) = data(idx(u, v))._1
 
-  def getNormal(u: Int, v: Int) = normals(u)(v)
+  def getNormal(u: Int, v: Int) = data(idx(u, v))._2
 
   /**
-   * Determines if the current micropolygon grid can be split and, if
-   * so, on which axis.
-   * @return None if the grid isn't splittable;
-   *         Some[SplitDirection] if the grid should be split on the
-   *         given direction
+   * Projects the grid onto the screen.
    */
-  def isSplittable: Option[SplitDirection] = {
-    val faceDistances =
-      (0 until MicropolygonGrid.DICE_COUNT - 1).flatMap(u => {
-        (0 until MicropolygonGrid.DICE_COUNT - 1).map(v => {
-          val v1 = getVertex(u, v).toVector2
-          val v2 = getVertex(u + 1, v).toVector2
-          val v3 = getVertex(u, v + 1).toVector2
-
-          (v1.dist(v2), v1.dist(v3)) // (u-dist, v-dist)
-        })
-      })
-
-    val maxUDist = faceDistances.map(_._1).max * MicropolygonGrid.DICE_COUNT
-    val maxVDist = faceDistances.map(_._2).max * MicropolygonGrid.DICE_COUNT
-
-    if (max(maxUDist, maxVDist) > MicropolygonGrid.SPLIT_THRESHOLD) {
-      if (maxUDist > maxVDist)
-        Some(SplitU)
-      else
-        Some(SplitV)
-    } else {
-      None
-    }
+  def project(cam: Camera): ProjectedMicropolygonGrid = {
+    new ProjectedMicropolygonGrid(
+      width,
+      height,
+      data.map(x => {
+        val vtx = x._1
+        val norm = x._2
+        val proj = cam.project(vtx)
+        (Vector3(proj.x, proj.y, vtx.z), norm)
+      }),
+      cam
+    )
   }
 
-}
+  /**
+   * Determines the bounding box of the grid.
+   * @return the bounding box
+   */
+  def boundingBox: BoundingBox = {
+    data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
+  }
 
-object MicropolygonGrid {
-  val DICE_COUNT = 8
-  val SPLIT_THRESHOLD = 32
 }

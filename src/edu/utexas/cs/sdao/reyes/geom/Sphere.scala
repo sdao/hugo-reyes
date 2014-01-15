@@ -1,12 +1,12 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{Vector3, BoundingBox}
+import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
 import math._
 
 case class Sphere(radius: Float, origin: Vector3) extends Surface {
 
   def boundingBox: BoundingBox =
-    BoundingBox(origin - radius, origin + radius)
+    FilledBoundingBox(origin - radius, origin + radius)
 
   def getVertex(u: Float, v: Float): Vector3 = {
     // Spheres have a special property:
@@ -20,14 +20,14 @@ case class Sphere(radius: Float, origin: Vector3) extends Surface {
     }
 
     // Map u ~ [0.0, 1.0] to uAngle ~ [0, 2*PI]
-    val uAngle = 2.0f * Pi * u
+    val uAngle = 2.0 * Pi * u
 
     // Map v ~ [0.0, 1.0] to vAngle ~ [-PI/2, PI/2]
     val vAngle = Pi * (v - 0.5)
 
     Vector3((cos(vAngle) * sin(uAngle)).toFloat,
       sin(vAngle).toFloat,
-      (cos(vAngle) * sin(uAngle)).toFloat)
+      (cos(vAngle) * cos(uAngle)).toFloat).normalize
   }
 
 }

@@ -40,24 +40,27 @@ case class SplitSurface(surface: Surface,
     )
   }
 
-  def dice(uDivisions: Int, vDivisions: Int): MicropolygonGrid = {
-    val grid = new MicropolygonGrid(uDivisions, vDivisions)
-
+  def dice(uDivisions: Int = ProjectedMicropolygonGrid.DICE_COUNT,
+           vDivisions: Int = ProjectedMicropolygonGrid.DICE_COUNT): MicropolygonGrid = {
     val width = endU - startU
     val height = endV - startV
-    for (uIndex <- 0 until uDivisions) {
-      val u = startU + width * uIndex.toFloat / (uDivisions - 1).toFloat
-      for (vIndex <- 0 until vDivisions) {
-        val v = startV + height * vIndex.toFloat / (vDivisions - 1).toFloat
 
-        grid.setVertex(uIndex, vIndex, surface.getVertex(u, v))
-        grid.setNormal(uIndex, vIndex, surface.getNormal(u, v))
-      }
-    }
+    val data =
+      (0 until uDivisions).flatMap(uIndex => {
+        val u = startU + width * uIndex.toFloat / (uDivisions - 1).toFloat
+        (0 until vDivisions).map(vIndex => {
+          val v = startV + height * vIndex.toFloat / (vDivisions - 1).toFloat
 
-    grid
+          (surface.getVertex(u, v), surface.getNormal(u, v))
+        })
+      }).toArray
+
+    new MicropolygonGrid(uDivisions, vDivisions, data)
   }
 
+  override def toString: String = {
+    f"$startU < u < $endU, $startV < v < $endV ($surface)"
+  }
 }
 
 abstract class SplitDirection

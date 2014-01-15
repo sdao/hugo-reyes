@@ -51,7 +51,7 @@ object Renderer {
     diceInfos.map(diceInfo => {
       println(s"Rendering $diceInfo")
       val dicedGrid = diceInfo.dice
-      val shadedGrid = dicedGrid.shade(DisplacementShaders.noDisplace, ColorShaders.solid(Color.RED))
+      val shadedGrid = dicedGrid.shade(DisplacementShaders.noDisplace, ColorShaders.checker(Color.RED, Color.WHITE))
       val projectedGrid = shadedGrid.project(cam)
       cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
     })

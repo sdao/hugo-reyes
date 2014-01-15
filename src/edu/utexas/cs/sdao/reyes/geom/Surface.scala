@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{Vector3, BoundingBox}
+import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
 
 /**
  * A surface parameterized over UV coordinates.
@@ -11,7 +11,7 @@ trait Surface {
    * Calculates the bounding box.
    * @return A box containing the bounds of the surface.
    */
-  def boundingBox: BoundingBox
+  def boundingBox: FilledBoundingBox
 
   /**
    * Creates a new split surface with this surface, unsplit,

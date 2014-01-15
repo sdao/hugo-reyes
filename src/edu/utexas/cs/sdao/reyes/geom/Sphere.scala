@@ -5,7 +5,7 @@ import math._
 
 case class Sphere(radius: Float, origin: Vector3) extends Surface {
 
-  def boundingBox: BoundingBox =
+  def boundingBox: FilledBoundingBox =
     FilledBoundingBox(origin - radius, origin + radius)
 
   def getVertex(u: Float, v: Float): Vector3 = {

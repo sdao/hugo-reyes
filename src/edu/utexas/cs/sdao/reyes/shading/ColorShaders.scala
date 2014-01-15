@@ -8,4 +8,16 @@ object ColorShaders {
     (uv) => c
   }
 
+  def checker(c: Color, d: Color): Vector2 => Color = {
+    (uv) => {
+      val uOff = (uv.x * 100.0f).toInt
+      val vOff = (uv.y * 100.0f).toInt
+
+      if (uOff % 2 == vOff % 2)
+        c
+      else
+        d
+    }
+  }
+
 }

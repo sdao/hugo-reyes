@@ -102,6 +102,6 @@ class ProjectedMicropolygonGrid(width: Int,
 
 object ProjectedMicropolygonGrid {
   val DICE_COUNT = 8
-  val SPLIT_THRESHOLD = 32
+  val SPLIT_THRESHOLD = 16
   val MAX_SPLIT = 20
 }

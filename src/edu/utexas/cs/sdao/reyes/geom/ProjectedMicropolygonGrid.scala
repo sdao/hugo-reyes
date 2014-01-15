@@ -15,7 +15,7 @@ class ProjectedMicropolygonGrid(width: Int,
   extends MicropolygonGrid(width, height, surface, data) {
 
   // We have to calculate the maximum length along the U- and V-axes.
-  val faceDistances =
+  lazy val faceDistances =
     (0 until ProjectedMicropolygonGrid.DICE_COUNT - 1).flatMap(u => {
       (0 until ProjectedMicropolygonGrid.DICE_COUNT - 1).map(v => {
         val v1 = getVertex(u, v).toVector2
@@ -26,8 +26,8 @@ class ProjectedMicropolygonGrid(width: Int,
       })
     })
 
-  val maxUDist = faceDistances.map(_._1).max * ProjectedMicropolygonGrid.DICE_COUNT
-  val maxVDist = faceDistances.map(_._2).max * ProjectedMicropolygonGrid.DICE_COUNT
+  lazy val maxUDist = faceDistances.map(_._1).max * ProjectedMicropolygonGrid.DICE_COUNT
+  lazy val maxVDist = faceDistances.map(_._2).max * ProjectedMicropolygonGrid.DICE_COUNT
 
   /**
    * Determines if the current micropolygon grid can be split and, if

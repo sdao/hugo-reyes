@@ -4,7 +4,6 @@ import edu.utexas.cs.sdao.reyes.geom.{DiceInfo, SplitSurface, Surface}
 import scala.collection.mutable
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Camera}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
-import java.awt.image.BufferedImage
 
 object Renderer {
 
@@ -16,6 +15,7 @@ object Renderer {
     }
 
     val done = mutable.MutableList[DiceInfo]()
+    /* val debugDiscard = mutable.MutableList[DiceInfo]() */
 
     while (queue.nonEmpty) {
       val surface = queue.dequeue()
@@ -26,7 +26,9 @@ object Renderer {
           case Some(dir) => queue ++= grid.split(dir)
           case None => done += grid.diceInfo
         }
-      }
+      } /* else {
+        debugDiscard += grid.diceInfo
+      } */
     }
 
     done.toList

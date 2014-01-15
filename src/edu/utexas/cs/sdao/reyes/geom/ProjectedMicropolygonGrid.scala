@@ -74,10 +74,10 @@ class ProjectedMicropolygonGrid(width: Int,
     boundingBox match {
       case EmptyBoundingBox() => false
       case FilledBoundingBox(lowBound, upBound) =>
-        upBound.x >= -cam.width / 2.0f &&
-          lowBound.x <= cam.width / 2.0f &&
-          upBound.y >= -cam.height / 2.0f &&
-          lowBound.y <= cam.height / 2.0f &&
+        upBound.x >= 0.0f &&
+          lowBound.x <= cam.width &&
+          upBound.y >= 0.0f &&
+          lowBound.y <= cam.height &&
           -lowBound.z >= cam.near /* must negate z, since using the OpenGL convention
                                      of pointing towards the negative z-axis */
     }

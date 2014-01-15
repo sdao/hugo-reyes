@@ -5,6 +5,6 @@ package edu.utexas.cs.sdao.reyes
  */
 object Main {
   def main(args: Array[String]): Unit = {
-    Console.println("Hello!")
+    Console.println("This is the Hugo Reyes renderer...")
   }
 }

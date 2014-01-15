@@ -67,12 +67,12 @@ class MicropolygonGrid(width: Int,
    * @param colorMap a function that maps a UV coordinate to a surface color
    * @return a new micropolygon grid
    */
-  def shade(displacementMap: (Vector3, Vector3, Vector2) => (Vector3, Vector3), colorMap: Vector2 => Color): MicropolygonGrid = {
+  def shade(displacementMap: (Vector3, Vector3, Vector2) => (Vector3, Vector3), colorMap: (Vector3, Vector2) => Color): MicropolygonGrid = {
     val newData = data.map(x => {
       val displacement = displacementMap(x._1, x._2, x._3)
       val vtx = displacement._1
       val norm = displacement._2
-      val color = colorMap(x._3)
+      val color = colorMap(x._2, x._3)
       (vtx, norm, x._3, color)
     })
 

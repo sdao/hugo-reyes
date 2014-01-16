@@ -17,8 +17,8 @@ class ProjectedMicropolygonGrid(width: Int,
   // TODO: Check if this is right.
   // We have to calculate the maximum length along the U- and V-axes.
   lazy val faceDistances =
-    (0 until ProjectedMicropolygonGrid.DICE_COUNT - 1).flatMap(u => {
-      (0 until ProjectedMicropolygonGrid.DICE_COUNT - 1).map(v => {
+    (0 until width - 1).flatMap(u => {
+      (0 until height - 1).map(v => {
         val v1 = getVertex(u, v).toVector2
         val v2 = getVertex(u + 1, v).toVector2
         val v3 = getVertex(u, v + 1).toVector2

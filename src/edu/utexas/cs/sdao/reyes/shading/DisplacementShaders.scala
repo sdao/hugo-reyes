@@ -12,4 +12,16 @@ object DisplacementShaders {
     (vtx, normal, uv) => (vtx + normal * dist, normal)
   }
 
+  def checkerDisplace(dist1: Float, dist2: Float): (Vector3, Vector3, Vector2) => (Vector3, Vector3) = {
+    (vtx, normal, uv) => {
+      val uOff = (uv.x * 10.0f).toInt
+      val vOff = (uv.y * 10.0f).toInt
+
+      if (uOff % 2 == vOff % 2)
+        (vtx + normal * dist1, normal)
+      else
+        (vtx + normal * dist2, normal)
+    }
+  }
+
 }

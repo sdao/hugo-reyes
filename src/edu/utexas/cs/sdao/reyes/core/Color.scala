@@ -63,4 +63,5 @@ object Color {
   val BLACK = Color(0.0f, 0.0f, 0.0f)
   val WHITE = Color(1.0f, 1.0f, 1.0f)
   val RED = Color(1.0f, 0.0f, 0.0f)
+  val GREEN = Color(0.0f, 0.8f, 0.2f)
 }

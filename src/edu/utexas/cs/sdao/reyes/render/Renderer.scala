@@ -4,14 +4,17 @@ import edu.utexas.cs.sdao.reyes.geom.{DiceInfo, SplitSurface, Surface}
 import scala.collection.mutable
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Camera}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
+import javax.swing.{SwingUtilities, JFrame}
+import java.awt.Dimension
+import edu.utexas.cs.sdao.reyes.ui.ImagePanel
 
 object Renderer {
 
   def split(surfaces: Iterable[Surface], cam: Camera): List[DiceInfo] = {
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
-      // TODO: only enqueue surfaces whose bounding boxes intersect the camera frustum.
-      queue.enqueue(x.toSplitSurface)
+      if (cam.containsBoundingBox(cam.project(x.boundingBox)))
+        queue.enqueue(x.toSplitSurface)
     }
 
     val done = mutable.MutableList[DiceInfo]()
@@ -49,13 +52,33 @@ object Renderer {
     })
   }
 
+  private def renderSingle(diceInfo: DiceInfo, cam: Camera) = {
+    println(s"Rendering $diceInfo")
+    val dicedGrid = diceInfo.dice
+    val shadedGrid = dicedGrid.shade(DisplacementShaders.checkerDisplace(0.0f, 0.2f),
+      ColorShaders.diffuse(Color.GREEN, Vector3(1.0f, 0.0f, 1.0f)))
+    val projectedGrid = shadedGrid.project(cam)
+    cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
+  }
+
   def render(diceInfos: Iterable[DiceInfo], cam: Camera) {
-    diceInfos.map(diceInfo => {
-      println(s"Rendering $diceInfo")
-      val dicedGrid = diceInfo.dice
-      val shadedGrid = dicedGrid.shade(DisplacementShaders.noDisplace, ColorShaders.diffuse(Color.RED, Vector3(1.0f, 0.0f, 1.0f)))
-      val projectedGrid = shadedGrid.project(cam)
-      cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
+    diceInfos.par.map(diceInfo => { renderSingle(diceInfo, cam) })
+  }
+
+  def renderInteractive(diceInfos: Iterable[DiceInfo], cam: Camera) {
+    val frame = new JFrame("Render Output")
+    val panel = new ImagePanel(cam.image)
+
+    frame.setPreferredSize(new Dimension(cam.width, cam.height))
+    frame.add(panel)
+    frame.pack()
+    frame.setVisible(true)
+
+    diceInfos.par.map(diceInfo => {
+      renderSingle(diceInfo, cam)
+      SwingUtilities.invokeAndWait(new Runnable {
+        def run(): Unit = panel.repaint()
+      })
     })
   }
 

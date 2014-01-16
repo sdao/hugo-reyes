@@ -24,8 +24,8 @@ object ColorShaders {
 
   def checker(c: Color, d: Color): (Vector3, Vector2) => Color = {
     (norm, uv) => {
-      val uOff = (uv.x * 100.0f).toInt
-      val vOff = (uv.y * 100.0f).toInt
+      val uOff = (uv.x * 10.0f).toInt
+      val vOff = (uv.y * 10.0f).toInt
 
       if (uOff % 2 == vOff % 2)
         c

@@ -68,19 +68,11 @@ class ProjectedMicropolygonGrid(width: Int,
 
   /**
    * Determines if the current micropolygon grid is visible.
+   * This will also clip objects between the camera and the near plane.
    * @return the visibility of the grid
    */
   def isVisible: Boolean = {
-    boundingBox match {
-      case EmptyBoundingBox() => false
-      case FilledBoundingBox(lowBound, upBound) =>
-        upBound.x >= 0.0f &&
-          lowBound.x <= cam.width &&
-          upBound.y >= 0.0f &&
-          lowBound.y <= cam.height &&
-          -lowBound.z >= cam.near /* must negate z, since using the OpenGL convention
-                                     of pointing towards the negative z-axis */
-    }
+    cam.containsBoundingBox(boundingBox)
   }
 
   def rasterize(buffer: BufferedImage, zBuffer: ZBuffer) = {

@@ -72,11 +72,12 @@ class MicropolygonGrid(width: Int,
       val displacement = displacementMap(x._1, x._2, x._3)
       val vtx = displacement._1
       val norm = displacement._2
+
+      // TODO: allow normal recomputation.
+
       val color = colorMap(x._2, x._3)
       (vtx, norm, x._3, color)
     })
-
-    // TODO: allow normal recomputation.
 
     new MicropolygonGrid(width, height, surface, newData)
   }

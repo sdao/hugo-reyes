@@ -55,6 +55,32 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
     (projectNormalized(u) + Camera.PROJECT_OFFSET) * Vector2(width.toFloat/2.0f, height.toFloat/2.0f)
   }
 
+  def project(b: FilledBoundingBox): FilledBoundingBox = {
+    val newLow = project(b.lowBound)
+    val newUp = project(b.upBound)
+    FilledBoundingBox(Vector3(newLow.x, newLow.y, b.lowBound.z),
+      Vector3(newUp.x, newUp.y, b.upBound.z))
+  }
+
+  /**
+   * Determines if a certain bounding box is contained within the camera's
+   * view frustum, at least partially.
+   * This will also clip objects between the camera and the near plane.
+   * @return the visibility of the bounding box
+   */
+  def containsBoundingBox(boundingBox: BoundingBox): Boolean = {
+    boundingBox match {
+      case EmptyBoundingBox() => false
+      case FilledBoundingBox(lowBound, upBound) =>
+        upBound.x >= 0.0f &&
+          lowBound.x <= width &&
+          upBound.y >= 0.0f &&
+          lowBound.y <= height &&
+          -lowBound.z >= near /* must negate z, since using the OpenGL convention
+                                 of pointing towards the negative z-axis */
+    }
+  }
+
   /**
    * Renders part of the image using a rendering function.
    * A lock will be acquired before the rendering function begins in
@@ -66,6 +92,8 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
   def render(func: (BufferedImage, ZBuffer) => Any) = {
     lock.synchronized { func(buffer, zBuffer) }
   }
+
+  def image = buffer
 
   def writeImageFile(name: String) = {
     val f = new File(name)

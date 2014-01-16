@@ -58,8 +58,9 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
   def project(b: FilledBoundingBox): FilledBoundingBox = {
     val newLow = project(b.lowBound)
     val newUp = project(b.upBound)
-    FilledBoundingBox(Vector3(newLow.x, newLow.y, b.lowBound.z),
-      Vector3(newUp.x, newUp.y, b.upBound.z))
+    BoundingBox.empty
+      .expand(Vector3(newLow.x, newLow.y, b.lowBound.z))
+      .expand(Vector3(newUp.x, newUp.y, b.upBound.z))
   }
 
   /**

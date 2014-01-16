@@ -35,8 +35,8 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
       for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
         if (contains(Vector2(x, y))) {
           if (x >= 0 && x < buffer.getWidth && y >= 0 && y < buffer.getHeight) {
-            if (zBuffer.tryPaint(x, y, v1.z))
-              buffer.setRGB(x, y, color.clamp.rgb)
+            if (zBuffer.tryPaint(x, buffer.getHeight - y - 1, v1.z))
+              buffer.setRGB(x, buffer.getHeight - y - 1, color.clamp.rgb)
           }
         }
       }

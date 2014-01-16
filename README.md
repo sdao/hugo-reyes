@@ -1,7 +1,7 @@
 Hugo Reyes
 ==========
 
-[Hugo Reyes](http://en.wikipedia.org/wiki/Hugo_Reyes) is a character on lost.
+[Hugo Reyes](http://en.wikipedia.org/wiki/Hugo_Reyes) is a character on the television series _Lost_.
 It is also the name of a renderer, written in Scala, that uses the Reyes algorithm (or rather, something very similar to it), in order to generate imagery.
 
 This renderer is partially based on the one presented in Alexander Boswell's [tutorial](http://www.steckles.com/reyes1.html).
@@ -9,6 +9,8 @@ The pipeline is basically the same (start with parametric surfaces, split them a
 This version is intended to be simpler and easier to follow in learning how the Reyes algorithm works; as a consequent, it is often slower and unoptimized.
 My code is largely written to be immutable; i.e. geometry and micropolygon grids are not modified as they pass through the pipeline; instead, new objects are generated and passed down.
 One result of this is that everything after splitting is completely parallelizable.
+
+None of the code has been translated directly, so if you're following Boswell's tutorial, you'll find that it doesn't match up. A lot of changes in the structure were due to designing the classes in a "Scala-esque" way, e.g. by using immutable objects instead of performing calculations in-place.
 
 Shaders are passed as Scala lambdas; for example, a displacement shader can be written that takes the input vertex and UV, displacing the vertex based on the UV position.
 

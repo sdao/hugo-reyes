@@ -14,6 +14,14 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
     BoundingBox.empty.expand(v1).expand(v2).expand(v3).expand(v4)
   }
 
+  /**
+   * Determines whether the micropolygon contains the given screen point.
+   * Note that the current implementation returns false for points contained
+   * within a micropolygon whose normal is pointing away from the camera,
+   * i.e. one that is backfacing.
+   * @param v the screen point to test
+   * @return whether the screen point is contained in the micrpolygon
+   */
   def contains(v: Vector2) = {
     ((v.y - v1.y) * (v1.x - v2.x) - (v.x - v1.x) * (v1.y - v2.y)) <= 0 &&
       ((v.y - v2.y) * (v2.x - v3.x) - (v.x - v2.x) * (v2.y - v3.y)) <= 0 &&
@@ -23,14 +31,13 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
 
   def rasterize(buffer: BufferedImage, zBuffer: ZBuffer) = {
     val bounds = boundingBox
-    for (x <- bounds.lowBound.x to bounds.upBound.x by 1.0f) {
-      for (y <- bounds.lowBound.y to bounds.upBound.y by 1.0f) {
+    for (x <- floor(bounds.lowBound.x).toInt to ceil(bounds.upBound.x).toInt) {
+      for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
         if (contains(Vector2(x, y))) {
-          val xx = max(min(buffer.getWidth, x), 0).toInt
-          val yy = max(min(buffer.getWidth, y), 0).toInt
-
-          if (zBuffer.tryPaint(xx, yy, v1.z))
-            buffer.setRGB(xx, yy, color.clamp.rgb)
+          if (x >= 0 && x < buffer.getWidth && y >= 0 && y < buffer.getHeight) {
+            if (zBuffer.tryPaint(x, y, v1.z))
+              buffer.setRGB(x, y, color.clamp.rgb)
+          }
         }
       }
     }

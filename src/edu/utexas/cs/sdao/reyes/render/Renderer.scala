@@ -55,8 +55,10 @@ object Renderer {
   private def renderSingle(diceInfo: DiceInfo, cam: Camera) = {
     println(s"Rendering $diceInfo")
     val dicedGrid = diceInfo.dice
-    val shadedGrid = dicedGrid.shade(DisplacementShaders.checkerDisplace(0.0f, 0.2f),
-      ColorShaders.diffuse(Color.GREEN, Vector3(1.0f, 0.0f, 1.0f)))
+    val shadedGrid = dicedGrid.shade(DisplacementShaders.bumpyDisplace,
+      ColorShaders.checker(ColorShaders.diffuse(Color.GREEN, Vector3(1.0f, -0.5f, 1.0f).normalize),
+        ColorShaders.diffuse(Color.BLUE, Vector3(1.0f, -0.5f, 1.0f).normalize)),
+      recalcNormals = true)
     val projectedGrid = shadedGrid.project(cam)
     cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
   }

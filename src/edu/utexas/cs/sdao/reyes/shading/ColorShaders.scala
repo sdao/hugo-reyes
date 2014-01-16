@@ -22,15 +22,16 @@ object ColorShaders {
     }
   }
 
-  def checker(c: Color, d: Color): (Vector3, Vector2) => Color = {
+  def checker(c: (Vector3, Vector2) => Color,
+              d: (Vector3, Vector2) => Color): (Vector3, Vector2) => Color = {
     (norm, uv) => {
-      val uOff = (uv.x * 10.0f).toInt
+      val uOff = (uv.x * 20.0f).toInt
       val vOff = (uv.y * 10.0f).toInt
 
       if (uOff % 2 == vOff % 2)
-        c
+        c(norm, uv)
       else
-        d
+        d(norm, uv)
     }
   }
 

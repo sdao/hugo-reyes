@@ -67,19 +67,43 @@ class MicropolygonGrid(width: Int,
    * @param colorMap a function that maps a UV coordinate to a surface color
    * @return a new micropolygon grid
    */
-  def shade(displacementMap: (Vector3, Vector3, Vector2) => (Vector3, Vector3), colorMap: (Vector3, Vector2) => Color): MicropolygonGrid = {
-    val newData = data.map(x => {
+  def shade(displacementMap: (Vector3, Vector3, Vector2) => (Vector3, Vector3),
+            colorMap: (Vector3, Vector2) => Color,
+            recalcNormals: Boolean): MicropolygonGrid = {
+    val displacedData = data.map(x => {
       val displacement = displacementMap(x._1, x._2, x._3)
       val vtx = displacement._1
       val norm = displacement._2
-
-      // TODO: allow normal recomputation.
-
-      val color = colorMap(x._2, x._3)
-      (vtx, norm, x._3, color)
+      (vtx, norm, x._3)
     })
 
-    new MicropolygonGrid(width, height, surface, newData)
+    val fixedNormalsData =
+      if (recalcNormals) recalculateNormals(displacedData)
+      else displacedData
+
+    val coloredData = fixedNormalsData.map(x => {
+      val color = colorMap(x._2, x._3)
+      (x._1, x._2, x._3, color)
+    })
+
+    new MicropolygonGrid(width, height, surface, coloredData)
+  }
+
+  private def recalculateNormals(oldData: Array[(Vector3, Vector3, Vector2)]):
+    Array[(Vector3, Vector3, Vector2)] = {
+    (0 until width).flatMap(u => {
+      (0 until height).map(v => {
+        val old = oldData(idx(u, v))
+        val newNormal =
+          if (u < width - 1 && v < height - 1) {
+            val v1 = getVertex(u, v) - getVertex(u + 1, v)
+            val v2 = getVertex(u, v) - getVertex(u, v + 1)
+            (v1 cross v2).normalize
+          } else old._2
+
+        (old._1, newNormal, old._3)
+      })
+    }).toArray
   }
 
 }

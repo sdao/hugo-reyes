@@ -63,8 +63,8 @@ class ProjectedMicropolygonGrid(width: Int,
    * @return the dice info
    */
   def diceInfo = DiceInfo(surface,
-    max(1, ceil(maxUDist * 2.0f).toInt),
-    max(1, ceil(maxVDist * 2.0f).toInt))
+    max(1, ceil(maxUDist * 4.0f).toInt),
+    max(1, ceil(maxVDist * 4.0f).toInt))
 
   /**
    * Determines if the current micropolygon grid is visible.

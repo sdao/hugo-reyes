@@ -14,6 +14,7 @@ class ProjectedMicropolygonGrid(width: Int,
                                 cam: Camera)
   extends MicropolygonGrid(width, height, surface, data) {
 
+  // TODO: Check if this is right.
   // We have to calculate the maximum length along the U- and V-axes.
   lazy val faceDistances =
     (0 until ProjectedMicropolygonGrid.DICE_COUNT - 1).flatMap(u => {
@@ -63,8 +64,8 @@ class ProjectedMicropolygonGrid(width: Int,
    * @return the dice info
    */
   def diceInfo = DiceInfo(surface,
-    max(1, ceil(maxUDist * 4.0f).toInt),
-    max(1, ceil(maxVDist * 4.0f).toInt))
+    max(1, ceil(maxUDist * 8.0f).toInt),
+    max(1, ceil(maxVDist * 8.0f).toInt))
 
   /**
    * Determines if the current micropolygon grid is visible.

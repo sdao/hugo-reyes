@@ -96,8 +96,8 @@ class MicropolygonGrid(width: Int,
         val old = oldData(idx(u, v))
         val newNormal =
           if (u < width - 1 && v < height - 1) {
-            val v1 = getVertex(u, v) - getVertex(u + 1, v)
-            val v2 = getVertex(u, v) - getVertex(u, v + 1)
+            val v1 = oldData(idx(u, v))._1 - oldData(idx(u + 1, v))._1
+            val v2 = oldData(idx(u, v))._1 - oldData(idx(u, v + 1))._1
             (v1 cross v2).normalize
           } else old._2
 

@@ -60,9 +60,17 @@ case class Color(r: Float, g: Float, b: Float) {
 }
 
 object Color {
+
   val BLACK = Color(0.0f, 0.0f, 0.0f)
   val WHITE = Color(1.0f, 1.0f, 1.0f)
   val RED = Color(1.0f, 0.0f, 0.0f)
   val GREEN = Color(0.0f, 0.8f, 0.2f)
   val BLUE = Color(0.1f, 0.2f, 0.8f)
+
+  def fromRGB(n: Int) = {
+    val javaColor = new java.awt.Color(n)
+    val comps = javaColor.getRGBColorComponents(null)
+    Color(comps(0), comps(1), comps(2))
+  }
+
 }

@@ -25,6 +25,12 @@ object ColorShaders {
     }
   }
 
+  def diffuse(t: Texture, light: Vector3): ColorShader = {
+    (norm, uv) => {
+      t(uv) * (light dot norm)
+    }
+  }
+
   def checker(c: ColorShader, d: ColorShader): ColorShader = {
     (norm, uv) => {
       val uOff = (uv.x * 20.0f).toInt

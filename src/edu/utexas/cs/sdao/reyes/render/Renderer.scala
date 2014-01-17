@@ -106,7 +106,7 @@ object Renderer {
     val frame = new JFrame("Render Output")
     val panel = new ImagePanel(cam.image)
 
-    frame.setPreferredSize(new Dimension(cam.width, cam.height))
+    frame.setPreferredSize(new Dimension(cam.realWidth, cam.realHeight))
     frame.add(panel)
     frame.pack()
     frame.setVisible(true)

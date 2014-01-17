@@ -4,7 +4,9 @@ import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Vector2}
 
 object ColorShaders {
 
-  def solid(c: Color): (Vector3, Vector2) => Color = {
+  type ColorShader = (Vector3, Vector2) => Color
+
+  def solid(c: Color): ColorShader = {
     (norm, uv) => c
   }
 
@@ -12,18 +14,18 @@ object ColorShaders {
    * Creates a diffuse shader with the specified surface color
    * and the specified light direction. The magnitude of the light
    * vector will be used for the intensity of the light.
+   * @param c the color of the surface
+   * @param light the direction of the light source, relative to the surface
+   *              (i.e. the negation of the direction of the light from the light source itself)
    * @return a diffuse shader
    */
-  def diffuse(c: Color, light: Vector3): (Vector3, Vector2) => Color = {
+  def diffuse(c: Color, light: Vector3): ColorShader = {
     (norm, uv) => {
-      val lightNormalized = light.normalize
-      val lightMagnitude = light.length
-      c * (lightNormalized dot norm) * lightMagnitude
+      c * (light dot norm)
     }
   }
 
-  def checker(c: (Vector3, Vector2) => Color,
-              d: (Vector3, Vector2) => Color): (Vector3, Vector2) => Color = {
+  def checker(c: ColorShader, d: ColorShader): ColorShader = {
     (norm, uv) => {
       val uOff = (uv.x * 20.0f).toInt
       val vOff = (uv.y * 10.0f).toInt
@@ -34,5 +36,7 @@ object ColorShaders {
         d(norm, uv)
     }
   }
+
+  val DEFAULT = solid(Color.GREEN)
 
 }

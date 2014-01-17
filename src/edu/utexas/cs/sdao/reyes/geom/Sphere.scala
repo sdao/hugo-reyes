@@ -2,8 +2,13 @@ package edu.utexas.cs.sdao.reyes.geom
 
 import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
 import math._
+import edu.utexas.cs.sdao.reyes.shading.{DisplacementShaders, ColorShaders}
 
-case class Sphere(radius: Float, origin: Vector3) extends Surface {
+case class Sphere(radius: Float,
+                  origin: Vector3,
+                  displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
+                  color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
+  extends Surface(displace, color) {
 
   def boundingBox: FilledBoundingBox =
     FilledBoundingBox(origin - radius, origin + radius)

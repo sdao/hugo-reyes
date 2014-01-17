@@ -62,29 +62,29 @@ class MicropolygonGrid(width: Int,
 
   /**
    * Performs shading routines on the micropolygon grid and returns a new grid.
-   * @param displacementMap a function that maps a vertex, a normal, and a UV coordinate to
-   *                        a new vertex and a new normal
-   * @param colorMap a function that maps a UV coordinate to a surface color
+   * The grid will be displaced and colored. Normals will be recalculated
+   * after displacement.
+   * @param displaceOnly whether to only displace the grid without calculating colors
    * @return a new micropolygon grid
    */
-  def shade(displacementMap: (Vector3, Vector3, Vector2) => (Vector3, Vector3),
-            colorMap: (Vector3, Vector2) => Color,
-            recalcNormals: Boolean): MicropolygonGrid = {
+  def shade(displaceOnly: Boolean = false): MicropolygonGrid = {
     val displacedData = data.map(x => {
-      val displacement = displacementMap(x._1, x._2, x._3)
-      val vtx = displacement._1
-      val norm = displacement._2
-      (vtx, norm, x._3)
+      val displacement = surface.surface.displacementShader(x._1, x._2, x._3)
+      (displacement, x._2, x._3)
     })
 
-    val fixedNormalsData =
-      if (recalcNormals) recalculateNormals(displacedData)
-      else displacedData
+    val fixedNormalsData = recalculateNormals(displacedData)
 
-    val coloredData = fixedNormalsData.map(x => {
-      val color = colorMap(x._2, x._3)
-      (x._1, x._2, x._3, color)
-    })
+    val coloredData =
+      if (displaceOnly)
+        fixedNormalsData.map(x => {
+          (x._1, x._2, x._3, Color.BLACK)
+        })
+      else
+        fixedNormalsData.map(x => {
+          val color = surface.surface.colorShader(x._2, x._3)
+          (x._1, x._2, x._3, color)
+        })
 
     new MicropolygonGrid(width, height, surface, coloredData)
   }

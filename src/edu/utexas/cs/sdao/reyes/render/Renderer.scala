@@ -36,7 +36,9 @@ object Renderer {
 
     while (queue.nonEmpty) {
       val surface = queue.dequeue()
-      val grid = surface.dice().project(cam)
+      // We should displace here to more accurately determine how many
+      // micropolygons are needed for the displaced surface.
+      val grid = surface.dice().shade(displaceOnly = true).project(cam)
 
       if (grid.isVisible) { // Only continue with microgrids that we'll actually see.
         grid.isSplittable match {
@@ -76,10 +78,7 @@ object Renderer {
   private def renderSingle(diceInfo: DiceInfo, cam: Camera): Unit = {
     println(s"Rendering $diceInfo")
     val dicedGrid = diceInfo.dice
-    val shadedGrid = dicedGrid.shade(DisplacementShaders.bumpyDisplace,
-      ColorShaders.checker(ColorShaders.diffuse(Color.GREEN, Vector3(0.0f, 0.5f, 1.0f).normalize),
-        ColorShaders.diffuse(Color.BLUE, Vector3(0.0f, 0.5f, 1.0f).normalize)),
-      recalcNormals = true)
+    val shadedGrid = dicedGrid.shade()
     val projectedGrid = shadedGrid.project(cam)
     cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
   }

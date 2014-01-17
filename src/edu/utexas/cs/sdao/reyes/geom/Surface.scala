@@ -1,11 +1,15 @@
 package edu.utexas.cs.sdao.reyes.geom
 
 import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
+import edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DisplacementShader
+import edu.utexas.cs.sdao.reyes.shading.ColorShaders.ColorShader
+import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 
 /**
  * A surface parameterized over UV coordinates.
  */
-trait Surface {
+abstract class Surface(val displacementShader: DisplacementShader = DisplacementShaders.DEFAULT,
+                       val colorShader: ColorShader = ColorShaders.DEFAULT) {
 
   /**
    * Calculates the bounding box.

@@ -29,12 +29,23 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
       ((v.y - v4.y) * (v4.x - v1.x) - (v.x - v4.x) * (v4.y - v1.y)) <= 0
   }
 
-  def rasterize(buffer: BufferedImage, zBuffer: ZBuffer) = {
+  /**
+   * Paints the micropolygon onto a buffer, using a z-buffer to determine overlaps.
+   * Points outside of a near-far range will be culled, as will points off the
+   * output image rectangle.
+   * @param buffer the buffer in which to paint the image
+   * @param zBuffer the z-buffer to use in calculating overlaps
+   * @param near the near plane distance; this should be positive
+   * @param far the far plane distance; this should be positive
+   */
+  def rasterize(buffer: BufferedImage, zBuffer: ZBuffer, near: Float, far: Float) = {
     val bounds = boundingBox
     for (x <- floor(bounds.lowBound.x).toInt to ceil(bounds.upBound.x).toInt) {
       for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
-        if (contains(Vector2(x, y))) {
-          if (x >= 0 && x < buffer.getWidth && y >= 0 && y < buffer.getHeight) {
+        if (x >= 0 && x < buffer.getWidth &&
+          y >= 0 && y < buffer.getHeight &&
+          -v1.z >= near && -v1.z <= far) {
+          if (contains(Vector2(x, y))) {
             if (zBuffer.tryPaint(x, buffer.getHeight - y - 1, v1.z))
               buffer.setRGB(x, buffer.getHeight - y - 1, color.clamp.rgb)
           }

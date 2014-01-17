@@ -77,8 +77,8 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
           lowBound.x <= width &&
           upBound.y >= 0.0f &&
           lowBound.y <= height &&
-          -lowBound.z >= near /* must negate z, since using the OpenGL convention
-                                 of pointing towards the negative z-axis */
+          -lowBound.z >= near && // Must negate z, since using the OpenGL convention
+          -lowBound.z <= far     // of pointing towards the negative z-axis.
     }
   }
 

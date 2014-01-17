@@ -14,7 +14,6 @@ class ProjectedMicropolygonGrid(width: Int,
                                 cam: Camera)
   extends MicropolygonGrid(width, height, surface, data) {
 
-  // TODO: Check if this is right.
   // We have to calculate the maximum length along the U- and V-axes.
   lazy val faceDistances =
     (0 until width - 1).flatMap(u => {
@@ -64,8 +63,8 @@ class ProjectedMicropolygonGrid(width: Int,
    * @return the dice info
    */
   def diceInfo = DiceInfo(surface,
-    max(1, ceil(maxUDist * 8.0f).toInt),
-    max(1, ceil(maxVDist * 8.0f).toInt))
+    max(1, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt),
+    max(1, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt))
 
   /**
    * Determines if the current micropolygon grid is visible.
@@ -88,7 +87,7 @@ class ProjectedMicropolygonGrid(width: Int,
         val color = getColor(u, v)
         Micropolygon(v1, v2, v3, v4, norm, color)
       })
-    }).map(_.rasterize(buffer, zBuffer))
+    }).map(_.rasterize(buffer, zBuffer, cam.near, cam.far))
   }
 
 }
@@ -97,4 +96,5 @@ object ProjectedMicropolygonGrid {
   val DICE_COUNT = 8
   val SPLIT_THRESHOLD = 16
   val MAX_SPLIT = 20
+  val SAMPLE_RATE = 8.0f
 }

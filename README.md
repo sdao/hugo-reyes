@@ -10,6 +10,8 @@ This version is intended to be simpler and easier to follow in learning how the 
 My code is largely written to be immutable; i.e. geometry and micropolygon grids are not modified as they pass through the pipeline; instead, new objects are generated and passed down.
 One result of this is that everything after splitting is completely parallelizable.
 
+It also now supports supersampling! A supersampling factor can be specified that multiplies the number of pixels sampled.
+
 None of the code has been translated directly, so if you're following Boswell's tutorial, you'll find that it doesn't match up. A lot of changes in the structure were due to designing the classes in a "Scala-esque" way, e.g. by using immutable objects instead of performing calculations in-place.
 
 Shaders are passed as Scala lambdas; for example, a displacement shader can be written that takes the input vertex and UV, displacing the vertex based on the UV position.

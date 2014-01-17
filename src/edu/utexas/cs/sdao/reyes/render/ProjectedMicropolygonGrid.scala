@@ -1,4 +1,4 @@
-package edu.utexas.cs.sdao.reyes.geom
+package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
 import scala.math._
@@ -6,6 +6,7 @@ import edu.utexas.cs.sdao.reyes.core.FilledBoundingBox
 import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
 import scala.Some
 import java.awt.image.BufferedImage
+import edu.utexas.cs.sdao.reyes.geom.{SplitV, SplitU, SplitDirection, SplitSurface}
 
 class ProjectedMicropolygonGrid(width: Int,
                                 height: Int,

@@ -1,4 +1,6 @@
-package edu.utexas.cs.sdao.reyes.geom
+package edu.utexas.cs.sdao.reyes.render
+
+import edu.utexas.cs.sdao.reyes.geom.SplitSurface
 
 /**
  * Stores information on how to best dice a specific surface.

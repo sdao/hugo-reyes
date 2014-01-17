@@ -2,6 +2,7 @@ package edu.utexas.cs.sdao.reyes.geom
 
 import math._
 import edu.utexas.cs.sdao.reyes.core.{Color, Vector2}
+import edu.utexas.cs.sdao.reyes.render.{MicropolygonGrid, ProjectedMicropolygonGrid}
 
 /**
  * Represents a split surface that is a portion of a parameterized surface.

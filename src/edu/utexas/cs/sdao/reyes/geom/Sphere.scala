@@ -28,7 +28,7 @@ case class Sphere(radius: Float,
     val uAngle = 2.0 * Pi * u
 
     // Map v ~ [0.0, 1.0] to vAngle ~ [-PI/2, PI/2]
-    val vAngle = Pi * (v - 0.5)
+    val vAngle = -Pi * (v - 0.5)
 
     Vector3((cos(vAngle) * sin(uAngle)).toFloat,
       sin(vAngle).toFloat,

@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.render
 
-import edu.utexas.cs.sdao.reyes.geom.{DiceInfo, SplitSurface, Surface}
+import edu.utexas.cs.sdao.reyes.geom.{SplitSurface, Surface}
 import scala.collection.mutable
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Camera}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}

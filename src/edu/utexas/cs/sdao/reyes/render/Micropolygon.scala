@@ -1,4 +1,4 @@
-package edu.utexas.cs.sdao.reyes.geom
+package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
 import java.awt.image.BufferedImage
@@ -23,10 +23,10 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
    * @return whether the screen point is contained in the micrpolygon
    */
   def contains(v: Vector2) = {
-    ((v.y - v1.y) * (v1.x - v2.x) - (v.x - v1.x) * (v1.y - v2.y)) <= 0 &&
-      ((v.y - v2.y) * (v2.x - v3.x) - (v.x - v2.x) * (v2.y - v3.y)) <= 0 &&
-      ((v.y - v3.y) * (v3.x - v4.x) - (v.x - v3.x) * (v3.y - v4.y)) <= 0 &&
-      ((v.y - v4.y) * (v4.x - v1.x) - (v.x - v4.x) * (v4.y - v1.y)) <= 0
+    ((v.y - v1.y) * (v1.x - v2.x) - (v.x - v1.x) * (v1.y - v2.y)) >= 0 &&
+      ((v.y - v2.y) * (v2.x - v3.x) - (v.x - v2.x) * (v2.y - v3.y)) >= 0 &&
+      ((v.y - v3.y) * (v3.x - v4.x) - (v.x - v3.x) * (v3.y - v4.y)) >= 0 &&
+      ((v.y - v4.y) * (v4.x - v1.x) - (v.x - v4.x) * (v4.y - v1.y)) >= 0
   }
 
   /**

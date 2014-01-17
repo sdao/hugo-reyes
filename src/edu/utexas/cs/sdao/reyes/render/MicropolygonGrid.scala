@@ -1,6 +1,7 @@
-package edu.utexas.cs.sdao.reyes.geom
+package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
+import edu.utexas.cs.sdao.reyes.geom.SplitSurface
 
 /**
  * A grid of micropolygons on a UV surface.

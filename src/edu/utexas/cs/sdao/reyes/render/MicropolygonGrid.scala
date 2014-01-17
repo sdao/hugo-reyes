@@ -21,6 +21,8 @@ class MicropolygonGrid(width: Int,
     throw new IllegalArgumentException("length of data array != width * height")
   }
 
+  lazy val bounds = data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
+
   private def idx(u: Int, v: Int) = u * height + v
 
   def getVertex(u: Int, v: Int) = data(idx(u, v))._1
@@ -57,9 +59,7 @@ class MicropolygonGrid(width: Int,
    * Determines the bounding box of the grid.
    * @return the bounding box
    */
-  def boundingBox: BoundingBox = {
-    data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
-  }
+  def boundingBox: BoundingBox = bounds
 
   /**
    * Performs shading routines on the micropolygon grid and returns a new grid.

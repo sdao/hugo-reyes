@@ -1,12 +1,27 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{Vector3, FilledBoundingBox}
+import edu.utexas.cs.sdao.reyes.core.{BoundingBox, Vector3, FilledBoundingBox}
+import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 
-case class Plane(width: Float, length: Float, origin: Vector3, faceNegative: Boolean) extends Surface {
+case class Plane(width: Float,
+                 length: Float,
+                 origin: Vector3,
+                 uAxis: Vector3,
+                 vAxis: Vector3,
+                 displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
+                 color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
+  extends Surface(displace, color) {
+
+  val uNormalized = uAxis.normalize
+
+  val vNormalized = vAxis.normalize
+
+  val normal = (uNormalized cross vNormalized).normalize
+
+  val zeroPoint = origin - uAxis * width / 2.0f - vAxis * length / 2.0f
 
   def boundingBox: FilledBoundingBox =
-    FilledBoundingBox(Vector3(origin.x - width / 2.0f, origin.y - length / 2.0f, origin.z),
-      Vector3(origin.x + width / 2.0f, origin.y + length / 2.0f, origin.z))
+    BoundingBox.empty.expand(getVertex(0.0f, 0.0f)).expand(getVertex(1.0f, 1.0f))
 
   /**
    * Gets the world coordinates at a certain UV coordinate.
@@ -15,7 +30,7 @@ case class Plane(width: Float, length: Float, origin: Vector3, faceNegative: Boo
    * @return the world coordinates
    */
   def getVertex(u: Float, v: Float): Vector3 = {
-    boundingBox.lowBound + Vector3(u * width, v * length, 0.0f)
+    zeroPoint + uAxis * width * u + vAxis * length * v
   }
 
   /**
@@ -24,10 +39,6 @@ case class Plane(width: Float, length: Float, origin: Vector3, faceNegative: Boo
    * @param v the V component
    * @return the world-space normal
    */
-  def getNormal(u: Float, v: Float): Vector3 = {
-    if (faceNegative)
-      Vector3(0.0f, 0.0f, -1.0f)
-    else
-      Vector3(0.0f, 0.0f, 1.0f)
-  }
+  def getNormal(u: Float, v: Float): Vector3 = normal
+
 }

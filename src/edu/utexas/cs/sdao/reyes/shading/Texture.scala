@@ -3,7 +3,13 @@ package edu.utexas.cs.sdao.reyes.shading
 import math._
 import java.awt.image.BufferedImage
 import edu.utexas.cs.sdao.reyes.core.{Vector2, Color}
+import javax.imageio.ImageIO
+import java.io.File
 
+/**
+ * A texture backed by an image file.
+ * @param img the image file
+ */
 case class Texture(img: BufferedImage) {
 
   private def getColor(x: Int, y: Int): Color = {
@@ -20,10 +26,10 @@ case class Texture(img: BufferedImage) {
     val y = uv.y * (img.getHeight - 1)
 
     val x1 = floor(x).toInt
-    val x2 = min(img.getWidth - 1, ceil(x).toInt)
+    val x2 = ceil(x).toInt
 
     val y1 = floor(y).toInt
-    val y2 = min(img.getHeight - 1, ceil(y).toInt)
+    val y2 = ceil(y).toInt
 
     val xTail = x - x1
     val xHead = 1.0f - xTail
@@ -34,6 +40,14 @@ case class Texture(img: BufferedImage) {
       getColor(x2, y1) * xTail * yHead +
       getColor(x1, y2) * xHead * yTail +
       getColor(x2, y2) * xTail * yTail
+  }
+
+}
+
+object Texture {
+
+  def readFromFile(path: String): Texture = {
+    Texture(ImageIO.read(new File(path)))
   }
 
 }

@@ -42,8 +42,8 @@ case class SplitSurface(surface: Surface,
     )
   }
 
-  def dice(uDivisions: Int = ProjectedMicropolygonGrid.DICE_COUNT,
-           vDivisions: Int = ProjectedMicropolygonGrid.DICE_COUNT): MicropolygonGrid = {
+  def dice(uDivisions: Int = ProjectedMicropolygonGrid.INITIAL_DICE_COUNT,
+           vDivisions: Int = ProjectedMicropolygonGrid.INITIAL_DICE_COUNT): MicropolygonGrid = {
     val width = endU - startU
     val height = endV - startV
 

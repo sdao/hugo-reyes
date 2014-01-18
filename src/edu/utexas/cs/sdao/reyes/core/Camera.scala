@@ -46,7 +46,7 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
    * @return the projected vector
    */
   private def projectNormalized(u: Vector3): Vector2 = {
-    (xform * u).toVector2
+    (xform * u).toVector2.clamp
   }
 
   /**
@@ -73,8 +73,10 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
   }
 
   /**
-   * Determines if a certain bounding box is contained within the camera's
+   * Determines if a certain projected bounding box is contained within the camera's
    * view frustum, at least partially.
+   * The projected bounding box's x- and y-components should be in screen space,
+   * whereas the z-component should be in scene world space.
    * This will also clip objects between the camera and the near plane.
    * @return the visibility of the bounding box
    */

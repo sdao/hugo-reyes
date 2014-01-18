@@ -41,7 +41,11 @@ case class Vector3(x: Float, y: Float, z: Float) {
    * assuming that (x, y, z) is a homogenous vector.
    * @return a Vector2 containing the (x/z, y/z) components
    */
-  def toVector2: Vector2 = Vector2(x/z, y/z)
+  def toVector2: Vector2 =
+    if (z != 0.0f)
+      Vector2(x/z, y/z)
+    else
+      Vector2.ZERO
 
   /**
    * Returns the vector (x, y), discarding the z-component.
@@ -54,7 +58,8 @@ case class Vector3(x: Float, y: Float, z: Float) {
 }
 
 object Vector3 {
-
   val ZERO = Vector3(0.0f, 0.0f, 0.0f)
-
+  val I = Vector3(1.0f, 0.0f, 0.0f)
+  val J = Vector3(0.0f, 1.0f, 0.0f)
+  val K = Vector3(0.0f, 0.0f, 1.0f)
 }

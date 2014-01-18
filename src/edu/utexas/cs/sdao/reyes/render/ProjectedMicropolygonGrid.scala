@@ -66,8 +66,8 @@ class ProjectedMicropolygonGrid(width: Int,
    * @return the dice info
    */
   def diceInfo = DiceInfo(surface,
-    max(1, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt),
-    max(1, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt))
+      max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)),
+      max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)))
 
   /**
    * Determines if the current micropolygon grid is visible.
@@ -96,8 +96,9 @@ class ProjectedMicropolygonGrid(width: Int,
 }
 
 object ProjectedMicropolygonGrid {
-  val DICE_COUNT = 8
+  val INITIAL_DICE_COUNT = 8
   val SPLIT_THRESHOLD = 64
   val MAX_SPLIT = 20
-  val SAMPLE_RATE = 2.0f
+  val MAX_DICE = 200
+  val SAMPLE_RATE = 1.0f
 }

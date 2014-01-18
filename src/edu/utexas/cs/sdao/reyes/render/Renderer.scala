@@ -90,8 +90,20 @@ object Renderer {
    * @param diceInfos the dicing parameters, including the surface to dice
    * @param cam the camera on which to project
    */
-  def render(diceInfos: Iterable[DiceInfo], cam: Camera) {
+  def render(diceInfos: Iterable[DiceInfo], cam: Camera) = {
     diceInfos.par.map(diceInfo => { renderSingle(diceInfo, cam) })
+    println("Render complete.")
+  }
+
+  /**
+   * Like render(), but processes each diced chunk sequentially.
+   * You should probably use render() instead.
+   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param cam the camera on which to project
+   */
+  def renderSequential(diceInfos: Iterable[DiceInfo], cam: Camera) = {
+    diceInfos.map(diceInfo => { renderSingle(diceInfo, cam) })
+    println("Render complete.")
   }
 
   /**
@@ -117,6 +129,8 @@ object Renderer {
         def run(): Unit = panel.repaint()
       })
     })
+
+    println("Render complete.")
   }
 
 }

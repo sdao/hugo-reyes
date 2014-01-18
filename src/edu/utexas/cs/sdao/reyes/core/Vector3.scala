@@ -47,13 +47,7 @@ case class Vector3(x: Float, y: Float, z: Float) {
     else
       Vector2.ZERO
 
-  /**
-   * Returns the vector (x, y), discarding the z-component.
-   * This method differs from toVector2 in that it does not
-   * adjust by the scalar for homogenous coordinates.
-   * @return a Vector2 containing the (x, y) components
-   */
-  def truncateToVector2: Vector2 = Vector2(x, y)
+  def dist2D(r: Vector3) = sqrt(pow(x - r.x, 2.0f) + pow(y - r.y, 2.0f)).toFloat
 
 }
 

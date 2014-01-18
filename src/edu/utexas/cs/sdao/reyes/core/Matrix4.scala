@@ -163,16 +163,4 @@ object Matrix4 {
                       0.0f,     0.0f,     0.0f,     1.0f))
   }
 
-  def perspective(fieldOfViewRads: Float,
-                  aspect: Float,
-                  near: Float,
-                  far: Float) = {
-    val yMax = near * tan(fieldOfViewRads / 2.0f).toFloat
-    val xMax = yMax * aspect
-
-    new Matrix4(Array((2.0f * near)/(2.0f * xMax), 0.0f, 0.0f, 0.0f,
-                      0.0f, (2.0f * near)/(2.0f * yMax), 0.0f, 0.0f,
-                      0.0f, 0.0f, (near + far)/(near - far), (2.0f * near * far)/(near - far),
-                      0.0f, 0.0f, -1.0f, 0.0f))
-  }
 }

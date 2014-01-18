@@ -18,17 +18,17 @@ class ProjectedMicropolygonGrid(width: Int,
   // We have to calculate the maximum length along the U- and V-axes.
   lazy val maxUDist = (0 until height).map(v => {
     (0 until width - 1).map(u => {
-      val v1 = getVertex(u, v).truncateToVector2
-      val v2 = getVertex(u + 1, v).truncateToVector2
-      v1.dist(v2)
+      val v1 = getVertex(u, v)
+      val v2 = getVertex(u + 1, v)
+      v1.dist2D(v2)
     }).sum
   }).max
 
   lazy val maxVDist = (0 until width).map(u => {
     (0 until height - 1).map(v => {
-      val v1 = getVertex(u, v).truncateToVector2
-      val v2 = getVertex(u, v + 1).truncateToVector2
-      v1.dist(v2)
+      val v1 = getVertex(u, v)
+      val v2 = getVertex(u, v + 1)
+      v1.dist2D(v2)
     }).sum
   }).max
 

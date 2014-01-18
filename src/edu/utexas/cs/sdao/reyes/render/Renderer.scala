@@ -22,8 +22,9 @@ object Renderer {
    * @param surfaces the surfaces to split
    * @param cam the camera to project the surfaces onto when splitting.
    * @return a list containing the split surfaces, prepared for the dicing step
+   *         and sorted by increasing z-depth
    */
-  def split(surfaces: Iterable[Surface], cam: Camera): List[DiceInfo] = {
+  def split(surfaces: Iterable[Surface], cam: Camera): Vector[PipelineInfo] = {
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
       // Only enqueue objects that are in the camera's view frustum.
@@ -31,7 +32,7 @@ object Renderer {
         queue.enqueue(x.toSplitSurface)
     }
 
-    val done = mutable.MutableList[DiceInfo]()
+    val done = mutable.MutableList[PipelineInfo]()
     /* val debugDiscard = mutable.MutableList[DiceInfo]() */
 
     while (queue.nonEmpty) {
@@ -43,18 +44,18 @@ object Renderer {
       if (grid.isVisible) { // Only continue with microgrids that we'll actually see.
         grid.isSplittable match {
           case Some(dir) => queue ++= grid.split(dir)
-          case None => done += grid.diceInfo
+          case None => done += grid.pipelineInfo
         }
       } /* else {
         debugDiscard += grid.diceInfo
       } */
     }
 
-    done.toList
+    done.toVector.sortBy(-_.zDepth)
   }
 
-  def debugVerifySplit(diceInfos: Iterable[DiceInfo]): Unit =
-    debugVerifySplitSurfaces(diceInfos.map(_.surface))
+  def debugVerifySplit(pipelineObjs: Iterable[PipelineInfo]): Unit =
+    debugVerifySplitSurfaces(pipelineObjs.map(_.surface))
 
   def debugVerifySplitSurfaces(splitSurfaces: Iterable[SplitSurface]): Unit = {
     splitSurfaces.groupBy(x => x.surface).map(group => {
@@ -72,10 +73,10 @@ object Renderer {
    * Renders a single split surface based on the dicing information given.
    * This function will dice, shade, and rasterize the split surface
    * using the given camera.
-   * @param diceInfo the dicing parameters, including the surface to dice
+   * @param diceInfo the pipeline object, including the surface to dice
    * @param cam the camera on which to project
    */
-  private def renderSingle(diceInfo: DiceInfo, cam: Camera): Unit = {
+  private def renderSingle(diceInfo: PipelineInfo, cam: Camera): Unit = {
     println(s"Rendering $diceInfo")
     val dicedGrid = diceInfo.dice
     val shadedGrid = dicedGrid.shade()
@@ -87,22 +88,22 @@ object Renderer {
    * Renders all of the split surfaces in a list.
    * This function will dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param pipelineObjs the pipeline objects, including the surface to dice
    * @param cam the camera on which to project
    */
-  def render(diceInfos: Iterable[DiceInfo], cam: Camera) = {
-    diceInfos.par.map(diceInfo => { renderSingle(diceInfo, cam) })
+  def render(pipelineObjs: Iterable[PipelineInfo], cam: Camera) = {
+    pipelineObjs.par.foreach(pipelineInfo => { renderSingle(pipelineInfo, cam) })
     println("Render complete.")
   }
 
   /**
    * Like render(), but processes each diced chunk sequentially.
    * You should probably use render() instead.
-   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param pipelineObjs the pipeline objects, including the surface to dice
    * @param cam the camera on which to project
    */
-  def renderSequential(diceInfos: Iterable[DiceInfo], cam: Camera) = {
-    diceInfos.map(diceInfo => { renderSingle(diceInfo, cam) })
+  def renderSequential(pipelineObjs: Iterable[PipelineInfo], cam: Camera) = {
+    pipelineObjs.foreach(pipelineInfo => { renderSingle(pipelineInfo, cam) })
     println("Render complete.")
   }
 
@@ -111,10 +112,10 @@ object Renderer {
    * image preview window as the rendering occurs.
    * This function will dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param pipelineObjs the pipeline objects, including the surface to dice
    * @param cam the camera on which to project
    */
-  def renderInteractive(diceInfos: Iterable[DiceInfo], cam: Camera) {
+  def renderInteractive(pipelineObjs: Iterable[PipelineInfo], cam: Camera) {
     val frame = new JFrame("Render Output")
     val panel = new ImagePanel(cam.image)
 
@@ -123,8 +124,8 @@ object Renderer {
     frame.pack()
     frame.setVisible(true)
 
-    diceInfos.par.map(diceInfo => {
-      renderSingle(diceInfo, cam)
+    pipelineObjs.par.foreach(pipelineInfo => {
+      renderSingle(pipelineInfo, cam)
       SwingUtilities.invokeAndWait(new Runnable {
         def run(): Unit = panel.repaint()
       })

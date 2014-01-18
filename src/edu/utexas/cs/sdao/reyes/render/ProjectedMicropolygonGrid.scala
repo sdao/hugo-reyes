@@ -65,7 +65,8 @@ class ProjectedMicropolygonGrid(width: Int,
    * Helper function to calculate dicing parameters for the original surface.
    * @return the dice info
    */
-  def diceInfo = DiceInfo(surface,
+  def pipelineInfo = PipelineInfo(surface,
+      boundingBox,
       max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)),
       max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)))
 

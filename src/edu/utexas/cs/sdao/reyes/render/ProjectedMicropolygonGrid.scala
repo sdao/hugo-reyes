@@ -16,19 +16,21 @@ class ProjectedMicropolygonGrid(width: Int,
   extends MicropolygonGrid(width, height, surface, data) {
 
   // We have to calculate the maximum length along the U- and V-axes.
-  lazy val faceDistances =
-    (0 until width - 1).flatMap(u => {
-      (0 until height - 1).map(v => {
-        val v1 = getVertex(u, v).toVector2
-        val v2 = getVertex(u + 1, v).toVector2
-        val v3 = getVertex(u, v + 1).toVector2
+  lazy val maxUDist = (0 until height).map(v => {
+    (0 until width - 1).map(u => {
+      val v1 = getVertex(u, v).truncateToVector2
+      val v2 = getVertex(u + 1, v).truncateToVector2
+      v1.dist(v2)
+    }).sum
+  }).max
 
-        (v1.dist(v2), v1.dist(v3)) // (u-dist, v-dist)
-      })
-    })
-
-  lazy val maxUDist = faceDistances.map(_._1).max * ProjectedMicropolygonGrid.DICE_COUNT
-  lazy val maxVDist = faceDistances.map(_._2).max * ProjectedMicropolygonGrid.DICE_COUNT
+  lazy val maxVDist = (0 until width).map(u => {
+    (0 until height - 1).map(v => {
+      val v1 = getVertex(u, v).truncateToVector2
+      val v2 = getVertex(u, v + 1).truncateToVector2
+      v1.dist(v2)
+    }).sum
+  }).max
 
   /**
    * Determines if the current micropolygon grid can be split and, if
@@ -86,7 +88,7 @@ class ProjectedMicropolygonGrid(width: Int,
         val v4 = getVertex(u, v + 1)
         val norm = getNormal(u, v)
         val color = getColor(u, v)
-        Micropolygon(v1, v2, v3, v4, norm, color)
+        Micropolygon(v1, v2, v3, v4, color)
       })
     }).map(_.rasterize(buffer, zBuffer, cam.near, cam.far))
   }
@@ -95,7 +97,7 @@ class ProjectedMicropolygonGrid(width: Int,
 
 object ProjectedMicropolygonGrid {
   val DICE_COUNT = 8
-  val SPLIT_THRESHOLD = 16
+  val SPLIT_THRESHOLD = 64
   val MAX_SPLIT = 20
-  val SAMPLE_RATE = 8.0f
+  val SAMPLE_RATE = 1.0f
 }

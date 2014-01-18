@@ -37,11 +37,19 @@ case class Vector3(x: Float, y: Float, z: Float) {
   def normalize = if (length == 0) this else Vector3(x / length, y / length, z / length)
 
   /**
-   * Returns the vector (x/z, y/z) vector,
+   * Returns the vector (x/z, y/z),
    * assuming that (x, y, z) is a homogenous vector.
-   * @return a Vector2 containing the (x, y) components
+   * @return a Vector2 containing the (x/z, y/z) components
    */
   def toVector2: Vector2 = Vector2(x/z, y/z)
+
+  /**
+   * Returns the vector (x, y), discarding the z-component.
+   * This method differs from toVector2 in that it does not
+   * adjust by the scalar for homogenous coordinates.
+   * @return a Vector2 containing the (x, y) components
+   */
+  def truncateToVector2: Vector2 = Vector2(x, y)
 
 }
 

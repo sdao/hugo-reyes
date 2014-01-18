@@ -8,7 +8,7 @@ import math._
  * An individual micropolygon that has been busted out from a micropolygon grid.
  */
 case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
-                        normal: Vector3, color: Color) {
+                        color: Color) {
 
   def boundingBox = {
     BoundingBox.empty.expand(v1).expand(v2).expand(v3).expand(v4)

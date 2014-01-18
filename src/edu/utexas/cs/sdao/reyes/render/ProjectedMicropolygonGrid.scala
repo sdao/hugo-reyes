@@ -86,7 +86,6 @@ class ProjectedMicropolygonGrid(width: Int,
         val v2 = getVertex(u + 1, v)
         val v3 = getVertex(u + 1, v + 1)
         val v4 = getVertex(u, v + 1)
-        val norm = getNormal(u, v)
         val color = getColor(u, v)
         Micropolygon(v1, v2, v3, v4, color)
       })
@@ -100,5 +99,5 @@ object ProjectedMicropolygonGrid {
   val SPLIT_THRESHOLD = 64
   val MAX_SPLIT = 20
   val MAX_DICE = 200
-  val SAMPLE_RATE = 1.0f
+  val SAMPLE_RATE = 2.0f
 }

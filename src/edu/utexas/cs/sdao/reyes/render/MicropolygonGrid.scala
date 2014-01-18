@@ -83,7 +83,7 @@ class MicropolygonGrid(width: Int,
         })
       else
         fixedNormalsData.map(x => {
-          val color = surface.surface.colorShader(x._2, x._3)
+          val color = surface.surface.colorShader(x._1, x._2, x._3)
           (x._1, x._2, x._3, color)
         })
 

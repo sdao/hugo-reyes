@@ -4,7 +4,7 @@ import edu.utexas.cs.sdao.reyes.core.Vector3
 import edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DisplacementShader
 import edu.utexas.cs.sdao.reyes.shading.ColorShaders.ColorShader
 
-object Helpers {
+object ShapeHelpers {
 
   def box(width: Float, length: Float, height: Float,
           origin: Vector3,

@@ -1,7 +1,7 @@
 package edu.utexas.cs.sdao.reyes.shading
 
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Vector2}
-import math._
+import edu.utexas.cs.sdao.reyes.shading.PointLightHelpers._
 
 object ColorShaders {
 
@@ -35,27 +35,28 @@ object ColorShaders {
   /**
    * Creates a diffuse shader with the specified color
    * and the specified point light source.
-   * Attenuation for the light source is controlled by a constant factor,
-   * a linear factor, and a quadratic factor. For best results, the three
-   * should add up to 1.0.
    * @param c the color of the surface
    * @param pointLight the location of the point light, in world coordinates
    * @param magnitude the magnitude of the point light
-   * @param attenuateConst the constant attenuation factor
-   * @param attenuateLin the linear attenuation factor
-   * @param attenuateQuad the quadratic attenuation factor
    * @return
    */
-  def diffuse(c: Color, pointLight: Vector3, magnitude: Float,
-              attenuateConst: Float = 0.3f,
-              attenuateLin: Float = 0.6f,
-              attenuateQuad: Float = 0.1f): ColorShader = {
+  def diffuse(c: Color, pointLight: Vector3, magnitude: Float): ColorShader = {
+    val light = PointLight(pointLight, magnitude)
     (vtx, normal, uv) => {
-      val light = vtx - pointLight
-      val dir = light.normalize
-      val power = magnitude /
-        (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
-      c * (dir dot normal * power)
+      light.calculateDiffuse(vtx, normal, c)
+    }
+  }
+
+  def diffuse(t: Texture, pointLight: Vector3, magnitude: Float): ColorShader = {
+    val light = PointLight(pointLight, magnitude)
+    (vtx, normal, uv) => {
+      light.calculateDiffuse(vtx, normal, t(uv))
+    }
+  }
+
+  def diffuse(c: Color, lights: Iterable[PointLight]): ColorShader = {
+    (vtx, normal, uv) => {
+      lights.calculateDiffuse(vtx, normal, c)
     }
   }
 

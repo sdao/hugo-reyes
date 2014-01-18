@@ -99,5 +99,5 @@ object ProjectedMicropolygonGrid {
   val DICE_COUNT = 8
   val SPLIT_THRESHOLD = 64
   val MAX_SPLIT = 20
-  val SAMPLE_RATE = 1.0f
+  val SAMPLE_RATE = 2.0f
 }

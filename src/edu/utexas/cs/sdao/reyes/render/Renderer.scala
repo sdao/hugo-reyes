@@ -2,17 +2,20 @@ package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.geom.{SplitSurface, Surface}
 import scala.collection.mutable
-import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Camera}
+import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, Color, Camera}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 import javax.swing.{SwingUtilities, JFrame}
 import java.awt.Dimension
 import edu.utexas.cs.sdao.reyes.ui.ImagePanel
+import math._
 
 /**
  * Contains functions for splitting and rasterizing objects using the
  * Reyes algorithm.
  */
 object Renderer {
+
+  val BUCKET_SIZE = 48
 
   /**
    * Splits primitive surfaces into smaller subsurfaces until they clear
@@ -23,7 +26,7 @@ object Renderer {
    * @param cam the camera to project the surfaces onto when splitting.
    * @return a list containing the split surfaces, prepared for the dicing step
    */
-  def split(surfaces: Iterable[Surface], cam: Camera): List[DiceInfo] = {
+  def split(surfaces: Iterable[Surface], cam: Camera): List[PipelineInfo] = {
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
       // Only enqueue objects that are in the camera's view frustum.
@@ -31,7 +34,7 @@ object Renderer {
         queue.enqueue(x.toSplitSurface)
     }
 
-    val done = mutable.MutableList[DiceInfo]()
+    val done = mutable.MutableList[PipelineInfo]()
     /* val debugDiscard = mutable.MutableList[DiceInfo]() */
 
     while (queue.nonEmpty) {
@@ -53,7 +56,7 @@ object Renderer {
     done.toList
   }
 
-  def debugVerifySplit(diceInfos: Iterable[DiceInfo]): Unit =
+  def debugVerifySplit(diceInfos: Iterable[PipelineInfo]): Unit =
     debugVerifySplitSurfaces(diceInfos.map(_.surface))
 
   def debugVerifySplitSurfaces(splitSurfaces: Iterable[SplitSurface]): Unit = {
@@ -68,30 +71,39 @@ object Renderer {
     })
   }
 
-  /**
-   * Renders a single split surface based on the dicing information given.
-   * This function will dice, shade, and rasterize the split surface
-   * using the given camera.
-   * @param diceInfo the dicing parameters, including the surface to dice
-   * @param cam the camera on which to project
-   */
-  private def renderSingle(diceInfo: DiceInfo, cam: Camera): Unit = {
-    println(s"Rendering $diceInfo")
-    val dicedGrid = diceInfo.dice
-    val shadedGrid = dicedGrid.shade()
-    val projectedGrid = shadedGrid.project(cam)
-    cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
+  def bucket(pipelineInfo: Iterable[PipelineInfo], cam: Camera): Iterable[Bucket] = {
+    val numBucketsX = ceil(cam.width.toFloat / BUCKET_SIZE).toInt
+    val numBucketsY = ceil(cam.height.toFloat / BUCKET_SIZE).toInt
+
+    (0 until numBucketsX).flatMap(u => {
+      (0 until numBucketsY).map(v => {
+        val xMin = u * BUCKET_SIZE
+        val yMin = v * BUCKET_SIZE
+        val xMax = min(cam.width, xMin + BUCKET_SIZE)
+        val yMax = min(cam.height, yMin + BUCKET_SIZE)
+        val bounds = FilledBoundingBox(Vector3(xMin, yMin, 0), Vector3(xMax, yMax, 0))
+
+        val objects = pipelineInfo.filter(info => {
+          bounds.intersects2D(info.boundingBox)
+        })
+        
+        Bucket(xMin, yMin, xMax, yMax, objects, cam)
+      })
+    }).toIterable
   }
 
   /**
    * Renders all of the split surfaces in a list.
    * This function will dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param objects the pipeline objects to render
    * @param cam the camera on which to project
    */
-  def render(diceInfos: Iterable[DiceInfo], cam: Camera) {
-    diceInfos.par.map(diceInfo => { renderSingle(diceInfo, cam) })
+  def render(objects: Iterable[PipelineInfo], cam: Camera): Unit = {
+    Renderer.bucket(objects, cam).par.filter(_.objects.nonEmpty).map(x => {
+      x.render()
+      println("Rendered bucket")
+    })
   }
 
   /**
@@ -99,10 +111,10 @@ object Renderer {
    * image preview window as the rendering occurs.
    * This function will dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param diceInfos the dicing parameters, including the surface to dice
+   * @param objects the pipeline objects to render
    * @param cam the camera on which to project
    */
-  def renderInteractive(diceInfos: Iterable[DiceInfo], cam: Camera) {
+  def renderInteractive(objects: Iterable[PipelineInfo], cam: Camera): Unit = {
     val frame = new JFrame("Render Output")
     val panel = new ImagePanel(cam.image)
 
@@ -111,8 +123,8 @@ object Renderer {
     frame.pack()
     frame.setVisible(true)
 
-    diceInfos.par.map(diceInfo => {
-      renderSingle(diceInfo, cam)
+    Renderer.bucket(objects, cam).par.filter(_.objects.nonEmpty).map(x => {
+      x.render()
       SwingUtilities.invokeAndWait(new Runnable {
         def run(): Unit = panel.repaint()
       })

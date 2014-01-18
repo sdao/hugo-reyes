@@ -36,7 +36,6 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
   val xform = cameraToScreen * worldToCamera
 
   private lazy val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-  private lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()
 
@@ -115,13 +114,13 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
   /**
    * Renders part of the image using a rendering function.
    * A lock will be acquired before the rendering function begins in
-   * order to keep the image buffer and z-buffer thread-safe.
+   * order to keep the image buffer thread-safe.
    * It is thus best to limit the amount of time spent in the rendering function.
-   * @param func a function that takes an image buffer and z-buffer and renders to them
+   * @param func a function that takes an image buffer and renders to them
    * @return the result of the inner function
    */
-  def render(func: (BufferedImage, ZBuffer) => Any) = {
-    lock.synchronized { func(buffer, zBuffer) }
+  def render(func: (BufferedImage) => Any) = {
+    lock.synchronized { func(buffer) }
   }
 
   /**

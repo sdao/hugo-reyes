@@ -90,7 +90,7 @@ class ProjectedMicropolygonGrid(width: Int,
         val color = getColor(u, v)
         Micropolygon(v1, v2, v3, v4, color)
       })
-    }).map(_.rasterize(buffer, zBuffer, cam.near, cam.far))
+    }).map(_.rasterize(buffer, zBuffer))
   }
 
 }

@@ -14,8 +14,6 @@ import java.awt.RenderingHints
  * @param fieldOfView the camera's horizontal field of view in radians
  * @param width the width of the output image plane
  * @param height the height of the output image plane
- * @param near the distance of the near plane from the camera
- * @param far the distance of the fat plane from the camera
  * @param supersample the supersampling factor
  */
 case class Camera(rotation: Vector3 = Vector3.ZERO,
@@ -23,8 +21,6 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
                   fieldOfView: Float = toRadians(60.0).toFloat,
                   width: Int = 800,
                   height: Int = 600,
-                  near: Float = 1.0f,
-                  far: Float = 100.0f,
                   supersample: Int = 1) {
 
   val aspect = width.toFloat/height.toFloat
@@ -86,8 +82,7 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
           lowBound.x <= width &&
           upBound.y >= 0.0f &&
           lowBound.y <= height &&
-          -lowBound.z >= near && // Must negate z, since using the OpenGL convention
-          -lowBound.z <= far     // of pointing towards the negative z-axis.
+          lowBound.z < 0.0f
     }
   }
 
@@ -107,8 +102,6 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
       fieldOfView,
       width * rate,
       height * rate,
-      near,
-      far,
       supersample * rate)
   }
 

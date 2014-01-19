@@ -15,4 +15,6 @@ class ZBuffer(width: Int, height: Int) {
     }
   }
 
+  def canPaint(x: Int, y: Int, z: Float): Boolean = z > data(idx(x, y))
+
 }

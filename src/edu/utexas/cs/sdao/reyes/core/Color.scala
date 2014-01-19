@@ -1,6 +1,7 @@
 package edu.utexas.cs.sdao.reyes.core
 
 import scala.math._
+import MathHelpers._
 
 /**
  * Defines a floating-point color in the RGB color space,
@@ -50,7 +51,7 @@ case class Color(r: Float, g: Float, b: Float) {
    * Adjusts any component that is greater than 1.0 down to 1.0.
    */
   def clamp: Color = {
-    Color(max(min(r, 1.0f), 0.0f), max(min(g, 1.0f), 0.0f), max(min(b, 1.0f), 0.0f))
+    Color(limit(0.0f, 1.0f, r), limit(0.0f, 1.0f, g), limit(0.0f, 1.0f, b))
   }
 
   def rgb: Int = {

@@ -20,11 +20,15 @@ object Renderer {
    * The result is that objects that are closer to the camera will be
    * split into more partitions.
    * @param surfaces the surfaces to split
-   * @param cam the camera to project the surfaces onto when splitting.
+   * @param cam the camera to project the surfaces onto when splitting;
+   *            the camera must not be supersampling during the split phase
    * @return a list containing the split surfaces, prepared for the dicing step
    *         and sorted by increasing z-depth
    */
   def split(surfaces: Iterable[Surface], cam: Camera): Vector[PipelineInfo] = {
+    if (cam.supersample != 1)
+      throw new IllegalArgumentException("cam is supersampling")
+
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
       // Only enqueue objects that are in the camera's view frustum.
@@ -47,7 +51,7 @@ object Renderer {
           case None => done += grid.pipelineInfo
         }
       } /* else {
-        debugDiscard += grid.diceInfo
+        debugDiscard += grid.pipelineInfo
       } */
     }
 
@@ -73,15 +77,19 @@ object Renderer {
    * Renders a single split surface based on the dicing information given.
    * This function will dice, shade, and rasterize the split surface
    * using the given camera.
-   * @param diceInfo the pipeline object, including the surface to dice
+   * @param pipelineObj the pipeline object, including the surface to dice
    * @param cam the camera on which to project
    */
-  private def renderSingle(diceInfo: PipelineInfo, cam: Camera): Unit = {
-    println(s"Rendering $diceInfo")
-    val dicedGrid = diceInfo.dice
-    val shadedGrid = dicedGrid.shade()
-    val projectedGrid = shadedGrid.project(cam)
-    cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
+  private def renderSingle(pipelineObj: PipelineInfo, cam: Camera): Unit = {
+    if (!cam.estimateZBufferOcclusion(pipelineObj.boundingBox)) {
+      println(s"Rendering $pipelineObj")
+      val dicedGrid = pipelineObj.dice
+      val shadedGrid = dicedGrid.shade()
+      val projectedGrid = shadedGrid.project(cam)
+      cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
+    } else {
+      println(s"Skipping $pipelineObj")
+    }
   }
 
   /**

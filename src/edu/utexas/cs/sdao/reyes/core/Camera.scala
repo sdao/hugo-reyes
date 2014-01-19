@@ -1,6 +1,7 @@
 package edu.utexas.cs.sdao.reyes.core
 
 import math._
+import MathHelpers._
 import java.awt.image.BufferedImage
 import java.io.File
 import javax.imageio.ImageIO
@@ -72,6 +73,7 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
    * The projected bounding box's x- and y-components should be in screen space,
    * whereas the z-component should be in scene world space.
    * This will also clip objects between the camera and the near plane.
+   * @param boundingBox the bounding box to check
    * @return the visibility of the bounding box
    */
   def containsBoundingBox(boundingBox: BoundingBox): Boolean = {
@@ -83,6 +85,46 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
           upBound.y >= 0.0f &&
           lowBound.y <= height &&
           lowBound.z < 0.0f
+    }
+  }
+
+  /**
+   * Estimates whether the z-buffer occludes a projected bounding box.
+   * The projected bounding box's x- and y-components should be in screen space,
+   * whereas the z-component should be in scene world space.
+   *
+   * Since this function is used to prevent the final projection and shading
+   * of hidden surfaces, it assumes that the bounding box intersects the screen
+   * and that the bounding box is in non-supersampled screen coordinates,
+   * even if the camera is supersampling.
+   *
+   * @param boundingBox the bounding box to check
+   * @return whether the bounding box is occluded
+   */
+  def estimateZBufferOcclusion(boundingBox: BoundingBox): Boolean = {
+    boundingBox match {
+      case EmptyBoundingBox() => true
+      case FilledBoundingBox(lowBound, upBound) =>
+        val zDepth = upBound.z
+
+        val minX = limit(0, width - 1, floor(lowBound.x * supersample).toInt)
+        val maxX = limit(0, width - 1, ceil(upBound.x * supersample).toInt)
+        val minY = limit(0, height - 1, floor(lowBound.y * supersample).toInt)
+        val maxY = limit(0, height - 1, ceil(upBound.y * supersample).toInt)
+
+        // We're going to do this the traditional, mutable way for performance.
+        var occluded = true
+        var x = minX
+        while (x <= maxX && occluded) {
+          var y = minY
+          while (y <= maxY && occluded) {
+            occluded = !zBuffer.canPaint(x, buffer.getHeight - y - 1, zDepth)
+            y += 1
+          }
+          x += 1
+        }
+
+        occluded
     }
   }
 

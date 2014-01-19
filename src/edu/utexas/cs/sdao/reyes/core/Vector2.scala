@@ -38,14 +38,6 @@ case class Vector2(x: Float, y: Float) {
 
   def <=(r: Vector2) = x <= r.x && y <= r.y
 
-  /**
-   * Clamps the x- and y- coordinates to the closed interval [-1, 1].
-   * (Note: this function actually clamps to -1.001 and 1.001, to ensure
-   * that off-screen objects remain off-screen.)
-   * @return the clamped vector
-   */
-  def clamp = Vector2(max(-1.001f, min(1.001f, x)), max(-1.001f, min(1.001f, y)))
-
 }
 
 object Vector2 {

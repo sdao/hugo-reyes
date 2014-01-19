@@ -2,8 +2,7 @@ package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
 import scala.math._
-import edu.utexas.cs.sdao.reyes.core.FilledBoundingBox
-import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
+import MathHelpers._
 import scala.Some
 import java.awt.image.BufferedImage
 import edu.utexas.cs.sdao.reyes.geom.{SplitV, SplitU, SplitDirection, SplitSurface}
@@ -67,8 +66,8 @@ class ProjectedMicropolygonGrid(width: Int,
    */
   def pipelineInfo = PipelineInfo(surface,
       boundingBox,
-      max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)),
-      max(1, min(ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt)))
+      limit(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt),
+      limit(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt))
 
   /**
    * Determines if the current micropolygon grid is visible.

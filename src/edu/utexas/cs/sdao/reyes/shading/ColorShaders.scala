@@ -1,7 +1,7 @@
 package edu.utexas.cs.sdao.reyes.shading
 
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Vector2}
-import edu.utexas.cs.sdao.reyes.shading.PointLightHelpers._
+import edu.utexas.cs.sdao.reyes.shading.LightHelpers._
 
 object ColorShaders {
 
@@ -13,50 +13,39 @@ object ColorShaders {
 
   /**
    * Creates a diffuse shader with the specified surface color
-   * and the specified light direction. The magnitude of the light
-   * vector will be used for the intensity of the light.
+   * and the specified light.
    * @param c the color of the surface
-   * @param light the direction of the light emission from the light source
-   *              (i.e. negative the relative direction of the light source)
+   * @param light the light used as an illumination source
    * @return a diffuse shader
    */
-  def diffuse(c: Color, light: Vector3): ColorShader = {
+  def diffuse(c: Color, light: Light): ColorShader = {
     (vtx, normal, uv) => {
-      c * (light dot normal)
-    }
-  }
-
-  def diffuse(t: Texture, light: Vector3): ColorShader = {
-    (vtx, normal, uv) => {
-      t(uv) * (light dot normal)
+      c * light(vtx, normal)
     }
   }
 
   /**
-   * Creates a diffuse shader with the specified color
-   * and the specified point light source.
-   * @param c the color of the surface
-   * @param pointLight the location of the point light, in world coordinates
-   * @param magnitude the magnitude of the point light
-   * @return
+   * Creates a diffuse shader with the specified surface texture
+   * and the specified light.
+   * @param t the surface sampled for colors
+   * @param light the light used as an illumination source
+   * @return a diffuse shader
    */
-  def diffuse(c: Color, pointLight: Vector3, magnitude: Float): ColorShader = {
-    val light = PointLight(pointLight, magnitude)
+  def diffuse(t: Texture, light: Light): ColorShader = {
     (vtx, normal, uv) => {
-      light.calculateDiffuse(vtx, normal, c)
+      t(uv) * light(vtx, normal)
     }
   }
 
-  def diffuse(t: Texture, pointLight: Vector3, magnitude: Float): ColorShader = {
-    val light = PointLight(pointLight, magnitude)
+  def diffuse(c: Color, lights: Iterable[Light]): ColorShader = {
     (vtx, normal, uv) => {
-      light.calculateDiffuse(vtx, normal, t(uv))
+      c * lights.total(vtx, normal)
     }
   }
 
-  def diffuse(c: Color, lights: Iterable[PointLight]): ColorShader = {
+  def diffuse(t: Texture, lights: Iterable[Light]): ColorShader = {
     (vtx, normal, uv) => {
-      lights.calculateDiffuse(vtx, normal, c)
+      t(uv) * lights.total(vtx, normal)
     }
   }
 

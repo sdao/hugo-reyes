@@ -20,42 +20,20 @@ import scala.math._
 case class PointLight(origin: Vector3, magnitude: Float,
                       attenuateConst: Float = 0.3f,
                       attenuateLin: Float = 0.6f,
-                      attenuateQuad: Float = 0.1f) {
+                      attenuateQuad: Float = 0.1f) extends Light {
 
   /**
-   * Calculates the diffuse shading at a point based on the light source.
+   * Calculates the light intensity at a point based on the light source.
    * @param pt the point to illuminate
    * @param normal the normal at the point to illuminate
-   * @param color the diffuse color of the surface at the point to illuminate
-   * @return the illuminated color of the point
+   * @return the light intensity
    */
-  def calculateDiffuse(pt: Vector3, normal: Vector3, color: Color) = {
+  def apply(pt: Vector3, normal: Vector3): Float = {
     val light = pt - origin
     val dir = light.normalize
-    val power = magnitude /
-      (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
-    color * (dir dot normal * power)
-  }
-
-}
-
-object PointLightHelpers {
-
-  implicit class PointLightIterable(x: Iterable[PointLight]) {
-
-    def calculateDiffuse(pt: Vector3, normal: Vector3, color: Color) = {
-      val lighting = x.map(pointLight => {
-        val light = pt - pointLight.origin
-        val dir = light.normalize
-        val power = pointLight.magnitude /
-          (pointLight.attenuateConst +
-            pointLight.attenuateLin * light.length +
-            pointLight.attenuateQuad * pow(light.length, 2.0f)).toFloat
-        dir dot normal * power
-      }).foldLeft(0.0f)(_+_)
-      color * lighting
-    }
-
+    val attenuation = (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
+    val power = magnitude / attenuation
+    dir dot normal * power
   }
 
 }

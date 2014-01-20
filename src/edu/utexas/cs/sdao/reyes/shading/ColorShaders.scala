@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Vector3, Color, Vector2}
+import edu.utexas.cs.sdao.reyes.core.{Texture, Vector3, Color, Vector2}
 import edu.utexas.cs.sdao.reyes.shading.LightHelpers._
 
 object ColorShaders {
@@ -33,7 +33,7 @@ object ColorShaders {
    */
   def diffuse(t: Texture, light: Light): ColorShader = {
     (vtx, normal, uv) => {
-      t(uv) * light(vtx, normal)
+      t.sampleColor(uv) * light(vtx, normal)
     }
   }
 
@@ -45,7 +45,7 @@ object ColorShaders {
 
   def diffuse(t: Texture, lights: Iterable[Light]): ColorShader = {
     (vtx, normal, uv) => {
-      t(uv) * lights.total(vtx, normal)
+      t.sampleColor(uv) * lights.total(vtx, normal)
     }
   }
 

@@ -2,7 +2,7 @@ package edu.utexas.cs.sdao.reyes.shading
 
 import edu.utexas.cs.sdao.reyes.core.{ZBuffer, Matrix4, Vector3}
 import math._
-import edu.utexas.cs.sdao.reyes.render.{Projection, Camera}
+import edu.utexas.cs.sdao.reyes.render.{SupersamplingCamera, Projection, Camera}
 import edu.utexas.cs.sdao.reyes.geom.Surface
 
 /**
@@ -25,6 +25,7 @@ import edu.utexas.cs.sdao.reyes.geom.Surface
 case class SpotLight(origin: Vector3, direction: Vector3,
                 hotspotAngle: Float, outerAngle: Float,
                 shadowMapRes: Int = 512,
+                supersampleShadowMap: Int = 2,
                 attenuateConst: Float = 0.3f,
                 attenuateLin: Float = 0.6f,
                 attenuateQuad: Float = 0.1f) extends Light {
@@ -39,12 +40,18 @@ case class SpotLight(origin: Vector3, direction: Vector3,
   private val cosHotspotAngle = cos(hotspotAngle).toFloat
   private val cosOuterAngle = cos(outerAngle).toFloat
 
+  /**
+   * Warning: don't use this camera for rendering; only use it for projecting.
+   * No image memory will be consumed since the buffers are lazy-loaded.
+   */
   private val shadowMapProjection =
-    new Projection(Matrix4.lookAt(direction).translate(origin).invert,
-    outerAngle * 2.0f, /* Field of view measured edge-to-edge, not center-to-edge. */
-    shadowMapRes,
-    shadowMapRes)
-  private val shadowMap = new ZBuffer(shadowMapRes, shadowMapRes)
+    new SupersamplingCamera(Matrix4.lookAt(direction).translate(origin).invert,
+      outerAngle * 2.0f, /* Field of view measured edge-to-edge, not center-to-edge. */
+      shadowMapRes,
+      shadowMapRes,
+      supersampleShadowMap)
+  private val shadowMap = new ZBuffer(shadowMapRes * supersampleShadowMap,
+    shadowMapRes * supersampleShadowMap)
 
   /**
    * Calculates the light intensity at a point based on the light source.
@@ -71,7 +78,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * @param surfaces the shadow casters
    */
   def renderShadowMap(surfaces: Iterable[Surface]) = {
-    val cam = shadowMapProjection.toCamera
+    val cam = shadowMapProjection.toCamera // Camera memory should be released out of scope.
     cam.render(surfaces, displaceOnly = true)
     cam.copyZBuffer(shadowMap)
   }

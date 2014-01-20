@@ -1,7 +1,6 @@
 package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
-import java.awt.image.BufferedImage
 import math._
 
 /**
@@ -36,16 +35,16 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
    * @param buffer the buffer in which to paint the image
    * @param zBuffer the z-buffer to use in calculating overlaps
    */
-  def rasterize(buffer: BufferedImage, zBuffer: ZBuffer) = {
+  def rasterize(buffer: Texture, zBuffer: ZBuffer) = {
     val bounds = boundingBox
     for (x <- floor(bounds.lowBound.x).toInt to ceil(bounds.upBound.x).toInt) {
       for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
-        if (x >= 0 && x < buffer.getWidth &&
-          y >= 0 && y < buffer.getHeight &&
+        if (x >= 0 && x < buffer.width &&
+          y >= 0 && y < buffer.height &&
           v1.z < 0.0f) {
           if (contains(Vector2(x, y))) {
-            if (zBuffer.tryPaint(x, buffer.getHeight - y - 1, v1.z))
-              buffer.setRGB(x, buffer.getHeight - y - 1, color.clamp.rgb)
+            if (zBuffer.tryPaint(x, y, v1.z))
+              buffer.setColor(x, y, color)
           }
         }
       }

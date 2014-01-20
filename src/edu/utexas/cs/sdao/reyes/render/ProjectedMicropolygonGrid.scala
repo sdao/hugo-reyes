@@ -4,7 +4,6 @@ import edu.utexas.cs.sdao.reyes.core._
 import scala.math._
 import MathHelpers._
 import scala.Some
-import java.awt.image.BufferedImage
 import edu.utexas.cs.sdao.reyes.geom.{SplitV, SplitU, SplitDirection, SplitSurface}
 
 class ProjectedMicropolygonGrid(width: Int,
@@ -78,7 +77,7 @@ class ProjectedMicropolygonGrid(width: Int,
     cam.containsBoundingBox(boundingBox)
   }
 
-  def rasterize(buffer: BufferedImage, zBuffer: ZBuffer) = {
+  def rasterize(buffer: Texture, zBuffer: ZBuffer) = {
     // Bust into micropolygons.
     (0 until width - 1).flatMap(u => {
       (0 until height - 1).map(v => {

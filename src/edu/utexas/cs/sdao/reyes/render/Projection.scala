@@ -7,8 +7,7 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
 
 /**
  * Projects world coordinates into screen coordinates.
- * Does not contain any apparatus for rendering images; for that functionality,
- * see [[edu.utexas.cs.sdao.reyes.render.Camera Camera]].
+ * Does not contain any apparatus for rendering images.
  *
  * @param worldToCamera a transformation matrix that converts world coordinates
  *                      to camera coordinates; e.g., if the camera is translated one unit
@@ -20,7 +19,7 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
  * @param width the width of the output image plane
  * @param height the height of the output image plane
  */
-class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
+abstract class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
                  fieldOfView: Float = toRadians(60.0).toFloat,
                  width: Int = 800,
                  height: Int = 600) {
@@ -85,6 +84,10 @@ class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     }
   }
 
+  /**
+   * Creates a camera from this projection.
+   * @return the new camera
+   */
   def toCamera: Camera = new Camera(worldToCamera, fieldOfView, width, height)
 
 }

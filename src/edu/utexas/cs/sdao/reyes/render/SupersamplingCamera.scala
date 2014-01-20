@@ -19,22 +19,22 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
  * @param fieldOfView the camera's horizontal field of view in radians,
  *                    measured as the angle from the left of the visible screen to the right;
  *                    acceptable values are 0 < fieldOfView < Pi
- * @param width the width of the output image plane
- * @param height the height of the output image plane
+ * @param logicalWidth the width of the output image plane
+ * @param logicalHeight the height of the output image plane
  * @param supersample the supersampling factor, in each direction
  */
 class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
                           fieldOfView: Float = toRadians(60.0).toFloat,
-                          width: Int = 800,
-                          height: Int = 600,
+                          logicalWidth: Int = 800,
+                          logicalHeight: Int = 600,
                           supersample: Int = 2)
   extends Camera(worldToCamera, fieldOfView,
-    width * supersample, height * supersample) {
+    logicalWidth * supersample, logicalHeight * supersample) {
 
   /**
    * The proxy camera that is used to split objects at normal scale.
    */
-  private val normalCam = new Camera(worldToCamera, fieldOfView, width, height)
+  private val normalCam = new Camera(worldToCamera, fieldOfView, logicalWidth, logicalHeight)
 
   /**
    * Estimates whether the z-buffer occludes a projected bounding box.
@@ -80,23 +80,20 @@ class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * also be overridden.
    * @return a copy of the image buffer
    */
-  override def image: BufferedImage = {
-    val newImage = new BufferedImage(width, height, buffer.getType)
-
-    val g2 = newImage.createGraphics()
-    g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
-      RenderingHints.VALUE_INTERPOLATION_BILINEAR)
-    g2.drawImage(buffer, 0, 0, width, height, null)
-    g2.dispose()
-
-    newImage
-  }
+  override def image: Texture = buffer.scale(logicalWidth, logicalHeight)
 
   /**
    * The dimensions, in pixel width and height, of the image returned by
    * the function image.
    * @return
    */
-  override def imageDimensions: (Int, Int) = (width, height)
+  override def imageDimensions: (Int, Int) = (logicalWidth, logicalHeight)
+
+  /**
+   * Creates a camera from this projection.
+   * @return the new camera
+   */
+  override def toCamera: Camera =
+    new SupersamplingCamera(worldToCamera, fieldOfView, logicalWidth, logicalHeight, supersample)
 
 }

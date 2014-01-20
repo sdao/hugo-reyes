@@ -1,10 +1,7 @@
 package edu.utexas.cs.sdao.reyes.render
 
 import math._
-import java.awt.image.BufferedImage
-import java.io.File
-import javax.imageio.ImageIO
-import java.awt.{Dimension, RenderingHints}
+import java.awt.Dimension
 import edu.utexas.cs.sdao.reyes.core._
 import edu.utexas.cs.sdao.reyes.core.MathHelpers._
 import edu.utexas.cs.sdao.reyes.core.FilledBoundingBox
@@ -12,13 +9,11 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
 import edu.utexas.cs.sdao.reyes.geom.{SplitSurface, Surface}
 import scala.collection.mutable
 import javax.swing.{SwingUtilities, JFrame}
-import edu.utexas.cs.sdao.reyes.ui.ImagePanel
+import edu.utexas.cs.sdao.reyes.ui.TexturePanel
 
 /**
  * A pinhole camera projection.
  * The default parameters create a camera pointing along the negative Z-axis.
- * If you only need to project, and not to render,
- * see [[edu.utexas.cs.sdao.reyes.render.Projection Projection]].
  *
  * @param worldToCamera a transformation matrix that converts world coordinates
  *                      to camera coordinates; e.g., if the camera is translated one unit
@@ -36,7 +31,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
              height: Int = 600)
   extends Projection(worldToCamera, fieldOfView, width, height) {
 
-  protected lazy val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
+  protected lazy val buffer = Texture(width, height)
   protected lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()
@@ -66,7 +61,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
         while (x <= maxX && occluded) {
           var y = minY
           while (y <= maxY && occluded) {
-            occluded = !zBuffer.canPaint(x, buffer.getHeight - y - 1, zDepth)
+            occluded = !zBuffer.canPaint(x, y, zDepth)
             y += 1
           }
           x += 1
@@ -82,7 +77,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * also be overridden.
    * @return a copy of the image buffer
    */
-  def image: BufferedImage = buffer
+  def image: Texture = buffer
 
   /**
    * The dimensions, in pixel width and height, of the image returned by
@@ -107,11 +102,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * @param name the name of the image file, preferably ending in ".png"
    * @return whether the write succeeded
    */
-  def writeImageFile(name: String) = {
-    val f = new File(name)
-    f.createNewFile()
-    ImageIO.write(image, "png", f)
-  }
+  def writeImageFile(name: String) = buffer.writeToFile(name)
 
   /**
    * Splits primitive surfaces into smaller subsurfaces until they clear
@@ -199,7 +190,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    */
   def renderInteractive(surfaces: Iterable[Surface]) {
     val frame = new JFrame("Render Output")
-    val panel = new ImagePanel(buffer)
+    val panel = new TexturePanel(buffer)
 
     frame.setPreferredSize(new Dimension(imageDimensions._1, imageDimensions._2))
     frame.add(panel)

@@ -21,7 +21,7 @@ class MicropolygonGrid(width: Int,
     throw new IllegalArgumentException("length of data array != width * height")
   }
 
-  lazy val bounds = data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
+  private lazy val bounds = data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
 
   private def idx(u: Int, v: Int) = u * height + v
 

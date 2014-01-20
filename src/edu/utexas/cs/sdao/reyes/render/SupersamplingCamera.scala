@@ -74,6 +74,12 @@ class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    */
   override def split(surfaces: Iterable[Surface]): Vector[PipelineInfo] = normalCam.split(surfaces)
 
+  /**
+   * Returns a copy of the image buffer.
+   * If this function is overridden by a subclass, then imageDimensions must
+   * also be overridden.
+   * @return a copy of the image buffer
+   */
   override def image: BufferedImage = {
     val newImage = new BufferedImage(width, height, buffer.getType)
 
@@ -86,6 +92,11 @@ class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     newImage
   }
 
+  /**
+   * The dimensions, in pixel width and height, of the image returned by
+   * the function image.
+   * @return
+   */
   override def imageDimensions: (Int, Int) = (width, height)
 
 }

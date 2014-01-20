@@ -1,10 +1,8 @@
 package edu.utexas.cs.sdao.reyes.core
 
-import scala.math._
-
 class ZBuffer(val width: Int, val height: Int) {
 
-  val data = Array.fill(width * height)(Float.NegativeInfinity)
+  private val data = Array.fill(width * height)(Float.NegativeInfinity)
 
   private def idx(x: Int, y: Int) = x * height + y
 
@@ -38,5 +36,15 @@ class ZBuffer(val width: Int, val height: Int) {
    * @return whether the pixel can be painted at
    */
   def canPaint(x: Int, y: Int, z: Float): Boolean = z > data(idx(x, y))
+
+  /**
+   * Copies this z-buffer into another z-buffer.
+   * The other z-buffer must have the same width and height.
+   *
+   * @param otherBuffer the buffer to copy into; its contents will be replaced
+   */
+  def copyInto(otherBuffer: ZBuffer) = {
+    Array.copy(data, 0, otherBuffer.data, 0, width * height)
+  }
 
 }

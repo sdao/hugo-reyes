@@ -17,6 +17,9 @@ import edu.utexas.cs.sdao.reyes.ui.ImagePanel
 /**
  * A pinhole camera projection.
  * The default parameters create a camera pointing along the negative Z-axis.
+ * If you only need to project, and not to render,
+ * see [[edu.utexas.cs.sdao.reyes.render.Projection Projection]].
+ *
  * @param worldToCamera a transformation matrix that converts world coordinates
  *                      to camera coordinates; e.g., if the camera is translated one unit
  *                      to the left, then this matrix will move world objects one unit to
@@ -30,74 +33,13 @@ import edu.utexas.cs.sdao.reyes.ui.ImagePanel
 class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
              fieldOfView: Float = toRadians(60.0).toFloat,
              width: Int = 800,
-             height: Int = 600) {
-
-  if (fieldOfView <= 0.0 || fieldOfView >= Pi)
-    throw  new IllegalArgumentException("fieldOfView out of range")
-
-  val aspect = width.toFloat/height.toFloat
+             height: Int = 600)
+  extends Projection(worldToCamera, fieldOfView, width, height) {
 
   protected lazy val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-  lazy val zBuffer = new ZBuffer(width, height)
+  protected lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()
-
-  val focalLength = (width / 2.0f) / tan(fieldOfView / 2.0f).toFloat // Trigonometry, what's that?!
-  val halfWidth = width / 2.0f
-  val halfHeight = height / 2.0f
-
-  /**
-   * Projects a point into the image space defined by u=0..width and v=0..height.
-   * The z-component is the z-depth of the point.
-   * @param u the vector to project
-   * @return the projected vector
-   */
-  def project(u: Vector3): Vector3 = {
-    val v = worldToCamera * u
-    if (v.z == 0.0f)
-      Vector3(focalLength * v.x / Float.MinPositiveValue + halfWidth,
-        focalLength * v.y / Float.MinPositiveValue + halfHeight,
-        v.z)
-    else
-      Vector3(focalLength * v.x / -v.z + halfWidth, // Note: negate z because we are using a right-handed system,
-        focalLength * v.y / -v.z + halfHeight,      // where the camera points to -z.
-        v.z)
-  }
-
-  /**
-   * Projects the points of a bounding box onto the image space defined by u=0..width and
-   * v=0..height.
-   * @param b the bounding box to project
-   * @return the projected bounding box
-   */
-  def project(b: FilledBoundingBox): FilledBoundingBox = {
-    val newLow = project(b.lowBound)
-    val newUp = project(b.upBound)
-    BoundingBox.empty
-      .expand(newLow)
-      .expand(newUp)
-  }
-
-  /**
-   * Determines if a certain projected bounding box is contained within the camera's
-   * view frustum, at least partially.
-   * The projected bounding box's x- and y-components should be in screen space,
-   * whereas the z-component should be in camera space.
-   * This will also clip objects between the camera and the near plane.
-   * @param boundingBox the bounding box to check
-   * @return the visibility of the bounding box
-   */
-  def containsBoundingBox(boundingBox: BoundingBox): Boolean = {
-    boundingBox match {
-      case EmptyBoundingBox() => false
-      case FilledBoundingBox(lowBound, upBound) =>
-        upBound.x >= 0.0f &&
-          lowBound.x <= width &&
-          upBound.y >= 0.0f &&
-          lowBound.y <= height &&
-          lowBound.z < 0.0f
-    }
-  }
 
   /**
    * Estimates whether the z-buffer occludes a projected bounding box.
@@ -135,14 +77,30 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
   }
 
   /**
-   * Returns the image buffer as-is.
-   * If the camera is supersampling, the image buffer's dimensions will be
-   * scaled up by the supersampling factor.
-   * @return the image buffer
+   * Returns a copy of the image buffer.
+   * If this function is overridden by a subclass, then imageDimensions must
+   * also be overridden.
+   * @return a copy of the image buffer
    */
   def image: BufferedImage = buffer
 
+  /**
+   * The dimensions, in pixel width and height, of the image returned by
+   * the function image.
+   * @return
+   */
   def imageDimensions: (Int, Int) = (width, height)
+
+  /**
+   * Copies the camera's internal z-buffer into an external buffer.
+   * The other buffer must have a width and height identical to the
+   * camera's width and height.
+   *
+   * @param otherBuffer the buffer to copy into; its contents will be replaced
+   */
+  def copyZBuffer(otherBuffer: ZBuffer): Unit = {
+    zBuffer.copyInto(otherBuffer)
+  }
 
   /**
    * Writes the real-sized image to a PNG file.
@@ -259,8 +217,4 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     println("Render complete.")
   }
 
-}
-
-object Camera {
-  val PROJECT_OFFSET = Vector2(1.0f, 1.0f)
 }

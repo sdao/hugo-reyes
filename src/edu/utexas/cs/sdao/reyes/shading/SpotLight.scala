@@ -1,8 +1,8 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Matrix4, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{ZBuffer, Matrix4, Vector3}
 import math._
-import edu.utexas.cs.sdao.reyes.render.Camera
+import edu.utexas.cs.sdao.reyes.render.{Projection, Camera}
 import edu.utexas.cs.sdao.reyes.geom.Surface
 
 /**
@@ -39,10 +39,12 @@ case class SpotLight(origin: Vector3, direction: Vector3,
   private val cosHotspotAngle = cos(hotspotAngle).toFloat
   private val cosOuterAngle = cos(outerAngle).toFloat
 
-  private val cam = new Camera(Matrix4.lookAt(direction).translate(origin).invert,
+  private val shadowMapProjection =
+    new Projection(Matrix4.lookAt(direction).translate(origin).invert,
     outerAngle * 2.0f, /* Field of view measured edge-to-edge, not center-to-edge. */
     shadowMapRes,
     shadowMapRes)
+  private val shadowMap = new ZBuffer(shadowMapRes, shadowMapRes)
 
   /**
    * Calculates the light intensity at a point based on the light source.
@@ -55,7 +57,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     val dir = light.normalize
     val spot = smoothstep(cosOuterAngle, cosHotspotAngle, dir dot normalizedDirection)
     val attenuation = (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
-    val shad = shadow(cam.project(pt))
+    val shad = shadow(shadowMapProjection.project(pt))
     val power = magnitude * spot * shad / attenuation
     dir dot normal * power
   }
@@ -69,7 +71,9 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * @param surfaces the shadow casters
    */
   def renderShadowMap(surfaces: Iterable[Surface]) = {
+    val cam = shadowMapProjection.toCamera
     cam.render(surfaces, displaceOnly = true)
+    cam.copyZBuffer(shadowMap)
   }
 
   /**
@@ -106,7 +110,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    */
   private def shadow(pt: Vector3): Float = {
     if (floor(pt.x) < 0 || floor(pt.y) < 0 ||
-      ceil(pt.x) >= cam.zBuffer.width || ceil(pt.y) >= cam.zBuffer.height) {
+      ceil(pt.x) >= shadowMap.width || ceil(pt.y) >= shadowMap.height) {
       1.0f
     } else {
       val x1 = floor(pt.x).toInt
@@ -122,10 +126,10 @@ case class SpotLight(origin: Vector3, direction: Vector3,
       val yTail = pt.y - y1
       val yHead = 1.0f - yTail
 
-      (if (cam.zBuffer.canPaint(x1, y1, z)) 1.0f else 0.0f) * xHead * yHead +
-        (if (cam.zBuffer.canPaint(x2, y1, z)) 1.0f else 0.0f) * xTail * yHead +
-        (if (cam.zBuffer.canPaint(x1, y2, z)) 1.0f else 0.0f) * xHead * yTail +
-        (if (cam.zBuffer.canPaint(x2, y2, z)) 1.0f else 0.0f) * xTail * yTail
+      (if (shadowMap.canPaint(x1, y1, z)) 1.0f else 0.0f) * xHead * yHead +
+        (if (shadowMap.canPaint(x2, y1, z)) 1.0f else 0.0f) * xTail * yHead +
+        (if (shadowMap.canPaint(x1, y2, z)) 1.0f else 0.0f) * xHead * yTail +
+        (if (shadowMap.canPaint(x2, y2, z)) 1.0f else 0.0f) * xTail * yTail
     }
   }
 

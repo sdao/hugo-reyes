@@ -12,7 +12,7 @@ case class Cylinder(radius: Float,
                     color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
 
-  val top = origin + Vector3(0.0f, height, 0.0f)
+  private val top = origin + Vector3(0.0f, height, 0.0f)
 
   def boundingBox: FilledBoundingBox =
     FilledBoundingBox(origin - Vector3(radius, 0.0f, radius),

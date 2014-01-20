@@ -12,13 +12,13 @@ case class Plane(width: Float,
                  color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
 
-  val uNormalized = uAxis.normalize
+  private val uNormalized = uAxis.normalize
 
-  val vNormalized = vAxis.normalize
+  private val vNormalized = vAxis.normalize
 
-  val normal = (uNormalized cross vNormalized).normalize
+  private val normal = (uNormalized cross vNormalized).normalize
 
-  val zeroPoint = origin - uAxis * width / 2.0f - vAxis * length / 2.0f
+  private val zeroPoint = origin - uAxis * width / 2.0f - vAxis * length / 2.0f
 
   def boundingBox: FilledBoundingBox =
     BoundingBox.empty.expand(getVertex(0.0f, 0.0f)).expand(getVertex(1.0f, 1.0f))

@@ -10,27 +10,30 @@ import java.awt.RenderingHints
 /**
  * A pinhole camera projection.
  * The default parameters create a camera pointing along the negative Z-axis.
- * @param rotation the rotation of the camera in world-space
- * @param translation the translation of the camera in world-space
- * @param fieldOfView the camera's horizontal field of view in radians
+ * @param worldToCamera a transformation matrix that converts world coordinates
+ *                      to camera coordinates; e.g., if the camera is translated one unit
+ *                      to the left, then this matrix will move world objects one unit to
+ *                      the right
+ * @param fieldOfView the camera's horizontal field of view in radians,
+ *                    measured as the angle from the left of the visible screen to the right;
+ *                    acceptable values are 0 < fieldOfView < Pi
  * @param width the width of the output image plane
  * @param height the height of the output image plane
  * @param supersample the supersampling factor
  */
-case class Camera(rotation: Vector3 = Vector3.ZERO,
-                  translation: Vector3 = Vector3.ZERO,
+case class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
                   fieldOfView: Float = toRadians(60.0).toFloat,
                   width: Int = 800,
                   height: Int = 600,
                   supersample: Int = 1) {
 
+  if (fieldOfView <= 0.0 || fieldOfView >= Pi)
+    throw  new IllegalArgumentException("fieldOfView out of range")
+
   val aspect = width.toFloat/height.toFloat
 
-  // This matrix first undoes a translation, and then undoes a rotation.
-  val worldToCamera = Matrix4.translation(-translation).antiRotate(rotation)
-
   private lazy val buffer = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB)
-  private lazy val zBuffer = new ZBuffer(width, height)
+  lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()
 
@@ -40,17 +43,20 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
 
   /**
    * Projects a point into the image space defined by u=0..width and v=0..height.
+   * The z-component is the z-depth of the point.
    * @param u the vector to project
    * @return the projected vector
    */
-  def project(u: Vector3): Vector2 = {
+  def project(u: Vector3): Vector3 = {
     val v = worldToCamera * u
     if (v.z == 0.0f)
-      Vector2(focalLength * v.x / Float.MinPositiveValue + halfWidth,
-        focalLength * v.y / Float.MinPositiveValue + halfHeight)
+      Vector3(focalLength * v.x / Float.MinPositiveValue + halfWidth,
+        focalLength * v.y / Float.MinPositiveValue + halfHeight,
+        v.z)
     else
-      Vector2(focalLength * v.x / -v.z + halfWidth, // Note: negate z because we are using a right-handed system,
-        focalLength * v.y / -v.z + halfHeight)      // where the camera points to -z.
+      Vector3(focalLength * v.x / -v.z + halfWidth, // Note: negate z because we are using a right-handed system,
+        focalLength * v.y / -v.z + halfHeight,      // where the camera points to -z.
+        v.z)
   }
 
   /**
@@ -63,8 +69,8 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
     val newLow = project(b.lowBound)
     val newUp = project(b.upBound)
     BoundingBox.empty
-      .expand(Vector3(newLow.x, newLow.y, b.lowBound.z))
-      .expand(Vector3(newUp.x, newUp.y, b.upBound.z))
+      .expand(newLow)
+      .expand(newUp)
   }
 
   /**
@@ -139,8 +145,7 @@ case class Camera(rotation: Vector3 = Vector3.ZERO,
    * @return the new camera, adjusted for supersampling
    */
   def getSupersampledCamera(rate: Int): Camera = {
-    Camera(rotation,
-      translation,
+    Camera(worldToCamera,
       fieldOfView,
       width * rate,
       height * rate,

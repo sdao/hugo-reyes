@@ -53,7 +53,12 @@ case class Vector3(x: Float, y: Float, z: Float) {
 
 object Vector3 {
   val ZERO = Vector3(0.0f, 0.0f, 0.0f)
+
   val I = Vector3(1.0f, 0.0f, 0.0f)
   val J = Vector3(0.0f, 1.0f, 0.0f)
   val K = Vector3(0.0f, 0.0f, 1.0f)
+
+  val NegativeI = Vector3(-1.0f, 0.0f, 0.0f)
+  val NegativeJ = Vector3(0.0f, -1.0f, 0.0f)
+  val NegativeK = Vector3(0.0f, 0.0f, -1.0f)
 }

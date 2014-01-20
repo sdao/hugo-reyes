@@ -43,15 +43,157 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
       u.x * this(3, 0) + u.y * this(3, 1) + u.z * this(3, 2) + u.w * this(3, 3))
   }
 
-  def rotate(rads: Vector3) = new Matrix4(mult(Matrix4.rotation(rads).data, data))
+  /**
+   * Generates the inverse matrix, i.e. a matrix that,
+   * when left- or right-multiplied with this one, produces the
+   * identity matrix.
+   *
+   * Use this function to produce a transformation matrix that will
+   * undo a given set of transformations.
+   *
+   * If this matrix is singular, then an inverse does not exist,
+   * so the original matrix will be returned.
+   *
+   * Note: this implementation doesn't do anything fancy.
+   * It hard-codes the arithmetic for each new matrix value.
+   *
+   * @return the inverse matrix
+   */
+  def invert: Matrix4 = {
+    val newData = Array.ofDim[Float](16)
 
-  def antiRotate(rads: Vector3) = new Matrix4(mult(Matrix4.antiRotation(rads).data, data))
+    newData(0) = data(5)  * data(10) * data(15) -
+      data(5)  * data(11) * data(14) -
+      data(9)  * data(6)  * data(15) +
+      data(9)  * data(7)  * data(14) +
+      data(13) * data(6)  * data(11) -
+      data(13) * data(7)  * data(10)
+
+    newData(4) = -data(4)  * data(10) * data(15) +
+      data(4)  * data(11) * data(14) +
+      data(8)  * data(6)  * data(15) -
+      data(8)  * data(7)  * data(14) -
+      data(12) * data(6)  * data(11) +
+      data(12) * data(7)  * data(10)
+
+    newData(8) = data(4)  * data(9) * data(15) -
+      data(4)  * data(11) * data(13) -
+      data(8)  * data(5) * data(15) +
+      data(8)  * data(7) * data(13) +
+      data(12) * data(5) * data(11) -
+      data(12) * data(7) * data(9)
+
+    newData(12) = -data(4)  * data(9) * data(14) +
+      data(4)  * data(10) * data(13) +
+      data(8)  * data(5) * data(14) -
+      data(8)  * data(6) * data(13) -
+      data(12) * data(5) * data(10) +
+      data(12) * data(6) * data(9)
+
+    newData(1) = -data(1)  * data(10) * data(15) +
+      data(1)  * data(11) * data(14) +
+      data(9)  * data(2) * data(15) -
+      data(9)  * data(3) * data(14) -
+      data(13) * data(2) * data(11) +
+      data(13) * data(3) * data(10)
+
+    newData(5) = data(0)  * data(10) * data(15) -
+      data(0)  * data(11) * data(14) -
+      data(8)  * data(2) * data(15) +
+      data(8)  * data(3) * data(14) +
+      data(12) * data(2) * data(11) -
+      data(12) * data(3) * data(10)
+
+    newData(9) = -data(0)  * data(9) * data(15) +
+      data(0)  * data(11) * data(13) +
+      data(8)  * data(1) * data(15) -
+      data(8)  * data(3) * data(13) -
+      data(12) * data(1) * data(11) +
+      data(12) * data(3) * data(9)
+
+    newData(13) = data(0)  * data(9) * data(14) -
+      data(0)  * data(10) * data(13) -
+      data(8)  * data(1) * data(14) +
+      data(8)  * data(2) * data(13) +
+      data(12) * data(1) * data(10) -
+      data(12) * data(2) * data(9)
+
+    newData(2) = data(1)  * data(6) * data(15) -
+      data(1)  * data(7) * data(14) -
+      data(5)  * data(2) * data(15) +
+      data(5)  * data(3) * data(14) +
+      data(13) * data(2) * data(7) -
+      data(13) * data(3) * data(6)
+
+    newData(6) = -data(0)  * data(6) * data(15) +
+      data(0)  * data(7) * data(14) +
+      data(4)  * data(2) * data(15) -
+      data(4)  * data(3) * data(14) -
+      data(12) * data(2) * data(7) +
+      data(12) * data(3) * data(6)
+
+    newData(10) = data(0)  * data(5) * data(15) -
+      data(0)  * data(7) * data(13) -
+      data(4)  * data(1) * data(15) +
+      data(4)  * data(3) * data(13) +
+      data(12) * data(1) * data(7) -
+      data(12) * data(3) * data(5)
+
+    newData(14) = -data(0)  * data(5) * data(14) +
+      data(0)  * data(6) * data(13) +
+      data(4)  * data(1) * data(14) -
+      data(4)  * data(2) * data(13) -
+      data(12) * data(1) * data(6) +
+      data(12) * data(2) * data(5)
+
+    newData(3) = -data(1) * data(6) * data(11) +
+      data(1) * data(7) * data(10) +
+      data(5) * data(2) * data(11) -
+      data(5) * data(3) * data(10) -
+      data(9) * data(2) * data(7) +
+      data(9) * data(3) * data(6)
+
+    newData(7) = data(0) * data(6) * data(11) -
+      data(0) * data(7) * data(10) -
+      data(4) * data(2) * data(11) +
+      data(4) * data(3) * data(10) +
+      data(8) * data(2) * data(7) -
+      data(8) * data(3) * data(6)
+
+    newData(11) = -data(0) * data(5) * data(11) +
+      data(0) * data(7) * data(9) +
+      data(4) * data(1) * data(11) -
+      data(4) * data(3) * data(9) -
+      data(8) * data(1) * data(7) +
+      data(8) * data(3) * data(5)
+
+    newData(15) = data(0) * data(5) * data(10) -
+      data(0) * data(6) * data(9) -
+      data(4) * data(1) * data(10) +
+      data(4) * data(2) * data(9) +
+      data(8) * data(1) * data(6) -
+      data(8) * data(2) * data(5)
+
+    val det = data(0) * newData(0) + data(1) * newData(4) + data(2) * newData(8) + data(3) * newData(12)
+    if (det == 0) {
+      this
+    } else {
+      for (i <- 0 until 16) {
+        newData(i) /= det
+      }
+      new Matrix4(newData)
+    }
+  }
+
+  def rotate(rads: Vector3) = new Matrix4(mult(Matrix4.rotation(rads).data, data))
 
   def rotateX(rads: Float) = new Matrix4(mult(Matrix4.rotationX(rads).data, data))
 
   def rotateY(rads: Float) = new Matrix4(mult(Matrix4.rotationY(rads).data, data))
 
   def rotateZ(rads: Float) = new Matrix4(mult(Matrix4.rotationZ(rads).data, data))
+
+  def lookAt(dir: Vector3) = new Matrix4(mult(Matrix4.lookAt(dir).data, data))
 
   def translate(t: Vector3) = new Matrix4(mult(Matrix4.translation(t).data, data))
 
@@ -96,6 +238,14 @@ object Matrix4 {
                                0.0f, 0.0f, 0.0f, 0.0f,
                                0.0f, 0.0f, 0.0f, 0.0f))
 
+  /**
+   * Performs a counter-clockwise rotation on the positive x-axis,
+   * i.e. the rotation would appear to be counter-clockwise if looking in
+   * the direction of the negative x-axis.
+   *
+   * @param rads the angle to rotate
+   * @return the rotation matrix
+   */
   def rotationX(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
@@ -106,6 +256,14 @@ object Matrix4 {
                       0.0f, 0.0f, 0.0f, 1.0f))
   }
 
+  /**
+   * Performs a counter-clockwise rotation on the positive y-axis,
+   * i.e. the rotation would appear to be counter-clockwise if looking in
+   * the direction of the negative y-axis.
+   *
+   * @param rads the angle to rotate
+   * @return the rotation matrix
+   */
   def rotationY(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
@@ -116,6 +274,14 @@ object Matrix4 {
                       0.0f, 0.0f, 0.0f, 1.0f))
   }
 
+  /**
+   * Performs a counter-clockwise rotation on the positive z-axis,
+   * i.e. the rotation would appear to be counter-clockwise if looking in
+   * the direction of the negative z-axis.
+   *
+   * @param rads the angle to rotate
+   * @return the rotation matrix
+   */
   def rotationZ(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
@@ -128,25 +294,47 @@ object Matrix4 {
 
   /**
    * Generates a matrix for an Euler rotation along the
-   * Z, Y, then X-axes, in that order.
+   * X, Y, then Z-axes, in that order.
    * @param rads a vector containing the rotation orders
    * @return the rotation matrix
    */
   def rotation(rads: Vector3) = {
-    rotationX(rads.x) * rotationY(rads.y) * rotationZ(rads.z)
+    rotationZ(rads.z) * rotationY(rads.y) * rotationX(rads.x)
   }
 
   /**
-   * Generates a matrix for reversing an Euler rotation along the
-   * Z, Y, then X-axes, in that order.
-   * In effect, the anti-rotation reverses the rotation first
-   * on the X, then on the Y, and then the Z-axes.
+   * Generates a matrix for the rotation caused by looking
+   * towards the specified direction from the origin.
    *
-   * @param rads a vector containing the rotation orders
+   * See [[http://en.wikipedia.org/wiki/Rotation_matrix#Rotation_matrix_from_axis_and_angle this Wikipedia article]]
+   * for the source of the equations.
+   *
+   * @param dir the direction to look at
    * @return the rotation matrix
    */
-  def antiRotation(rads: Vector3) = {
-    rotationZ(rads.z) * rotationY(rads.y) * rotationX(rads.x)
+  def lookAt(dir: Vector3) = {
+    val normalDir = dir.normalize
+    val axis = (Vector3.NegativeK cross normalDir).normalize
+    val c = Vector3.NegativeK dot normalDir
+    val s = sqrt(1 - c * c).toFloat
+    val t = 1 - c
+
+    val data = Array.ofDim[Float](16)
+    data(0) = t * axis.x * axis.x + c
+    data(1) = t * axis.x * axis.y - axis.z * s
+    data(2) = t * axis.x * axis.z + axis.y * s
+
+    data(4) = t * axis.x * axis.y + axis.z * s
+    data(5) = t * axis.y * axis.y + c
+    data(6) = t * axis.y * axis.z - axis.x * s
+
+    data(8) = t * axis.x * axis.z - axis.y * s
+    data(9) = t * axis.y * axis.z + axis.x * s
+    data(10) = t * axis.z * axis.z + c
+
+    data(15) = 1.0f
+
+    new Matrix4(data)
   }
 
   def translation(amount: Vector3) = {

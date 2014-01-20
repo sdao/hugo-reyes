@@ -49,7 +49,7 @@ class MicropolygonGrid(width: Int,
         val uv = x._3
         val color = x._4
         val proj = cam.project(vtx)
-        (Vector3(proj.x, proj.y, vtx.z), norm, uv, color)
+        (proj, norm, uv, color)
       }),
       cam
     )

@@ -58,33 +58,22 @@ object Renderer {
     done.toVector.sortBy(-_.zDepth)
   }
 
-  def debugVerifySplit(pipelineObjs: Iterable[PipelineInfo]): Unit =
-    debugVerifySplitSurfaces(pipelineObjs.map(_.surface))
-
-  def debugVerifySplitSurfaces(splitSurfaces: Iterable[SplitSurface]): Unit = {
-    splitSurfaces.groupBy(x => x.surface).map(group => {
-      println(s"Surface: ${group._1}")
-
-      val sorted = group._2.toVector.sortBy(x => (x.startU, x.startV))
-      sorted.map(x => println(s"${x.startU} < u < ${x.endU}; ${x.startV} < v < ${x.endV}"))
-
-      val remain = sorted.foldLeft(0.0)((accum, cur) => accum + (cur.endU - cur.startU) * (cur.endV - cur.startV))
-      println(s"Remaining: $remain")
-    })
-  }
-
   /**
    * Renders a single split surface based on the dicing information given.
    * This function will dice, shade, and rasterize the split surface
    * using the given camera.
    * @param pipelineObj the pipeline object, including the surface to dice
+   * @param displaceOnly whether to only run displacement shaders in the shading step
+   *                     without running any color shaders
    * @param cam the camera on which to project
    */
-  private def renderSingle(pipelineObj: PipelineInfo, cam: Camera): Unit = {
+  private def renderSingle(pipelineObj: PipelineInfo,
+                           cam: Camera,
+                           displaceOnly: Boolean = false): Unit = {
     if (!cam.estimateZBufferOcclusion(pipelineObj.boundingBox)) {
       println(s"Rendering $pipelineObj")
       val dicedGrid = pipelineObj.dice
-      val shadedGrid = dicedGrid.shade()
+      val shadedGrid = dicedGrid.shade(displaceOnly = displaceOnly)
       val projectedGrid = shadedGrid.project(cam)
       cam.render((buffer, zBuffer) => projectedGrid.rasterize(buffer, zBuffer))
     } else {
@@ -101,17 +90,6 @@ object Renderer {
    */
   def render(pipelineObjs: Iterable[PipelineInfo], cam: Camera) = {
     pipelineObjs.par.foreach(pipelineInfo => { renderSingle(pipelineInfo, cam) })
-    println("Render complete.")
-  }
-
-  /**
-   * Like render(), but processes each diced chunk sequentially.
-   * You should probably use render() instead.
-   * @param pipelineObjs the pipeline objects, including the surface to dice
-   * @param cam the camera on which to project
-   */
-  def renderSequential(pipelineObjs: Iterable[PipelineInfo], cam: Camera) = {
-    pipelineObjs.foreach(pipelineInfo => { renderSingle(pipelineInfo, cam) })
     println("Render complete.")
   }
 

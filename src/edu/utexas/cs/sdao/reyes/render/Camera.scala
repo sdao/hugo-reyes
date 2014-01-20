@@ -82,7 +82,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * Determines if a certain projected bounding box is contained within the camera's
    * view frustum, at least partially.
    * The projected bounding box's x- and y-components should be in screen space,
-   * whereas the z-component should be in scene world space.
+   * whereas the z-component should be in camera space.
    * This will also clip objects between the camera and the near plane.
    * @param boundingBox the bounding box to check
    * @return the visibility of the bounding box
@@ -102,7 +102,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
   /**
    * Estimates whether the z-buffer occludes a projected bounding box.
    * The projected bounding box's x- and y-components should be in screen space,
-   * whereas the z-component should be in scene world space.
+   * whereas the z-component should be in camera space.
    *
    * @param boundingBox the bounding box to check
    * @return whether the bounding box is occluded

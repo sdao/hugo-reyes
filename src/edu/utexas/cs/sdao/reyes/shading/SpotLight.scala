@@ -1,7 +1,9 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Matrix4, Camera, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{Matrix4, Vector3}
 import math._
+import edu.utexas.cs.sdao.reyes.render.Camera
+import edu.utexas.cs.sdao.reyes.geom.Surface
 
 /**
  * Creates a spotlight with cone geometry, emanating from a point
@@ -37,8 +39,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
   private val cosHotspotAngle = cos(hotspotAngle).toFloat
   private val cosOuterAngle = cos(outerAngle).toFloat
 
-
-  val cam = Camera(Matrix4.lookAt(direction).translate(origin).invert,
+  private val cam = new Camera(Matrix4.lookAt(direction).translate(origin).invert,
     outerAngle * 2.0f, /* Field of view measured edge-to-edge, not center-to-edge. */
     shadowMapRes,
     shadowMapRes)
@@ -50,24 +51,25 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * @return the light intensity
    */
   def apply(pt: Vector3, normal: Vector3): Float = {
-    val projPt = cam.project(pt)
-    val x = floor(projPt.x).toInt // TODO: use texture sampling.
-    val y = floor(projPt.y).toInt
-    val shadow =
-      if (x >= 0 && x < cam.width &&
-          y >= 0 && y < cam.height) {
-        if (cam.zBuffer.canPaint(x, cam.height - y - 1, projPt.z + 0.1f))
-          1.0
-        else
-          0.0
-      } else 1.0
-
-    val light = pt - origin // V
+    val light = pt - origin
     val dir = light.normalize
     val spot = smoothstep(cosOuterAngle, cosHotspotAngle, dir dot normalizedDirection)
     val attenuation = (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
-    val power = magnitude * spot * shadow.toFloat / attenuation
+    val shad = shadow(cam.project(pt))
+    val power = magnitude * spot * shad / attenuation
     dir dot normal * power
+  }
+
+  /**
+   * Renders the shadow map for the given objects.
+   * Remove objects from the list of surfaces if you wish for them
+   * not to cast any shadows.
+   * If this function is never called before final rendering,
+   * no shadows will be generated for this light.
+   * @param surfaces the shadow casters
+   */
+  def renderShadowMap(surfaces: Iterable[Surface]) = {
+    cam.render(surfaces, displaceOnly = true)
   }
 
   /**
@@ -87,6 +89,43 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     else {
       (-2.0f * pow((x - low)/(high-low), 3.0f) +
         3.0f * pow((x - low)/(high-low), 2.0f)).toFloat
+    }
+  }
+
+  /**
+   * Given a floating-point coordinate to the z-buffer's dimensions,
+   * returns a bilinearly filtered shadow multiplier value by
+   * interpolating nearby points.
+   *
+   * A return value of 0.0 indicates that the point is to be
+   * completely shadowed, whereas a value of 1.0 indicates that the
+   * point is to be completely visible.
+   *
+   * @param pt the point at which to sample
+   * @return the shadow multiplier
+   */
+  private def shadow(pt: Vector3): Float = {
+    if (floor(pt.x) < 0 || floor(pt.y) < 0 ||
+      ceil(pt.x) >= cam.zBuffer.width || ceil(pt.y) >= cam.zBuffer.height) {
+      1.0f
+    } else {
+      val x1 = floor(pt.x).toInt
+      val x2 = ceil(pt.x).toInt
+
+      val y1 = floor(pt.y).toInt
+      val y2 = ceil(pt.y).toInt
+
+      val z = pt.z + 0.01f // Add small increment to prevent z-fighting with previous rendering.
+
+      val xTail = pt.x - x1
+      val xHead = 1.0f - xTail
+      val yTail = pt.y - y1
+      val yHead = 1.0f - yTail
+
+      (if (cam.zBuffer.canPaint(x1, y1, z)) 1.0f else 0.0f) * xHead * yHead +
+        (if (cam.zBuffer.canPaint(x2, y1, z)) 1.0f else 0.0f) * xTail * yHead +
+        (if (cam.zBuffer.canPaint(x1, y2, z)) 1.0f else 0.0f) * xHead * yTail +
+        (if (cam.zBuffer.canPaint(x2, y2, z)) 1.0f else 0.0f) * xTail * yTail
     }
   }
 

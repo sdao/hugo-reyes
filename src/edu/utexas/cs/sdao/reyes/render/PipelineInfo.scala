@@ -15,11 +15,20 @@ case class PipelineInfo(surface: SplitSurface,
                         boundingBox: BoundingBox,
                         diceRateU: Int, diceRateV: Int) {
 
+  /**
+   * The greatest z-depth point in the surface's displaced bounding box,
+   * i.e. the z-depth of the displaced point closest to the camera.
+   * @return the z-depth of the displaced surface
+   */
   def zDepth: Float = boundingBox match {
-    case EmptyBoundingBox() => Float.NegativeInfinity
+    case EmptyBoundingBox => Float.NegativeInfinity
     case FilledBoundingBox(lowBound, upBound) => upBound.z
   }
 
+  /**
+   * Dice the surface using the pre-calculated U and V dice rates.
+   * @return the diced micropolygon grid
+   */
   def dice: MicropolygonGrid = surface.dice(diceRateU, diceRateV)
 
 }

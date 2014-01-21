@@ -46,7 +46,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    */
   protected def estimateZBufferOcclusion(boundingBox: BoundingBox): Boolean = {
     boundingBox match {
-      case EmptyBoundingBox() => true
+      case EmptyBoundingBox => true
       case FilledBoundingBox(lowBound, upBound) =>
         val zDepth = upBound.z
 
@@ -102,7 +102,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * @param name the name of the image file, preferably ending in ".png"
    * @return whether the write succeeded
    */
-  def writeImageFile(name: String) = buffer.writeToFile(name)
+  def writeImageFile(name: String) = image.writeToFile(name)
 
   /**
    * Splits primitive surfaces into smaller subsurfaces until they clear
@@ -117,7 +117,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
       // Only enqueue objects that are in the camera's view frustum.
-      if (containsBoundingBox(project(x.boundingBox)))
+      if (containsScreenBoundingBox(x.boundingBox.project(this)))
         queue.enqueue(x.toSplitSurface)
     }
 
@@ -128,7 +128,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
       val surface = queue.dequeue()
       // We should displace here to more accurately determine how many
       // micropolygons are needed for the displaced surface.
-      val grid = surface.dice().shade(displaceOnly = true).project(this)
+      val grid = surface.dice().shade(this, displaceOnly = true).project(this)
 
       if (grid.isVisible) { // Only continue with microgrids that we'll actually see.
         grid.isSplittable match {
@@ -156,7 +156,7 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     if (!estimateZBufferOcclusion(pipelineObj.boundingBox)) {
       println(s"Rendering $pipelineObj")
       val dicedGrid = pipelineObj.dice
-      val shadedGrid = dicedGrid.shade(displaceOnly = displaceOnly)
+      val shadedGrid = dicedGrid.shade(this, displaceOnly = displaceOnly)
       val projectedGrid = shadedGrid.project(this)
       lock.synchronized {
         projectedGrid.rasterize(buffer, zBuffer)

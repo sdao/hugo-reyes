@@ -10,15 +10,32 @@ case class Sphere(radius: Float,
                   color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
 
+  /**
+   * The bounding box of the surface.
+   * The bounding box can be larger than the surface, but must not be smaller.
+   * @return a box containing the bounds of the surface
+   */
   def boundingBox: FilledBoundingBox =
     FilledBoundingBox(origin - radius, origin + radius)
 
+  /**
+   * Gets the world coordinates at a certain UV coordinate.
+   * @param u the U component
+   * @param v the V component
+   * @return the world coordinates
+   */
   def getVertex(u: Float, v: Float): Vector3 = {
     // Spheres have a special property:
     // The vertex at a point on the unit sphere is the same as the normal.
     getNormal(u, v) * radius + origin
   }
 
+  /**
+   * Gets the world-space normal at a certain UV coordinate.
+   * @param u the U component
+   * @param v the V component
+   * @return the world-space normal
+   */
   def getNormal(u: Float, v: Float): Vector3 = {
     if (u < 0.0 || u > 1.0) {
       throw new IllegalArgumentException("u not between 0.0 and 1.0, inclusive")

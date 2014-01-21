@@ -64,7 +64,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     val dir = light.normalize
     val spot = smoothstep(cosOuterAngle, cosHotspotAngle, dir dot normalizedDirection)
     val attenuation = (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
-    val shad = shadow(shadowMapProjection.project(pt))
+    val shad = shadow(shadowMapProjection.projectToScreen(pt))
     val power = magnitude * spot * shad / attenuation
     dir dot normal * power
   }

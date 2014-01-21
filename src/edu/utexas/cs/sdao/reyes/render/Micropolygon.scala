@@ -9,15 +9,13 @@ import math._
 case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
                         color: Color) {
 
-  def boundingBox = {
-    BoundingBox.empty.expand(v1).expand(v2).expand(v3).expand(v4)
-  }
+  private val bounds = EmptyBoundingBox.expand(v1).expand(v2).expand(v3).expand(v4)
 
   /**
    * Determines whether the micropolygon contains the given screen point.
    * Note that the current implementation returns false for points contained
-   * within a micropolygon whose normal is pointing away from the camera,
-   * i.e. one that is backfacing.
+   * within a micropolygon whose winding order indicates that its normal points
+   * away from the camera, i.e. one that is backfacing.
    * @param v the screen point to test
    * @return whether the screen point is contained in the micrpolygon
    */
@@ -36,7 +34,6 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
    * @param zBuffer the z-buffer to use in calculating overlaps
    */
   def rasterize(buffer: Texture, zBuffer: ZBuffer) = {
-    val bounds = boundingBox
     for (x <- floor(bounds.lowBound.x).toInt to ceil(bounds.upBound.x).toInt) {
       for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
         if (x >= 0 && x < buffer.width &&

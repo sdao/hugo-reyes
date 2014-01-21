@@ -21,16 +21,41 @@ class MicropolygonGrid(width: Int,
     throw new IllegalArgumentException("length of data array != width * height")
   }
 
-  private lazy val bounds = data.foldLeft(BoundingBox.empty)((accum, cur) => accum.expand(cur._1))
+  private lazy val bounds = data.foldLeft(EmptyBoundingBox: BoundingBox)((accum, cur) => accum.expand(cur._1))
 
   private def idx(u: Int, v: Int) = u * height + v
 
+  /**
+   * Gets the world-space coordinate of a vertex.
+   * @param u the U-index of the vertex
+   * @param v the V-index of the vertex
+   * @return the vertex at the UV index
+   */
   def getVertex(u: Int, v: Int) = data(idx(u, v))._1
 
+  /**
+   * Gets the world-space normal of a vertex.
+   * @param u the U-index of the vertex
+   * @param v the V-index of the vertex
+   * @return the normal at the UV index
+   */
   def getNormal(u: Int, v: Int) = data(idx(u, v))._2
 
+  /**
+   * Gets the UV coordinate of a vertex.
+   * @param u the U-index of the vertex
+   * @param v the V-index of the vertex
+   * @return the UV coordinate at the UV index
+   */
   def getUV(u: Int, v: Int) = data(idx(u, v))._3
 
+  /**
+   * Gets the color of a vertex.
+   * Typically, the color will be Color.BLACK unless the grid has been shaded.
+   * @param u the U-index of the vertex
+   * @param v the V-index of the vertex
+   * @return the color at the UV index
+   */
   def getColor(u: Int, v: Int) = data(idx(u, v))._4
 
   /**
@@ -38,7 +63,7 @@ class MicropolygonGrid(width: Int,
    * Note that, in the projected grid, the vertex will have three components:
    * x and y are the screen coordinates, and z is the z-depth for z-buffer calculations.
    */
-  def project(cam: Camera): ProjectedMicropolygonGrid = {
+  def project(proj: Projection): ProjectedMicropolygonGrid = {
     new ProjectedMicropolygonGrid(
       width,
       height,
@@ -48,15 +73,15 @@ class MicropolygonGrid(width: Int,
         val norm = x._2
         val uv = x._3
         val color = x._4
-        val proj = cam.project(vtx)
-        (proj, norm, uv, color)
+        val projVtx = proj.projectToScreen(vtx)
+        (projVtx, norm, uv, color)
       }),
-      cam
+      proj
     )
   }
 
   /**
-   * Determines the bounding box of the grid.
+   * The bounding box of the grid.
    * @return the bounding box
    */
   def boundingBox: BoundingBox = bounds
@@ -65,12 +90,14 @@ class MicropolygonGrid(width: Int,
    * Performs shading routines on the micropolygon grid and returns a new grid.
    * The grid will be displaced and colored. Normals will be recalculated
    * after displacement.
+   * @param eyeProjection the projection from world coordinates to the eye
    * @param displaceOnly whether to only displace the grid without calculating colors
    * @return a new micropolygon grid
    */
-  def shade(displaceOnly: Boolean = false): MicropolygonGrid = {
+  def shade(eyeProjection: Projection,
+            displaceOnly: Boolean = false): MicropolygonGrid = {
     val displacedData = data.map(x => {
-      val displacement = surface.surface.displacementShader(x._1, x._2, x._3)
+      val displacement = surface.surface.displacementShader(x._1, x._2, x._3, eyeProjection)
       (displacement, x._2, x._3)
     })
 
@@ -83,7 +110,7 @@ class MicropolygonGrid(width: Int,
         })
       else
         fixedNormalsData.map(x => {
-          val color = surface.surface.colorShader(x._1, x._2, x._3)
+          val color = surface.surface.colorShader(x._1, x._2, x._3, eyeProjection)
           (x._1, x._2, x._3, color)
         })
 
@@ -107,4 +134,11 @@ class MicropolygonGrid(width: Int,
     }).toArray
   }
 
+}
+
+object MicropolygonGrid {
+  /**
+   * The amount of dicing to do when testing grid bounds during the splitting phase.
+   */
+  val INITIAL_DICE_COUNT = 8
 }

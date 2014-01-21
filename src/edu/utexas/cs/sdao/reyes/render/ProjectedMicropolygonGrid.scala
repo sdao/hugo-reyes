@@ -10,7 +10,7 @@ class ProjectedMicropolygonGrid(width: Int,
                                 height: Int,
                                 surface: SplitSurface,
                                 data: Array[(Vector3, Vector3, Vector2, Color)],
-                                cam: Camera)
+                                proj: Projection)
   extends MicropolygonGrid(width, height, surface, data) {
 
   // We have to calculate the maximum length along the U- and V-axes.
@@ -60,8 +60,9 @@ class ProjectedMicropolygonGrid(width: Int,
   def split(dir: SplitDirection) = surface.split(dir)
 
   /**
-   * Helper function to calculate dicing parameters for the original surface.
-   * @return the dice info
+   * Helper function to calculate dicing and shading parameters for the original surface
+   * for use further down in the pipeline.
+   * @return the pipeline info
    */
   def pipelineInfo = PipelineInfo(surface,
       boundingBox,
@@ -74,9 +75,15 @@ class ProjectedMicropolygonGrid(width: Int,
    * @return the visibility of the grid
    */
   def isVisible: Boolean = {
-    cam.containsBoundingBox(boundingBox)
+    proj.containsScreenBoundingBox(boundingBox)
   }
 
+  /**
+   * Rasterizes the projected micropolygon grid into an image buffer and z-buffer
+   * by busting it into individual micropolygons.
+   * @param buffer the image buffer to rasterize with
+   * @param zBuffer the z-buffer to rasterize with
+   */
   def rasterize(buffer: Texture, zBuffer: ZBuffer) = {
     // Bust into micropolygons.
     (0 until width - 1).flatMap(u => {
@@ -88,15 +95,32 @@ class ProjectedMicropolygonGrid(width: Int,
         val color = getColor(u, v)
         Micropolygon(v1, v2, v3, v4, color)
       })
-    }).map(_.rasterize(buffer, zBuffer))
+    }).foreach(_.rasterize(buffer, zBuffer))
   }
 
 }
 
 object ProjectedMicropolygonGrid {
-  val INITIAL_DICE_COUNT = 8
+
+  /**
+   * The maximum pixel size along the U- or V-axes at which splitting should stop.
+   */
   val SPLIT_THRESHOLD = 64
+
+  /**
+   * The maximum number of splits to perform, regardless of the splitting threshold.
+   */
   val MAX_SPLIT = 20
+
+  /**
+   * The maximum number of dices to perform, regardless of the U- or V-size.
+   */
   val MAX_DICE = 200
+
+  /**
+   * About how many micropolygons to generate per pixel-axis.
+   * Thus, a value of 2 generates two micropolygons per pixel U-axis and pixel V-axis.
+   * This means a total of about 4 micropolygons total per pixel.
+   */
   val SAMPLE_RATE = 2.0f
 }

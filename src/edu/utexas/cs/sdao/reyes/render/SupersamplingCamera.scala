@@ -2,8 +2,6 @@ package edu.utexas.cs.sdao.reyes.render
 
 import edu.utexas.cs.sdao.reyes.core._
 import scala.math._
-import java.awt.image.BufferedImage
-import java.awt.RenderingHints
 import edu.utexas.cs.sdao.reyes.geom.Surface
 import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
 
@@ -49,7 +47,7 @@ class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    */
   override def estimateZBufferOcclusion(boundingBox: BoundingBox): Boolean = {
     boundingBox match {
-      case EmptyBoundingBox() => true
+      case EmptyBoundingBox => true
       case FilledBoundingBox(lowBound, upBound) =>
         super.estimateZBufferOcclusion(FilledBoundingBox(
           Vector3(lowBound.x * supersample, lowBound.y * supersample, lowBound.z),

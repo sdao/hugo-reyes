@@ -4,6 +4,8 @@ import scala.math._
 
 /**
  * Defines a 4x4 matrix.
+ * @param data a 16-item array containing the matrix in row-major
+ *             order, i.e. indices 0-3 are the first row, 4-7 the second row, etc.
  */
 class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
 
@@ -34,13 +36,6 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
     Vector3(u.x * this(0, 0) + u.y * this(0, 1) + u.z * this(0, 2) + this(0, 3),
       u.x * this(1, 0) + u.y * this(1, 1) + u.z * this(1, 2) + this(1, 3),
       u.x * this(2, 0) + u.y * this(2, 1) + u.z * this(2, 2) + this(2, 3))
-  }
-
-  def *(u: Vector4): Vector4 = {
-    Vector4(u.x * this(0, 0) + u.y * this(0, 1) + u.z * this(0, 2) + u.w * this(0, 3),
-      u.x * this(1, 0) + u.y * this(1, 1) + u.z * this(1, 2) + u.w * this(1, 3),
-      u.x * this(2, 0) + u.y * this(2, 1) + u.z * this(2, 2) + u.w * this(2, 3),
-      u.x * this(3, 0) + u.y * this(3, 1) + u.z * this(3, 2) + u.w * this(3, 3))
   }
 
   /**
@@ -185,20 +180,75 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
     }
   }
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then does a rotation; positive values rotate counter-clockwise.
+   * In other words, a rotation matrix is left-multiplied to the current matrix.
+   * @param rads the Euler angles of the rotation; rotation is performed in XYZ order
+   * @return the new transformation matrix
+   */
   def rotate(rads: Vector3) = new Matrix4(mult(Matrix4.rotation(rads).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then does a rotation about the positive X-axis; positive values rotate counter-clockwise.
+   * In other words, a rotation matrix is left-multiplied to the current matrix.
+   * @param rads the radians to rotate counter-clockwise along the +X-axis
+   * @return the new transformation matrix
+   */
   def rotateX(rads: Float) = new Matrix4(mult(Matrix4.rotationX(rads).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then does a rotation about the positive Y-axis; positive values rotate counter-clockwise.
+   * In other words, a rotation matrix is left-multiplied to the current matrix.
+   * @param rads the radians to rotate counter-clockwise along the +Y-axis
+   * @return the new transformation matrix
+   */
   def rotateY(rads: Float) = new Matrix4(mult(Matrix4.rotationY(rads).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then does a rotation about the positive Z-axis; positive values rotate counter-clockwise.
+   * In other words, a rotation matrix is left-multiplied to the current matrix.
+   * @param rads the radians to rotate counter-clockwise along the +Z-axis
+   * @return the new transformation matrix
+   */
   def rotateZ(rads: Float) = new Matrix4(mult(Matrix4.rotationZ(rads).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then looks in the specified direction.
+   * In other words, a look-at matrix is left-multiplied to the current matrix.
+   * @param dir the direction to look at, relative to the curren position
+   * @return the new transformation matrix
+   */
   def lookAt(dir: Vector3) = new Matrix4(mult(Matrix4.lookAt(dir).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then translates in the specified direction.
+   * In other words, a translation matrix is left-multiplied to the current matrix.
+   * @param t the direction to translate in
+   * @return the new transformation matrix
+   */
   def translate(t: Vector3) = new Matrix4(mult(Matrix4.translation(t).data, data))
 
+  /**
+   * Produces a new transformation matrix that does all of the previous transformations,
+   * and then applies the specified scaling.
+   * In other words, a scaling matrix is left-multiplied to the current matrix.
+   * @param s the amount to scale along each axis
+   * @return the new transformation matrix
+   */
   def scale(s: Vector3) = new Matrix4(mult(Matrix4.scaling(s).data, data))
 
+  /**
+   * Gets the value of the matrix at the specified position.
+   * @param row the row of the desired value
+   * @param col the column of the desired value
+   * @return the desired value
+   */
   def apply(row: Int, col: Int) = data(idx(row, col))
 
   override def toString: String = {
@@ -228,11 +278,19 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
 
 object Matrix4 {
 
+  /**
+   * The identity matrix. When any matrix M is right- or left-multiplied
+   * by the identity, M is returned.
+   */
   val IDENTITY = new Matrix4(Array(1.0f, 0.0f, 0.0f, 0.0f,
                                    0.0f, 1.0f, 0.0f, 0.0f,
                                    0.0f, 0.0f, 1.0f, 0.0f,
                                    0.0f, 0.0f, 0.0f, 1.0f))
 
+  /**
+   * The matrix composed of all zero values. When any matrix M is right- or
+   * left-multiplied by the zero matrix, the zero matrix is returned.
+   */
   val ZERO = new Matrix4(Array(0.0f, 0.0f, 0.0f, 0.0f,
                                0.0f, 0.0f, 0.0f, 0.0f,
                                0.0f, 0.0f, 0.0f, 0.0f,
@@ -337,6 +395,11 @@ object Matrix4 {
     new Matrix4(data)
   }
 
+  /**
+   * Generates a matrix for translation in the specified distances.
+   * @param amount the amount to translate along each axis
+   * @return the translation matrix
+   */
   def translation(amount: Vector3) = {
     new Matrix4(Array(1.0f, 0.0f, 0.0f, amount.x,
                       0.0f, 1.0f, 0.0f, amount.y,
@@ -344,6 +407,11 @@ object Matrix4 {
                       0.0f, 0.0f, 0.0f, 1.0f))
   }
 
+  /**
+   * Generates a matrix for scaling with the specified factors.
+   * @param factor the factor to scale by along each axis
+   * @return the scaling matrix
+   */
   def scaling(factor: Vector3) = {
     new Matrix4(Array(factor.x, 0.0f,     0.0f,     0.0f,
                       0.0f,     factor.y, 0.0f,     0.0f,

@@ -19,6 +19,11 @@ case class SplitSurface(surface: Surface,
                         startV: Float = 0.0f, endV: Float = 1.0f,
                         splitCount: Int = 0) {
 
+  /**
+   * Splits the surface into two new surfaces along the specified axis.
+   * @param direction the axis to split on
+   * @return the new split surfaces
+   */
   def split(direction: SplitDirection): Vector[SplitSurface] = {
     val newUVs =
       direction match {
@@ -42,8 +47,15 @@ case class SplitSurface(surface: Surface,
     )
   }
 
-  def dice(uDivisions: Int = ProjectedMicropolygonGrid.INITIAL_DICE_COUNT,
-           vDivisions: Int = ProjectedMicropolygonGrid.INITIAL_DICE_COUNT): MicropolygonGrid = {
+  /**
+   * Dices the split surface into a micropolygon grid with the specified
+   * number of divisions.
+   * @param uDivisions the number of divisions along the U-axis
+   * @param vDivisions the number of divisions along the V-axis
+   * @return the diced micropolygon grid
+   */
+  def dice(uDivisions: Int = MicropolygonGrid.INITIAL_DICE_COUNT,
+           vDivisions: Int = MicropolygonGrid.INITIAL_DICE_COUNT): MicropolygonGrid = {
     val width = endU - startU
     val height = endV - startV
 
@@ -65,6 +77,21 @@ case class SplitSurface(surface: Surface,
   }
 }
 
+/**
+ * Specifies the axis to split on.
+ */
 abstract class SplitDirection
+
+/**
+ * Split the U-axis, i.e. if the original surface is defined on U=a..b,
+ * pick a point c such that c = a + (1/2)(b-a) to form two new surfaces
+ * defined on U=a..c and U=c..b
+ */
 case object SplitU extends SplitDirection
+
+/**
+ * Split the V-axis, i.e. if the original surface is defined on V=a..b,
+ * pick a point c such that c = a + (1/2)(b-a) to form two new surfaces
+ * defined on V=a..c and V=c..b
+ */
 case object SplitV extends SplitDirection

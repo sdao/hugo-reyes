@@ -12,15 +12,16 @@ abstract class Surface(val displacementShader: DisplacementShader = Displacement
                        val colorShader: ColorShader = ColorShaders.DEFAULT) {
 
   /**
-   * Calculates the bounding box.
-   * @return A box containing the bounds of the surface.
+   * The bounding box of the surface.
+   * The bounding box can be larger than the surface, but must not be smaller.
+   * @return a box containing the bounds of the surface
    */
   def boundingBox: FilledBoundingBox
 
   /**
    * Creates a new split surface with this surface, unsplit,
    * with the split count equal to 0.
-   * @return A SplitSurface containing this surface.
+   * @return a split surface containing this surface.
    */
   def toSplitSurface: SplitSurface = SplitSurface(this)
 

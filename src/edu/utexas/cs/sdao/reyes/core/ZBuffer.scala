@@ -1,5 +1,13 @@
 package edu.utexas.cs.sdao.reyes.core
 
+/**
+ * A z-buffer that measures the depth of rasterized objects.
+ * The z-buffer initializes all pixels to negative infinity;
+ * objects that are closer to the screen have higher z-depth.
+ * However, objects with positive z-depth are behind the screen.
+ * @param width the width of the buffer
+ * @param height the height of the buffer
+ */
 class ZBuffer(val width: Int, val height: Int) {
 
   private val data = Array.fill(width * height)(Float.NegativeInfinity)

@@ -54,6 +54,10 @@ case class Color(r: Float, g: Float, b: Float) {
     Color(limit(0.0f, 1.0f, r), limit(0.0f, 1.0f, g), limit(0.0f, 1.0f, b))
   }
 
+  /**
+   * Returns the RGB integer value for the current color.
+   * @return
+   */
   def rgb: Int = {
     new java.awt.Color(r, g, b).getRGB
   }
@@ -68,6 +72,11 @@ object Color {
   val GREEN = Color(0.0f, 0.8f, 0.2f)
   val BLUE = Color(0.1f, 0.2f, 0.8f)
 
+  /**
+   * Creates a color from an RGB integer value.
+   * @param n the RGB integer value
+   * @return the new color
+   */
   def fromRGB(n: Int) = {
     val javaColor = new java.awt.Color(n)
     val comps = javaColor.getRGBColorComponents(null)

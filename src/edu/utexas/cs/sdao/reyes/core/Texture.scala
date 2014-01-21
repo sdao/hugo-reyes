@@ -14,11 +14,30 @@ import java.awt.{Graphics2D, RenderingHints}
  */
 class Texture(backingImage: BufferedImage) {
 
+  /**
+   * The width of the image, in pixels.
+   */
   val width = backingImage.getWidth
+
+  /**
+   * The height of the image, in pixels.
+   */
   val height = backingImage.getHeight
 
+  /**
+   * Gets the color at the specified pixel.
+   * @param x the pixel X-coordinate
+   * @param y the pixel Y-coordinate
+   * @return the color at the pixel
+   */
   def getColor(x: Int, y: Int): Color = Color.fromRGB(backingImage.getRGB(x, height - y - 1))
 
+  /**
+   * Sets the color at the specified pixel.
+   * @param x the pixel X-coordinate
+   * @param y the pixel Y-coordinate
+   * @param c the color to set at the pixel
+   */
   def setColor(x: Int, y: Int, c: Color): Unit = backingImage.setRGB(x, height - y - 1, c.clamp.rgb)
 
   /**
@@ -47,6 +66,14 @@ class Texture(backingImage: BufferedImage) {
       getColor(x2, y2) * xTail * yTail
   }
 
+  /**
+   * Produces a new image with the current image's picture data
+   * scaled to the new width and height.
+   * Bilinear interpolation will be used in forming the scaled image.
+   * @param newWidth the width of the new scaled image
+   * @param newHeight the height of the new scaled image
+   * @return the new scaled image
+   */
   def scale(newWidth: Int, newHeight: Int): Texture = {
     val newImage = new BufferedImage(newWidth, newHeight, backingImage.getType)
 
@@ -60,7 +87,7 @@ class Texture(backingImage: BufferedImage) {
   }
 
   /**
-   * Writes the real-sized image to a PNG file.
+   * Writes the image to a PNG file.
    * @param name the name of the image file, preferably ending in ".png"
    * @return whether the write succeeded
    */
@@ -70,7 +97,14 @@ class Texture(backingImage: BufferedImage) {
     ImageIO.write(backingImage, "png", f)
   }
 
-  def drawInGraphics(g2: Graphics2D, drawWidth: Int, drawHeight: Int) = {
+  /**
+   * Draws the image in the specified graphics context.
+   * @param g2 the graphics context
+   * @param drawWidth the width to draw the image in
+   * @param drawHeight the height to draw the image in
+   * @return whether the image has been completely drawn, or whether pixels are still changing
+   */
+  def drawInGraphics(g2: Graphics2D, drawWidth: Int, drawHeight: Int): Boolean = {
     g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
       RenderingHints.VALUE_INTERPOLATION_BILINEAR)
     g2.drawImage(backingImage, 0, 0, drawWidth, drawHeight, null)
@@ -80,10 +114,21 @@ class Texture(backingImage: BufferedImage) {
 
 object Texture {
 
+  /**
+   * Constructs a texture from the image at a specified path.
+   * @param path the path of the texture image
+   * @return the new texture
+   */
   def apply(path: String) = {
     new Texture(ImageIO.read(new File(path)))
   }
 
+  /**
+   * Constructs an empty RGB texture with the specified width and height.
+   * @param width the width of the new texture
+   * @param height the height of the new texture
+   * @return the new, empty texture
+   */
   def apply(width: Int, height: Int) = {
     new Texture(new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB))
   }

@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{ZBuffer, Matrix4, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{Color, ZBuffer, Matrix4, Vector3}
 import math._
 import edu.utexas.cs.sdao.reyes.render.{SupersamplingCamera, Projection, Camera}
 import edu.utexas.cs.sdao.reyes.geom.Surface
@@ -10,6 +10,8 @@ import edu.utexas.cs.sdao.reyes.geom.Surface
  * towards a specific direction, with a given hotspot angle and outer angle.
  *
  * @param origin the location of the spotlight, in world coordinates
+ * @param color the color of the point light;
+ *              this controls the magnitude of the light per color component
  * @param direction the direction that the light points in
  * @param hotspotAngle the angle of the hotspot (inner cone), in radians,
  *                     measured from the center of the hotspot to the edge of the hotspot cone;
@@ -23,12 +25,14 @@ import edu.utexas.cs.sdao.reyes.geom.Surface
  * @param attenuateQuad the quadratic attenuation factor
  */
 case class SpotLight(origin: Vector3, direction: Vector3,
-                hotspotAngle: Float, outerAngle: Float,
-                shadowMapRes: Int = 512,
-                supersampleShadowMap: Int = 2,
-                attenuateConst: Float = 0.3f,
-                attenuateLin: Float = 0.6f,
-                attenuateQuad: Float = 0.1f) extends Light {
+                     hotspotAngle: Float, outerAngle: Float,
+                     color: Color = Color.WHITE,
+                     shadowMapRes: Int = 512,
+                     supersampleShadowMap: Int = 2,
+                     attenuateConst: Float = 0.3f,
+                     attenuateLin: Float = 0.6f,
+                     attenuateQuad: Float = 0.1f)
+  extends Light(attenuateConst, attenuateLin, attenuateQuad) {
 
   if (hotspotAngle <= 0.0 || hotspotAngle >= outerAngle)
     throw new IllegalArgumentException("hotspotAngle out of range")
@@ -36,7 +40,6 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     throw new IllegalArgumentException("outerAngle out of range")
 
   val normalizedDirection = direction.normalize
-  val magnitude = direction.length
   private val cosHotspotAngle = cos(hotspotAngle).toFloat
   private val cosOuterAngle = cos(outerAngle).toFloat
 
@@ -57,16 +60,17 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * Calculates the light intensity at a point based on the light source.
    * @param pt the point to illuminate
    * @param normal the normal at the point to illuminate
+   * @param eye the projection representing the eye position and orientation
    * @return the light intensity
    */
-  def apply(pt: Vector3, normal: Vector3): Float = {
+  def apply(pt: Vector3, normal: Vector3, eye: Projection): LightComponents = {
     val light = pt - origin
     val dir = light.normalize
     val spot = smoothstep(cosOuterAngle, cosHotspotAngle, dir dot normalizedDirection)
-    val attenuation = (attenuateConst + attenuateLin * light.length + attenuateQuad * pow(light.length, 2.0f)).toFloat
     val shad = shadow(shadowMapProjection.projectToScreen(pt))
-    val power = magnitude * spot * shad / attenuation
-    dir dot normal * power
+    val attenuation = attenuate(light.length)
+    val diffuse = dir dot normal * spot * shad / attenuation
+    LightComponents(color * diffuse, Color.BLACK, Color.BLACK)
   }
 
   /**

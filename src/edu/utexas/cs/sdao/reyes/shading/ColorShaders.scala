@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Texture, Vector3, Color, Vector2}
+import edu.utexas.cs.sdao.reyes.core._
 import edu.utexas.cs.sdao.reyes.shading.LightHelpers._
 import edu.utexas.cs.sdao.reyes.render.Projection
 
@@ -29,54 +29,28 @@ object ColorShaders {
   }
 
   /**
-   * Creates a diffuse shader with the specified surface color
+   * Creates a diffuse shader with the specified surface map
    * and the specified light.
-   * @param c the color of the surface
+   * @param m the surface map sampled for colors
    * @param light the light used as an illumination source
    * @return a diffuse shader
    */
-  def diffuse(c: Color, light: Light): ColorShader = {
+  def diffuse(m: ColorMap, light: Light): ColorShader = {
     (vtx, normal, uv, proj) => {
-      c * light(vtx, normal)
+      m.sampleColor(uv) * light(vtx, normal, proj).diffuse
     }
   }
 
   /**
-   * Creates a diffuse shader with the specified surface texture
-   * and the specified light.
-   * @param t the surface sampled for colors
-   * @param light the light used as an illumination source
-   * @return a diffuse shader
-   */
-  def diffuse(t: Texture, light: Light): ColorShader = {
-    (vtx, normal, uv, proj) => {
-      t.sampleColor(uv) * light(vtx, normal)
-    }
-  }
-
-  /**
-   * Creates a diffuse shader with the specified surface color
+   * Creates a diffuse shader with the specified surface map
    * and the specified lights.
-   * @param c the color of the surface
+   * @param m the surface map sampled for colors
    * @param lights the lights used as illumination sources
    * @return a diffuse shader
    */
-  def diffuse(c: Color, lights: Iterable[Light]): ColorShader = {
+  def diffuse(m: ColorMap, lights: Iterable[Light]): ColorShader = {
     (vtx, normal, uv, proj) => {
-      c * lights.total(vtx, normal)
-    }
-  }
-
-  /**
-   * Creates a diffuse shader with the specified surface texture
-   * and the specified lights.
-   * @param t the surface sampled for colors
-   * @param lights the lights used as illumination sources
-   * @return a diffuse shader
-   */
-  def diffuse(t: Texture, lights: Iterable[Light]): ColorShader = {
-    (vtx, normal, uv, proj) => {
-      t.sampleColor(uv) * lights.total(vtx, normal)
+      m.sampleColor(uv) * lights.total(vtx, normal, proj).diffuse
     }
   }
 

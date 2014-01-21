@@ -12,7 +12,7 @@ import java.awt.{Graphics2D, RenderingHints}
  *
  * @param backingImage the buffered image backing the wrapper
  */
-class Texture(backingImage: BufferedImage) {
+class Texture(backingImage: BufferedImage) extends ColorMap {
 
   /**
    * The width of the image, in pixels.

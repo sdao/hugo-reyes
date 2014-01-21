@@ -9,7 +9,7 @@ import MathHelpers._
  *
  * Each component should be in the range 0..1.
  */
-case class Color(r: Float, g: Float, b: Float) {
+case class Color(r: Float, g: Float, b: Float) extends ColorMap {
 
   def +(right: Color): Color = {
     Color(r + right.r, g + right.g, b + right.b)
@@ -61,6 +61,13 @@ case class Color(r: Float, g: Float, b: Float) {
   def rgb: Int = {
     new java.awt.Color(r, g, b).getRGB
   }
+
+  /**
+   * Samples a color from the map.
+   * @param uv the UV coordinate to sample
+   * @return the color at the UV coordinate
+   */
+  def sampleColor(uv: Vector2): Color = this
 
 }
 

@@ -5,6 +5,7 @@ import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 
 /**
  * A finite plane.
+ * The normal is defined by vAxis cross uAxis = -(uAxis cross vAxis).
  * Note that, when projected into screen space, the plane is only visible if
  * the positive V-axis is clockwise from the positive U-axis, e.g. when the U-axis
  * extends to the right and the V-axis extends to the bottom.
@@ -30,7 +31,7 @@ case class Plane(width: Float,
 
   private val vNormalized = vAxis.normalize
 
-  private val normal = (uNormalized cross vNormalized).normalize
+  private val normal = (vNormalized cross uNormalized).normalize
 
   private val zeroPoint = origin - uAxis * width / 2.0f - vAxis * length / 2.0f
 

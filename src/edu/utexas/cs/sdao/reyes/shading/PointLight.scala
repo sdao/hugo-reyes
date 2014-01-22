@@ -34,7 +34,7 @@ case class PointLight(origin: Vector3,
    * @return the light intensity
    */
   def apply(pt: Vector3, normal: Vector3, eye: Projection): LightComponents = {
-    val light = pt - origin
+    val light = origin - pt
     val dir = light.normalize
     val attenuation = attenuate(light.length)
     val diffuse = dir dot normal / attenuation

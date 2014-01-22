@@ -34,11 +34,9 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
    * @param zBuffer the z-buffer to use in calculating overlaps
    */
   def rasterize(buffer: Texture, zBuffer: ZBuffer) = {
-    for (x <- floor(bounds.lowBound.x).toInt to ceil(bounds.upBound.x).toInt) {
-      for (y <- floor(bounds.lowBound.y).toInt to ceil(bounds.upBound.y).toInt) {
-        if (x >= 0 && x < buffer.width &&
-          y >= 0 && y < buffer.height &&
-          v1.z < 0.0f) {
+    if (v1.z < 0.0f) {
+      for (x <- max(0, floor(bounds.lowBound.x).toInt) to min(buffer.width - 1, ceil(bounds.upBound.x).toInt)) {
+        for (y <- max(0, floor(bounds.lowBound.y).toInt) to min(buffer.height - 1, ceil(bounds.upBound.y).toInt)) {
           if (contains(Vector2(x, y))) {
             if (zBuffer.tryPaint(x, y, v1.z))
               buffer.setColor(x, y, color)
@@ -46,7 +44,6 @@ case class Micropolygon(v1: Vector3, v2: Vector3, v3: Vector3, v4: Vector3,
         }
       }
     }
-
   }
 
 }

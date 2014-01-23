@@ -7,12 +7,14 @@ import scala.math._
 import java.awt.{Graphics2D, RenderingHints}
 
 /**
- * A wrapper around Java's BufferedImage that uses the bottom-left corner as the origin,
- * with positive x-coordinates going to the right and positive y-coordinates to the top.
+ * A wrapper around Java's BufferedImage that provides texture-specific functionality,
+ * such as bilinear filtering and coordinate flipping.
  *
  * @param backingImage the buffered image backing the wrapper
+ * @param flipped whether the origin should start at the bottom-left instead of the top-left
  */
-class Texture(backingImage: BufferedImage) extends ColorMap {
+class Texture(backingImage: BufferedImage,
+              flipped: Boolean = true) extends ColorMap {
 
   /**
    * The width of the image, in pixels.
@@ -24,13 +26,19 @@ class Texture(backingImage: BufferedImage) extends ColorMap {
    */
   val height = backingImage.getHeight
 
+  private def yFunc(y: Int): Int =
+    if (flipped)
+      height - y - 1
+    else
+      y
+
   /**
    * Gets the color at the specified pixel.
    * @param x the pixel X-coordinate
    * @param y the pixel Y-coordinate
    * @return the color at the pixel
    */
-  def getColor(x: Int, y: Int): Color = Color.fromRGB(backingImage.getRGB(x, height - y - 1))
+  def getColor(x: Int, y: Int): Color = Color.fromRGB(backingImage.getRGB(x, yFunc(y)))
 
   /**
    * Sets the color at the specified pixel.
@@ -38,7 +46,7 @@ class Texture(backingImage: BufferedImage) extends ColorMap {
    * @param y the pixel Y-coordinate
    * @param c the color to set at the pixel
    */
-  def setColor(x: Int, y: Int, c: Color): Unit = backingImage.setRGB(x, height - y - 1, c.clamp.rgb)
+  def setColor(x: Int, y: Int, c: Color): Unit = backingImage.setRGB(x, yFunc(y), c.clamp.rgb)
 
   /**
    * Samples a pixel from the texture using bilinear filtering.
@@ -83,7 +91,7 @@ class Texture(backingImage: BufferedImage) extends ColorMap {
     g2.drawImage(backingImage, 0, 0, newWidth, newHeight, null)
     g2.dispose()
 
-    new Texture(newImage)
+    new Texture(newImage, flipped)
   }
 
   /**
@@ -117,20 +125,24 @@ object Texture {
   /**
    * Constructs a texture from the image at a specified path.
    * @param path the path of the texture image
+   * @param flipped whether the origin should start at the bottom-left instead of the top-left;
+   *                most external texture files are not flipped
    * @return the new texture
    */
-  def apply(path: String) = {
-    new Texture(ImageIO.read(new File(path)))
+  def apply(path: String, flipped: Boolean = false) = {
+    new Texture(ImageIO.read(new File(path)), flipped)
   }
 
   /**
    * Constructs an empty RGB texture with the specified width and height.
    * @param width the width of the new texture
    * @param height the height of the new texture
+   * @param flipped whether the origin should start at the bottom-left instead of the top-left;
+   *                most internal graphics uses rely on flipped coordinates
    * @return the new, empty texture
    */
-  def apply(width: Int, height: Int) = {
-    new Texture(new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB))
+  def apply(width: Int, height: Int, flipped: Boolean) = {
+    new Texture(new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB), flipped)
   }
 
 }

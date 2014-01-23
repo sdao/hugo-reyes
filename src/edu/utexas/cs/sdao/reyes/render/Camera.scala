@@ -29,7 +29,7 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
              height: Int = 600)
   extends Projection(cameraTransform, fieldOfView, width, height) {
 
-  protected lazy val buffer = Texture(width, height)
+  protected lazy val buffer = Texture(width, height, flipped = true)
   protected lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()

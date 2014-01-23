@@ -20,7 +20,7 @@ Features
 ========
 * Displacement
 * Programmable shaders
-* Lambert and Phong shaders included
+* Lambert, Phong, and toon shaders included
 * Spot and point lights
 * Shadow maps
 * Parallel rendering

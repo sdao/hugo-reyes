@@ -16,6 +16,15 @@ None of the code has been translated directly, so if you're following Boswell's 
 
 Shaders are passed as Scala lambdas; for example, a displacement shader can be written that takes the input vertex and UV, displacing the vertex based on the UV position.
 
+Features
+========
+* Displacement
+* Programmable shaders
+* Lambert and Phong shaders included
+* Spot and point lights
+* Shadow maps
+* Parallel rendering
+
 Compiling
 =========
 I use IntelliJ IDEA to compile the project; it might take a bit of reorganizing and writing config files to get it to compile with another build tool, such as SBT.

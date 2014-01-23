@@ -51,7 +51,7 @@ case class Color(r: Float, g: Float, b: Float) extends ColorMap {
    * Adjusts any component that is greater than 1.0 down to 1.0.
    */
   def clamp: Color = {
-    Color(limit(0.0f, 1.0f, r), limit(0.0f, 1.0f, g), limit(0.0f, 1.0f, b))
+    Color(clampUnit(r), clampUnit(g), clampUnit(b))
   }
 
   /**

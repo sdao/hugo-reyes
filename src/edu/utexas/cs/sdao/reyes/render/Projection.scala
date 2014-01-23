@@ -16,17 +16,15 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
  * Screen space is in 2D coordinates, corresponding to the image plane;
  * the third coordinate is commonly used to represent the z-depth from the camera.
  *
- * @param worldToCamera a transformation matrix that converts world coordinates
- *                      to camera coordinates; e.g., if the camera is translated one unit
- *                      to the left, then this matrix will move world objects one unit to
- *                      the right
+ * @param cameraTransform a transformation matrix that represents how the camera
+ *                        has been transformed in the world space
  * @param fieldOfView the camera's horizontal field of view in radians,
  *                    measured as the angle from the left of the visible screen to the right;
  *                    acceptable values are 0 < fieldOfView < Pi
  * @param width the width of the output image plane
  * @param height the height of the output image plane
  */
-abstract class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
+abstract class Projection(cameraTransform: Matrix4 = Matrix4.IDENTITY,
                           fieldOfView: Float = toRadians(60.0).toFloat,
                           width: Int = 800,
                           height: Int = 600) {
@@ -35,9 +33,21 @@ abstract class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
     throw  new IllegalArgumentException("fieldOfView out of range")
 
   /**
+   * The transformation matrix that converts world to camera coordinates.
+   * This is the same as the inverse of the cameraTransform parameter.
+   */
+  val worldToCamera = cameraTransform.invert
+
+  /**
    * The length from the camera pinhole to the image plane.
    */
   val focalLength = (width / 2.0f) / tan(fieldOfView / 2.0f).toFloat // Trigonometry, what's that?!
+
+  /**
+   * Gets the camera's "eye" vector in world-space
+   */
+  val eyeWorldSpace = transformToWorld(Vector3.NegativeK)
+
   private val halfWidth = width / 2.0f
   private val halfHeight = height / 2.0f
 
@@ -48,10 +58,18 @@ abstract class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    *
    * To also project the point into screen space, use projectToScreen instead.
    *
-   * @param u the transformed vector
+   * @param u the world space point to transform
+   * @return the transformed vector in camera space
    */
   def transformToCamera(u: Vector3) = worldToCamera * u
-  
+
+  /**
+   * Transforms a point from camera space back into world space.
+   * @param u the camera space point to transform
+   * @return the transformed vector in world space
+   */
+  def transformToWorld(u: Vector3) = cameraTransform * u
+
   /**
    * Transforms a point from world space into camera space,
    * and then projects it into the screen space defined by
@@ -100,6 +118,6 @@ abstract class Projection(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * Creates a camera from this projection.
    * @return the new camera
    */
-  def toCamera: Camera = new Camera(worldToCamera, fieldOfView, width, height)
+  def toCamera: Camera = new Camera(cameraTransform, fieldOfView, width, height)
 
 }

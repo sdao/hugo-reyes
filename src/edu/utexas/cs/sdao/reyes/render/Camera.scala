@@ -15,21 +15,19 @@ import edu.utexas.cs.sdao.reyes.ui.TexturePanel
  * A pinhole camera projection.
  * The default parameters create a camera pointing along the negative Z-axis.
  *
- * @param worldToCamera a transformation matrix that converts world coordinates
- *                      to camera coordinates; e.g., if the camera is translated one unit
- *                      to the left, then this matrix will move world objects one unit to
- *                      the right
+ * @param cameraTransform a transformation matrix that represents how the camera
+ *                        has been transformed in the world space
  * @param fieldOfView the camera's horizontal field of view in radians,
  *                    measured as the angle from the left of the visible screen to the right;
  *                    acceptable values are 0 < fieldOfView < Pi
  * @param width the width of the output image plane
  * @param height the height of the output image plane
  */
-class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
+class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
              fieldOfView: Float = toRadians(60.0).toFloat,
              width: Int = 800,
              height: Int = 600)
-  extends Projection(worldToCamera, fieldOfView, width, height) {
+  extends Projection(cameraTransform, fieldOfView, width, height) {
 
   protected lazy val buffer = Texture(width, height)
   protected lazy val zBuffer = new ZBuffer(width, height)
@@ -50,10 +48,10 @@ class Camera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
       case FilledBoundingBox(lowBound, upBound) =>
         val zDepth = upBound.z
 
-        val minX = limit(0, width - 1, floor(lowBound.x).toInt)
-        val maxX = limit(0, width - 1, ceil(upBound.x).toInt)
-        val minY = limit(0, height - 1, floor(lowBound.y).toInt)
-        val maxY = limit(0, height - 1, ceil(upBound.y).toInt)
+        val minX = clamp(0, width - 1, floor(lowBound.x).toInt)
+        val maxX = clamp(0, width - 1, ceil(upBound.x).toInt)
+        val minY = clamp(0, height - 1, floor(lowBound.y).toInt)
+        val maxY = clamp(0, height - 1, ceil(upBound.y).toInt)
 
         // We're going to do this the traditional, mutable way for performance.
         var occluded = true

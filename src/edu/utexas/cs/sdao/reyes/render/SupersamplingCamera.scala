@@ -10,10 +10,8 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
  * Up to the split stage, the camera acts like a normal camera.
  * After the split stage, the number of pixels sampled is augmented by the supersampling factor.
  *
- * @param worldToCamera a transformation matrix that converts world coordinates
- *                      to camera coordinates; e.g., if the camera is translated one unit
- *                      to the left, then this matrix will move world objects one unit to
- *                      the right
+ * @param cameraTransform a transformation matrix that represents how the camera
+ *                        has been transformed in the world space
  * @param fieldOfView the camera's horizontal field of view in radians,
  *                    measured as the angle from the left of the visible screen to the right;
  *                    acceptable values are 0 < fieldOfView < Pi
@@ -21,18 +19,18 @@ import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
  * @param logicalHeight the height of the output image plane
  * @param supersample the supersampling factor, in each direction
  */
-class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
+class SupersamplingCamera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
                           fieldOfView: Float = toRadians(60.0).toFloat,
                           logicalWidth: Int = 800,
                           logicalHeight: Int = 600,
                           supersample: Int = 2)
-  extends Camera(worldToCamera, fieldOfView,
+  extends Camera(cameraTransform, fieldOfView,
     logicalWidth * supersample, logicalHeight * supersample) {
 
   /**
    * The proxy camera that is used to split objects at normal scale.
    */
-  private val normalCam = new Camera(worldToCamera, fieldOfView, logicalWidth, logicalHeight)
+  private val normalCam = new Camera(cameraTransform, fieldOfView, logicalWidth, logicalHeight)
 
   /**
    * Estimates whether the z-buffer occludes a projected bounding box.
@@ -92,6 +90,6 @@ class SupersamplingCamera(worldToCamera: Matrix4 = Matrix4.IDENTITY,
    * @return the new camera
    */
   override def toCamera: Camera =
-    new SupersamplingCamera(worldToCamera, fieldOfView, logicalWidth, logicalHeight, supersample)
+    new SupersamplingCamera(cameraTransform, fieldOfView, logicalWidth, logicalHeight, supersample)
 
 }

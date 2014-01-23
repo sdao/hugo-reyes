@@ -15,13 +15,14 @@ abstract class Light(attenuateConst: Float = 0.3f,
                      attenuateQuad: Float = 0.1f) {
 
   /**
-   * Calculates the light intensity at a point based on the light source.
+   * Calculates the vector of the ray of light that reaches a point.
+   * The length of the vector is the intensity of the light.
+   * The direction of the vector is the direction from the light to the point.
+   *
    * @param pt the point to illuminate
-   * @param normal the normal at the point to illuminate
-   * @param eye the projection representing the eye position and orientation
-   * @return the light intensity
+   * @return the light ray
    */
-  def apply(pt: Vector3, normal: Vector3, eye: Projection): LightComponents
+  def apply(pt: Vector3): Vector3
 
   /**
    * Helper function to calculate attenuation.
@@ -29,25 +30,6 @@ abstract class Light(attenuateConst: Float = 0.3f,
    * @return the attenuation multiplier
    */
   protected def attenuate(distance: Float): Float =
-    (attenuateConst + attenuateLin * distance + attenuateQuad * pow(distance, 2.0f)).toFloat
-
-}
-
-object LightHelpers {
-
-  implicit class LightIterable(x: Iterable[Light]) {
-
-    /**
-     * Sums the illumination coming from several lights.
-     * @param pt the point to illuminate
-     * @param normal the normal at the point to illuminate
-     * @param eye the projection representing the eye position and orientation
-     * @return the total light intensity
-     */
-    def total(pt: Vector3, normal: Vector3, eye: Projection): LightComponents = {
-      x.map(light => light(pt, normal, eye)).foldLeft(LightComponents.ZERO)(_+_)
-    }
-
-  }
+    attenuateConst + attenuateLin * distance + attenuateQuad * distance * distance
 
 }

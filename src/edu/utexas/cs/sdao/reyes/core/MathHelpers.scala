@@ -13,10 +13,10 @@ object MathHelpers {
    * upper if x is greater than upper.
    * @param lower the lower bound
    * @param upper the upper bound
-   * @param x the value to limit
-   * @return the limited value
+   * @param x the value to clamp
+   * @return the clamped value
    */
-  def limit(lower: Float, upper: Float, x: Float): Float = max(lower, min(upper, x))
+  def clamp(lower: Float, upper: Float, x: Float): Float = max(lower, min(upper, x))
 
   /**
    * Returns x if x is between lower and upper,
@@ -24,9 +24,16 @@ object MathHelpers {
    * upper if x is greater than upper.
    * @param lower the lower bound
    * @param upper the upper bound
-   * @param x the value to limit
-   * @return the limited value
+   * @param x the value to clamp
+   * @return the clamped value
    */
-  def limit(lower: Int, upper: Int, x: Int): Int = max(lower, min(upper, x))
+  def clamp(lower: Int, upper: Int, x: Int): Int = max(lower, min(upper, x))
+
+  /**
+   * A shortcut for clamp(0.0f, 1.0f, x).
+   * @param x the value to clamp
+   * @return the clamped value
+   */
+  def clampUnit(x: Float) = max(0.0f, min(1.0f, x))
 
 }

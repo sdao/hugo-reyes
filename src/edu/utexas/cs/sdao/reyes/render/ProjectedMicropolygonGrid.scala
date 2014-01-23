@@ -66,8 +66,8 @@ class ProjectedMicropolygonGrid(width: Int,
    */
   def pipelineInfo = PipelineInfo(surface,
       boundingBox,
-      limit(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt),
-      limit(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt))
+      clamp(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxUDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt),
+      clamp(1, ProjectedMicropolygonGrid.MAX_DICE, ceil(maxVDist * ProjectedMicropolygonGrid.SAMPLE_RATE).toInt))
 
   /**
    * Determines if the current micropolygon grid is visible.

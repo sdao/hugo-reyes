@@ -85,6 +85,13 @@ case class Vector3(x: Float, y: Float, z: Float) {
    */
   def dist2D(r: Vector3) = sqrt(pow(x - r.x, 2.0f) + pow(y - r.y, 2.0f)).toFloat
 
+  /**
+   * Reflects the vector over the specified normal.
+   * @param normal the normal to reflect over
+   * @return the reflected vector
+   */
+  def reflect(normal: Vector3) = this - normal * (2.0f * (normal dot this))
+
 }
 
 object Vector3 {

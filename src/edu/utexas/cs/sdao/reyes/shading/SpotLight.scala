@@ -10,8 +10,6 @@ import edu.utexas.cs.sdao.reyes.geom.Surface
  * towards a specific direction, with a given hotspot angle and outer angle.
  *
  * @param origin the location of the spotlight, in world coordinates
- * @param color the color of the point light;
- *              this controls the magnitude of the light per color component
  * @param direction the direction that the light points in
  * @param hotspotAngle the angle of the hotspot (inner cone), in radians,
  *                     measured from the center of the hotspot to the edge of the hotspot cone;
@@ -26,7 +24,6 @@ import edu.utexas.cs.sdao.reyes.geom.Surface
  */
 case class SpotLight(origin: Vector3, direction: Vector3,
                      hotspotAngle: Float, outerAngle: Float,
-                     color: Color = Color.WHITE,
                      shadowMapRes: Int = 512,
                      supersampleShadowMap: Int = 2,
                      attenuateConst: Float = 0.3f,
@@ -48,7 +45,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * No image memory will be consumed since the buffers are lazy-loaded.
    */
   private val shadowMapProjection =
-    new SupersamplingCamera(Matrix4.lookAt(direction).translate(origin).invert,
+    new SupersamplingCamera(Matrix4.lookAt(direction).translate(origin),
       outerAngle * 2.0f, /* Field of view measured edge-to-edge, not center-to-edge. */
       shadowMapRes,
       shadowMapRes,
@@ -57,20 +54,20 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     shadowMapRes * supersampleShadowMap)
 
   /**
-   * Calculates the light intensity at a point based on the light source.
+   * Calculates the vector of the ray of light that reaches a point.
+   * The length of the vector is the intensity of the light.
+   * The direction of the vector is the direction from the light to the point.
+   *
    * @param pt the point to illuminate
-   * @param normal the normal at the point to illuminate
-   * @param eye the projection representing the eye position and orientation
-   * @return the light intensity
+   * @return the light ray
    */
-  def apply(pt: Vector3, normal: Vector3, eye: Projection): LightComponents = {
-    val light = origin - pt
+  def apply(pt: Vector3): Vector3 = {
+    val light = pt - origin
     val dir = light.normalize
-    val spot = smoothstep(cosOuterAngle, cosHotspotAngle, -dir dot normalizedDirection)
+    val spot = smoothstep(cosOuterAngle, cosHotspotAngle, dir dot normalizedDirection)
     val shad = shadow(shadowMapProjection.projectToScreen(pt))
     val attenuation = attenuate(light.length)
-    val diffuse = dir dot normal * spot * shad / attenuation
-    LightComponents(color * diffuse, Color.BLACK, Color.BLACK)
+    dir * spot * shad / attenuation
   }
 
   /**
@@ -130,7 +127,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
       val y1 = floor(pt.y).toInt
       val y2 = ceil(pt.y).toInt
 
-      val z = pt.z + 0.01f // Add small increment to prevent z-fighting with previous rendering.
+      val z = pt.z + 0.1f // Add small increment to prevent z-fighting with previous rendering.
 
       val xTail = pt.x - x1
       val xHead = 1.0f - xTail

@@ -13,32 +13,27 @@ import edu.utexas.cs.sdao.reyes.render.Projection
  * should add up to 1.0.
  *
  * @param origin the location of the point light, in world coordinates
- * @param color the color of the point light;
- *              this controls the magnitude of the light per color component
  * @param attenuateConst the constant attenuation factor
  * @param attenuateLin the linear attenuation factor
  * @param attenuateQuad the quadratic attenuation factor
  */
 case class PointLight(origin: Vector3,
-                      color: Color = Color.WHITE,
                       attenuateConst: Float = 0.3f,
                       attenuateLin: Float = 0.6f,
                       attenuateQuad: Float = 0.1f)
   extends Light(attenuateConst, attenuateLin, attenuateQuad) {
 
   /**
-   * Calculates the light intensity at a point based on the light source.
+   * Calculates the vector of the ray of light that reaches a point.
+   * The length of the vector is the intensity of the light.
+   * The direction of the vector is the direction from the light to the point.
+   *
    * @param pt the point to illuminate
-   * @param normal the normal at the point to illuminate
-   * @param eye the projection representing the eye position and orientation
-   * @return the light intensity
+   * @return the light ray
    */
-  def apply(pt: Vector3, normal: Vector3, eye: Projection): LightComponents = {
-    val light = origin - pt
-    val dir = light.normalize
-    val attenuation = attenuate(light.length)
-    val diffuse = dir dot normal / attenuation
-    LightComponents(color * diffuse, Color.BLACK,Color.BLACK)
+  def apply(pt: Vector3): Vector3 = {
+    val light = pt - origin
+    light.normalize / attenuate(light.length)
   }
 
 }

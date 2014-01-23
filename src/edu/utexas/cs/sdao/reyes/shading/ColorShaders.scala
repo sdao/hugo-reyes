@@ -1,8 +1,9 @@
 package edu.utexas.cs.sdao.reyes.shading
 
 import edu.utexas.cs.sdao.reyes.core._
-import edu.utexas.cs.sdao.reyes.shading.LightHelpers._
 import edu.utexas.cs.sdao.reyes.render.Projection
+import edu.utexas.cs.sdao.reyes.core.MathHelpers._
+import scala.math._
 
 /**
  * Contains pre-defined color shaders.
@@ -29,28 +30,46 @@ object ColorShaders {
   }
 
   /**
-   * Creates a diffuse shader with the specified surface map
+   * Creates a diffuse (Lambertian) shader with the specified surface map
    * and the specified light.
    * @param m the surface map sampled for colors
-   * @param light the light used as an illumination source
-   * @return a diffuse shader
+   * @param lights the lights used as an illumination source
+   * @return a Lambert shader
    */
-  def diffuse(m: ColorMap, light: Light): ColorShader = {
+  def lambert(m: ColorMap, lights: Vector[Light]): ColorShader = {
     (vtx, normal, uv, proj) => {
-      m.sampleColor(uv) * light(vtx, normal, proj).diffuse
+      m.sampleColor(uv) * lights.map(l => -l(vtx) dot normal).sum
     }
   }
 
   /**
-   * Creates a diffuse shader with the specified surface map
-   * and the specified lights.
-   * @param m the surface map sampled for colors
-   * @param lights the lights used as illumination sources
-   * @return a diffuse shader
+   * Creates a shiny (Phong) shader with the specified surface map
+   * and the specified light.
+   *
+   * For best results, scale down the diffuse and specular maps
+   * so they add up to about 1.0; a ratio of 0.8 diffuse--0.2 specular
+   * is a good starting point.
+   *
+   * @param diffuse the surface map sampled for diffuse colors
+   * @param specular the surface map sampled for specular colors
+   * @param lights the lights used as an illumination source
+   * @param hardness the hardness of the specular reflection (the Phong cosine power)
+   * @return a Phong shader
    */
-  def diffuse(m: ColorMap, lights: Iterable[Light]): ColorShader = {
+  def phong(diffuse: ColorMap,
+            specular: ColorMap,
+            lights: Vector[Light],
+            hardness: Float = 20.0f): ColorShader = {
     (vtx, normal, uv, proj) => {
-      m.sampleColor(uv) * lights.total(vtx, normal, proj).diffuse
+      val totalLighting = lights.map(l => {
+        val ray = l(vtx)
+        val diffuse = -ray dot normal
+        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot -proj.eyeWorldSpace), hardness).toFloat * ray.length
+        (diffuse, specular)
+      }).foldLeft((0.0f, 0.0f))((accum, cur) => (accum._1 + cur._1, accum._2 + cur._2))
+
+      diffuse.sampleColor(uv) * totalLighting._1 +
+        specular.sampleColor(uv) * totalLighting._2
     }
   }
 

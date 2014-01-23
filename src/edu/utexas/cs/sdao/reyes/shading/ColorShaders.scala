@@ -74,6 +74,25 @@ object ColorShaders {
   }
 
   /**
+   * Creates a toon/cel shader, using Lambertian reflectance only,
+   * with the specified surface map and the specified light.
+   * @param m the surface map sampled for non-edge colors
+   * @param e the surface map sampled for edge colors
+   * @param levels the number of levels of shading
+   * @param edgeThickness a factor that is proportional to the edge line thickness
+   * @param lights the lights used as an illumination source
+   * @return a toon shader
+   */
+  def toonLambert(m: ColorMap, e: ColorMap, levels: Int = 3, edgeThickness: Float = 0.5f, lights: Vector[Light]): ColorShader = {
+    (vtx, normal, uv, proj) => {
+      if ((normal dot -proj.eyeWorldSpace) < edgeThickness)
+        e.sampleColor(uv)
+      else
+        m.sampleColor(uv) * ceil(lights.map(l => -l(vtx) dot normal).sum * levels).toFloat / levels
+    }
+  }
+
+  /**
    * Creates a shader with a checkerboard pattern that alternates
    * between two shaders.
    * @param c the first shader

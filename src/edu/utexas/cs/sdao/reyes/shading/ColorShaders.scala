@@ -52,14 +52,14 @@ object ColorShaders {
    *
    * @param diffuse the surface map sampled for diffuse colors
    * @param specular the surface map sampled for specular colors
-   * @param lights the lights used as an illumination source
    * @param hardness the hardness of the specular reflection (the Phong cosine power)
+   * @param lights the lights used as an illumination source
    * @return a Phong shader
    */
   def phong(diffuse: ColorMap,
             specular: ColorMap,
-            lights: Vector[Light],
-            hardness: Float = 20.0f): ColorShader = {
+            hardness: Float = 20.0f,
+            lights: Vector[Light]): ColorShader = {
     (vtx, normal, uv, proj) => {
       val totalLighting = lights.map(l => {
         val ray = l(vtx)
@@ -79,17 +79,74 @@ object ColorShaders {
    * @param m the surface map sampled for non-edge colors
    * @param e the surface map sampled for edge colors
    * @param levels the number of levels of shading
-   * @param edgeThickness a factor that is proportional to the edge line thickness
+   * @param contour a factor that is proportional to the edge contour thickness;
+   *                0.0 = no contour, 1.0 = thickest contour
+   * @param smoothness a factor that controls how smooth the smoothness between the surface and contours;
+   *                   0.0 = no smoothing, 1.0 = smoothed across entire surface
    * @param lights the lights used as an illumination source
    * @return a toon shader
    */
-  def toonLambert(m: ColorMap, e: ColorMap, levels: Int = 3, edgeThickness: Float = 0.5f, lights: Vector[Light]): ColorShader = {
+  def toonLambert(m: ColorMap, e: ColorMap, levels: Int = 3,
+                  contour: Float = 0.5f, smoothness: Float = 0.1f,
+                  lights: Vector[Light]): ColorShader = {
+    val edgeInner = clamp(0.0f, 1.0f, contour - smoothness / 2.0f)
+    val edgeOuter = clamp(0.0f, 1.0f, contour + smoothness / 2.0f)
+
     (vtx, normal, uv, proj) => {
-      if ((normal dot -proj.eyeWorldSpace) < edgeThickness)
-        e.sampleColor(uv)
-      else
-        m.sampleColor(uv) * ceil(lights.map(l => -l(vtx) dot normal).sum * levels).toFloat / levels
+      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot -proj.eyeWorldSpace)
+
+      val surface = m.sampleColor(uv) * (lights.map(l => -l(vtx) dot normal).sum * levels).ceil / levels
+      val edge = e.sampleColor(uv)
+
+      surface * surfaceComp + edge * (1.0f - surfaceComp)
     }
+  }
+
+  /**
+   * Creates a toon/cel shader, using Lambertian reflectance only,
+   * with the specified surface map and the specified light.
+   * @param diffuse the surface map sampled for non-edge colors
+   * @param specular the surface map sampled for specular colors
+   * @param e the surface map sampled for edge colors
+   * @param hardness the size of the specular reflection (the Phong cosine power)
+   * @param levels the number of levels of shading
+   * @param contour a factor that is proportional to the edge contour thickness;
+   *                0.0 = no contour, 1.0 = thickest contour
+   * @param smoothness a factor that controls how smooth the smoothness between the surface and contours or highlights;
+   *                   0.0 = no smoothing, 1.0 = smoothed across entire surface
+   * @param lights the lights used as an illumination source
+   * @return a toon shader
+   */
+  def toonPhong(diffuse: ColorMap, specular: ColorMap, e: ColorMap,
+                hardness: Float = 20.0f, levels: Int = 3,
+                contour: Float = 0.5f, smoothness: Float = 0.1f,
+                lights: Vector[Light]): ColorShader = {
+
+    val edgeInner = clampUnit(contour - smoothness / 2.0f)
+    val edgeOuter = clampUnit(contour + smoothness / 2.0f)
+
+    val specularInner = clampUnit(0.5f - smoothness / 2.0f)
+    val specularOuter = clampUnit(0.5f + smoothness / 2.0f)
+
+    (vtx, normal, uv, proj) => {
+      val totalLighting = lights.map(l => {
+        val ray = l(vtx)
+        val diffuse = -ray dot normal
+        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot -proj.eyeWorldSpace), hardness).toFloat * ray.length
+        (diffuse, specular)
+      }).foldLeft((0.0f, 0.0f))((accum, cur) => (accum._1 + cur._1, accum._2 + cur._2))
+
+      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot -proj.eyeWorldSpace)
+      val diffuseLevel = (totalLighting._1 * levels).ceil / levels
+      val specularLevel = smoothstep(specularInner, specularOuter, totalLighting._2)
+
+      val surface = diffuse.sampleColor(uv) * diffuseLevel +
+        specular.sampleColor(uv) * specularLevel
+      val edge = e.sampleColor(uv)
+
+      surface * surfaceComp + edge * (1.0f - surfaceComp)
+    }
+
   }
 
   /**

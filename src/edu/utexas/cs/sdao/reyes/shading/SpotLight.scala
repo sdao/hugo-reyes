@@ -1,8 +1,9 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Color, ZBuffer, Matrix4, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{ZBuffer, Matrix4, Vector3}
 import math._
-import edu.utexas.cs.sdao.reyes.render.{SupersamplingCamera, Projection, Camera}
+import edu.utexas.cs.sdao.reyes.core.MathHelpers._
+import edu.utexas.cs.sdao.reyes.render.SupersamplingCamera
 import edu.utexas.cs.sdao.reyes.geom.Surface
 
 /**
@@ -82,26 +83,6 @@ case class SpotLight(origin: Vector3, direction: Vector3,
     val cam = shadowMapProjection.toCamera // Camera memory should be released out of scope.
     cam.render(surfaces, displaceOnly = true)
     cam.copyZBuffer(shadowMap)
-  }
-
-  /**
-   * Returns 0 if the value is below the minimum and 1 if the value is above the maximum.
-   * Otherwise, it returns a smooth Hermite interpolation between the min and max.
-   *
-   * See [[http://http.developer.nvidia.com/CgTutorial/cg_tutorial_chapter05.html this Nvidia page]]
-   * for more info.
-   * @param low the minimum value
-   * @param high the maximum value
-   * @param x the value to smoothstep interpolate
-   * @return the smoothstep-interpolated value
-   */
-  private def smoothstep(low: Float, high: Float, x: Float): Float = {
-    if (x < low) 0.0f
-    else if (x >= high) 1.0f
-    else {
-      (-2.0f * pow((x - low)/(high-low), 3.0f) +
-        3.0f * pow((x - low)/(high-low), 2.0f)).toFloat
-    }
   }
 
   /**

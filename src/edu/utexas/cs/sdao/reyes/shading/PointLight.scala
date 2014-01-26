@@ -1,8 +1,6 @@
 package edu.utexas.cs.sdao.reyes.shading
 
-import edu.utexas.cs.sdao.reyes.core.{Color, Vector3}
-import scala.math._
-import edu.utexas.cs.sdao.reyes.render.Projection
+import edu.utexas.cs.sdao.reyes.core.Vector3
 
 /**
  * Represents light emanating from a point source,

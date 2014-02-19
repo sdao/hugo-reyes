@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{EmptyBoundingBox, Vector3, FilledBoundingBox}
+import edu.utexas.cs.sdao.reyes.core._
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 
 /**
@@ -36,12 +36,12 @@ case class Plane(width: Float,
   private val zeroPoint = origin - uAxis * width / 2.0f - vAxis * length / 2.0f
 
   /**
-   * The bounding box of the surface.
-   * The bounding box can be larger than the surface, but must not be smaller.
-   * @return a box containing the bounds of the surface
+   * The bounding sphere of the surface.
+   * The bounding sphere can be larger than the surface, but must not be smaller.
+   * @return a sphere containing the bounds of the surface
    */
-  def boundingBox: FilledBoundingBox =
-    EmptyBoundingBox.expand(getVertex(0.0f, 0.0f)).expand(getVertex(1.0f, 1.0f))
+  def boundingSphere: FilledBoundingSphere =
+    EmptyBoundingSphere.expand(getVertex(0.0f, 0.0f)).expand(getVertex(1.0f, 1.0f))
 
   /**
    * Gets the world coordinates at a certain UV coordinate.

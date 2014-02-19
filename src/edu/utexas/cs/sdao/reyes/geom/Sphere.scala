@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
+import edu.utexas.cs.sdao.reyes.core.{FilledBoundingSphere, FilledBoundingBox, Vector3, BoundingBox}
 import math._
 import edu.utexas.cs.sdao.reyes.shading.{DisplacementShaders, ColorShaders}
 
@@ -11,12 +11,12 @@ case class Sphere(radius: Float,
   extends Surface(displace, color) {
 
   /**
-   * The bounding box of the surface.
-   * The bounding box can be larger than the surface, but must not be smaller.
-   * @return a box containing the bounds of the surface
+   * The bounding sphere of the surface.
+   * The bounding sphere can be larger than the surface, but must not be smaller.
+   * @return a sphere containing the bounds of the surface
    */
-  def boundingBox: FilledBoundingBox =
-    FilledBoundingBox(origin - radius, origin + radius)
+  def boundingSphere: FilledBoundingSphere =
+    FilledBoundingSphere(origin, radius)
 
   /**
    * Gets the world coordinates at a certain UV coordinate.

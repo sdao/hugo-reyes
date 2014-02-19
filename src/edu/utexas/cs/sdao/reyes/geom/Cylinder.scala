@@ -1,9 +1,8 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{EmptyBoundingSphere, FilledBoundingSphere, FilledBoundingBox, Vector3}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 import scala.math._
-import edu.utexas.cs.sdao.reyes.core.FilledBoundingBox
 
 case class Cylinder(radius: Float,
                     height: Float,
@@ -13,13 +12,16 @@ case class Cylinder(radius: Float,
   extends Surface(displace, color) {
 
   /**
-   * The bounding box of the surface.
-   * The bounding box can be larger than the surface, but must not be smaller.
-   * @return a box containing the bounds of the surface
+   * The bounding sphere of the surface.
+   * The bounding sphere can be larger than the surface, but must not be smaller.
+   * @return a sphere containing the bounds of the surface
    */
-  def boundingBox: FilledBoundingBox =
-    FilledBoundingBox(origin - Vector3(radius, 0.0f, radius),
-      origin + Vector3(radius, height, radius))
+  def boundingSphere: FilledBoundingSphere =
+    EmptyBoundingSphere
+      .expand(origin + Vector3(-radius, 0.0f, -radius))
+      .expand(origin + Vector3(radius, 0.0f, radius))
+      .expand(origin + Vector3(-radius, height, -radius))
+      .expand(origin + Vector3(radius, height, radius))
 
   /**
    * Gets the world coordinates at a certain UV coordinate.

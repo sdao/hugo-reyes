@@ -53,12 +53,16 @@ case class Vector3(x: Float, y: Float, z: Float) {
    */
   def length = sqrt(x * x + y * y + z * z).toFloat
 
+  def lengthSquared = x * x + y * y + z * z
+
   /**
    * The distance from this vector to another vector.
    * @param r the other vector
    * @return the distance
    */
   def dist(r: Vector3) = (r - this).length
+
+  def distSquared(r: Vector3) = (r - this).lengthSquared
 
   /**
    * Normalizes this vector to produce a new vector with the same direction and a length of 1.

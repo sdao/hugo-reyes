@@ -115,7 +115,7 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
     val queue = mutable.Queue[SplitSurface]()
     for (x <- surfaces) {
       // Only enqueue objects that are in the camera's view frustum.
-      if (containsScreenBoundingBox(x.boundingBox.project(this)))
+      if (containsScreenBoundingBox(x.boundingSphere.project(this)))
         queue.enqueue(x.toSplitSurface)
     }
 

@@ -38,6 +38,12 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
       u.x * this(2, 0) + u.y * this(2, 1) + u.z * this(2, 2) + this(2, 3))
   }
 
+  def *(b: FilledBoundingSphere): FilledBoundingSphere = {
+    val newOrigin = this * b.origin
+    val newRadius = (this * (Vector3.I * b.radius)).length
+    FilledBoundingSphere(newOrigin, newRadius)
+  }
+
   /**
    * Generates the inverse matrix, i.e. a matrix that,
    * when left- or right-multiplied with this one, produces the
@@ -178,6 +184,22 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
       }
       new Matrix4(newData)
     }
+  }
+
+  /**
+   * Generates the transpose matrix, that is, the matrix whose rows are
+   * composed of this matrix's columns, and whose columns are composed
+   * of this matrix's rows.
+   * @return the transpose matrix
+   */
+  def transpose: Matrix4 = {
+    val newData = Array.ofDim[Float](16)
+    for (i <- 0 until 4) {
+      for (j <- 0 until 4) {
+        newData(idx(i, j)) = data(idx(j, i))
+      }
+    }
+    new Matrix4(newData)
   }
 
   /**

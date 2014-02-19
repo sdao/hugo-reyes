@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{FilledBoundingBox, Vector3, BoundingBox}
+import edu.utexas.cs.sdao.reyes.core.{Matrix4, FilledBoundingSphere, Vector3}
 import edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DisplacementShader
 import edu.utexas.cs.sdao.reyes.shading.ColorShaders.ColorShader
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
@@ -12,11 +12,11 @@ abstract class Surface(val displacementShader: DisplacementShader = Displacement
                        val colorShader: ColorShader = ColorShaders.DEFAULT) {
 
   /**
-   * The bounding box of the surface.
-   * The bounding box can be larger than the surface, but must not be smaller.
-   * @return a box containing the bounds of the surface
+   * The bounding sphere of the surface.
+   * The bounding sphere can be larger than the surface, but must not be smaller.
+   * @return a sphere containing the bounds of the surface
    */
-  def boundingBox: FilledBoundingBox
+  def boundingSphere: FilledBoundingSphere
 
   /**
    * Creates a new split surface with this surface, unsplit,
@@ -40,5 +40,9 @@ abstract class Surface(val displacementShader: DisplacementShader = Displacement
    * @return the world-space normal
    */
   def getNormal(u: Float, v: Float): Vector3
+
+  def transform(newTransform: Matrix4): TransformedSurface = {
+    new TransformedSurface(this, newTransform)
+  }
 
 }

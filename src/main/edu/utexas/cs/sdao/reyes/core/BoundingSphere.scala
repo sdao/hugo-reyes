@@ -14,6 +14,8 @@ abstract class BoundingSphere {
    */
   def expand(pt: Vector3): FilledBoundingSphere
 
+  def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere
+
   /**
    * Checks if a point is contained within the bounding sphere.
    * @param pt the point to check
@@ -35,6 +37,10 @@ case object EmptyBoundingSphere extends BoundingSphere {
    */
   override def expand(pt: Vector3): FilledBoundingSphere = {
     FilledBoundingSphere(pt, 0.0f)
+  }
+
+  override def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere = {
+    bSphere
   }
 
   /**
@@ -72,6 +78,19 @@ case class FilledBoundingSphere(origin: Vector3, radius: Float) extends Bounding
       val newOrigin = pt + halfPtToEdge
       val newRadius = halfPtToEdge.length
       new FilledBoundingSphere(newOrigin, newRadius)
+    }
+  }
+
+  override def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere = {
+    val thisToOther = bSphere.origin - origin
+    thisToOther.length match {
+      case 0 =>
+        if (bSphere.radius > radius) bSphere else this
+      case _ =>
+        val otherToEdge = thisToOther.normalize * bSphere.radius
+        val edge = bSphere.origin + otherToEdge
+        val oppEdge = bSphere.origin - otherToEdge
+        expand(edge).expand(oppEdge)
     }
   }
 

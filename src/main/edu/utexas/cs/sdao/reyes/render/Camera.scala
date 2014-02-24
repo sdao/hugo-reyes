@@ -10,6 +10,7 @@ import edu.utexas.cs.sdao.reyes.geom.{SplitSurface, Surface}
 import scala.collection.mutable
 import javax.swing.{SwingUtilities, JFrame}
 import edu.utexas.cs.sdao.reyes.ui.TexturePanel
+import edu.utexas.cs.sdao.reyes.graph.SurfaceNode
 
 /**
  * A pinhole camera projection.
@@ -139,6 +140,27 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
     }
 
     done.toVector.sortBy(-_.zDepth)
+  }
+
+  def split(sceneRoot: SurfaceNode): Vector[PipelineInfo] = {
+    val nodeQueue = mutable.Queue[SurfaceNode]()
+    nodeQueue.enqueue(sceneRoot)
+
+    val surfaces = mutable.MutableList[Surface]()
+
+    // Traverse scene hierarchy (BFS) and transform all nodes.
+    while (nodeQueue.nonEmpty) {
+      val node = nodeQueue.dequeue()
+      if (containsScreenBoundingBox(node.boundingSphere.project(this))) {
+        // Add current object to list.
+        surfaces += node.transformedSurface
+
+        // Traverse my children!
+        nodeQueue ++= node.transformedChildren
+      }
+    }
+
+    split(surfaces)
   }
 
   /**

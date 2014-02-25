@@ -5,7 +5,6 @@ import math._
 import edu.utexas.cs.sdao.reyes.shading.{DisplacementShaders, ColorShaders}
 
 case class Sphere(radius: Float,
-                  origin: Vector3,
                   displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
                   color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
@@ -16,7 +15,7 @@ case class Sphere(radius: Float,
    * @return a sphere containing the bounds of the surface
    */
   def boundingSphere: FilledBoundingSphere =
-    FilledBoundingSphere(origin, radius)
+    FilledBoundingSphere(Vector3.ZERO, radius)
 
   /**
    * Gets the world coordinates at a certain UV coordinate.
@@ -27,7 +26,7 @@ case class Sphere(radius: Float,
   def getVertex(u: Float, v: Float): Vector3 = {
     // Spheres have a special property:
     // The vertex at a point on the unit sphere is the same as the normal.
-    getNormal(u, v) * radius + origin
+    getNormal(u, v) * radius
   }
 
   /**

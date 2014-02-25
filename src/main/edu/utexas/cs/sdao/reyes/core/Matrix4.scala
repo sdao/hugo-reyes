@@ -40,7 +40,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
 
   def *(b: FilledBoundingSphere): FilledBoundingSphere = {
     val newOrigin = this * b.origin
-    val newRadius = (this * (Vector3.I * b.radius)).length
+    val newRadius = ((this * (b.origin + Vector3.I * b.radius)) - newOrigin).length
     FilledBoundingSphere(newOrigin, newRadius)
   }
 

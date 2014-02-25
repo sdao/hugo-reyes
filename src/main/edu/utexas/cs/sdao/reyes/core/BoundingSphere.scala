@@ -14,7 +14,12 @@ abstract class BoundingSphere {
    */
   def expand(pt: Vector3): FilledBoundingSphere
 
-  def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere
+  /**
+   * Expands the bounding sphere to also contain the contents of another sphere.
+   * @param bSphere the other sphere to add
+   * @return the expanded bounding sphere
+   */
+  def expand(bSphere: BoundingSphere): BoundingSphere
 
   /**
    * Checks if a point is contained within the bounding sphere.
@@ -23,6 +28,14 @@ abstract class BoundingSphere {
    */
   def contains(pt: Vector3): Boolean
 
+  /**
+   * Projects the bounding box from world-space to a 2-D bounding box in screen-space.
+   * The z-bounds on the resultant bounding box represent bounds
+   * on the z-depth.
+   * @param proj the projection to use
+   * @return the projected bounding box
+   */
+  def project(proj: Projection): BoundingBox
 }
 
 /**
@@ -39,7 +52,12 @@ case object EmptyBoundingSphere extends BoundingSphere {
     FilledBoundingSphere(pt, 0.0f)
   }
 
-  override def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere = {
+  /**
+   * Expands the bounding sphere to also contain the contents of another sphere.
+   * @param bSphere the other sphere to add
+   * @return the expanded bounding sphere
+   */
+  override def expand(bSphere: BoundingSphere): BoundingSphere = {
     bSphere
   }
 
@@ -51,6 +69,17 @@ case object EmptyBoundingSphere extends BoundingSphere {
    * @return whether the bounding sphere contains the specified point
    */
   override def contains(pt: Vector3): Boolean = false
+
+  /**
+   * Projects the bounding box from world-space to a 2-D bounding box in screen-space.
+   * The z-bounds on the resultant bounding box represent bounds
+   * on the z-depth.
+   * @param proj the projection to use
+   * @return the projected bounding box
+   */
+  override def project(proj: Projection): BoundingBox = {
+    EmptyBoundingBox
+  }
 
 }
 
@@ -81,15 +110,22 @@ case class FilledBoundingSphere(origin: Vector3, radius: Float) extends Bounding
     }
   }
 
-  override def expand(bSphere: FilledBoundingSphere): FilledBoundingSphere = {
-    val thisToOther = bSphere.origin - origin
-    thisToOther.length match {
-      case 0 =>
-        if (bSphere.radius > radius) bSphere else this
-      case _ =>
-        val otherToEdge = thisToOther.normalize * bSphere.radius
-        val edge = bSphere.origin + otherToEdge
-        val oppEdge = bSphere.origin - otherToEdge
+  /**
+   * Expands the bounding sphere to also contain the contents of another sphere.
+   * @param bSphere the other sphere to add
+   * @return the expanded bounding sphere
+   */
+  override def expand(bSphere: BoundingSphere): FilledBoundingSphere = {
+    bSphere match {
+      case EmptyBoundingSphere =>
+        this
+      case FilledBoundingSphere(o, r) if o == origin =>
+        if (r > radius) FilledBoundingSphere(o, r) else this
+      case FilledBoundingSphere(o, r) =>
+        val thisToOther = o - origin
+        val otherToEdge = thisToOther.normalize * r
+        val edge = o + otherToEdge
+        val oppEdge = o - otherToEdge
         expand(edge).expand(oppEdge)
     }
   }
@@ -111,7 +147,7 @@ case class FilledBoundingSphere(origin: Vector3, radius: Float) extends Bounding
    * @param proj the projection to use
    * @return the projected bounding box
    */
-  def project(proj: Projection): FilledBoundingBox = {
+  override def project(proj: Projection): BoundingBox = {
     val bBox = EmptyBoundingBox
       .expand(origin + Vector3(radius, radius, radius))
       .expand(origin - Vector3(radius, radius, radius))

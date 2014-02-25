@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{FilledBoundingSphere, Vector3, FilledBoundingBox, Matrix4}
+import edu.utexas.cs.sdao.reyes.core._
 
 /**
  * Represents a surface that has been transformed by a matrix.
@@ -8,7 +8,8 @@ import edu.utexas.cs.sdao.reyes.core.{FilledBoundingSphere, Vector3, FilledBound
  * @param surface the original surface before transformation
  * @param transform the transformation matrix
  */
-class TransformedSurface(surface: Surface, transform: Matrix4) extends Surface {
+class TransformedSurface(surface: Surface, transform: Matrix4)
+  extends Surface(surface.displacementShader, surface.colorShader) {
 
   private val inverseTranspose = transform.invert.transpose
 
@@ -35,8 +36,11 @@ class TransformedSurface(surface: Surface, transform: Matrix4) extends Surface {
    * The bounding box can be larger than the surface, but must not be smaller.
    * @return a box containing the bounds of the surface
    */
-  override def boundingSphere: FilledBoundingSphere =
-    transform * surface.boundingSphere
+  override def boundingSphere: BoundingSphere =
+    surface.boundingSphere match {
+      case EmptyBoundingSphere => EmptyBoundingSphere
+      case FilledBoundingSphere(o, r) => transform * FilledBoundingSphere(o, r)
+    }
 
   override def transform(newTransform: Matrix4): TransformedSurface = {
     new TransformedSurface(this, newTransform * transform)

@@ -5,6 +5,7 @@ import math._
 import edu.utexas.cs.sdao.reyes.core.MathHelpers._
 import edu.utexas.cs.sdao.reyes.render.SupersamplingCamera
 import edu.utexas.cs.sdao.reyes.geom.Surface
+import edu.utexas.cs.sdao.reyes.graph.SurfaceNode
 
 /**
  * Creates a spotlight with cone geometry, emanating from a point
@@ -77,11 +78,11 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * not to cast any shadows.
    * If this function is never called before final rendering,
    * no shadows will be generated for this light.
-   * @param surfaces the shadow casters
+   * @param root the root node of the hierarchy to render shadows for
    */
-  def renderShadowMap(surfaces: Iterable[Surface]) = {
+  def renderShadowMap(root: SurfaceNode) = {
     val cam = shadowMapProjection.toCamera // Camera memory should be released out of scope.
-    cam.render(surfaces, displaceOnly = true)
+    cam.render(root, displaceOnly = true)
     cam.copyZBuffer(shadowMap)
   }
 

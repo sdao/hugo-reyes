@@ -142,6 +142,15 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
     done.toVector.sortBy(-_.zDepth)
   }
 
+  /**
+   * Splits primitive surfaces into smaller subsurfaces until they clear
+   * the size threshold when projected.
+   * The result is that objects that are closer to the camera will be
+   * split into more partitions.
+   * @param sceneRoot the root node of the scene graph
+   * @return a list containing the split surfaces, prepared for the dicing step
+   *         and sorted by increasing z-depth
+   */
   def split(sceneRoot: SurfaceNode): Vector[PipelineInfo] = {
     val nodeQueue = mutable.Queue[SurfaceNode]()
     nodeQueue.enqueue(sceneRoot)
@@ -190,13 +199,13 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * Renders all of the surfaces in a list.
    * This function will split, dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param surfaces the surfaces to render
+   * @param sceneRoot the root node of the scene graph
    * @param displaceOnly whether to only run displacement shaders in the shading step
    *                     without running any color shaders
    */
-  def render(surfaces: Iterable[Surface],
+  def render(sceneRoot: SurfaceNode,
              displaceOnly: Boolean = false) = {
-    val pipelineObjs = split(surfaces)
+    val pipelineObjs = split(sceneRoot)
     pipelineObjs.par.foreach(pipelineInfo => { renderSingle(pipelineInfo, displaceOnly) })
     println("Render complete.")
   }
@@ -206,9 +215,9 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * image preview window as the rendering occurs.
    * This function will split, dice, shade, and rasterize the split surfaces
    * using the given camera.
-   * @param surfaces the surfaces to render
+   * @param sceneRoot the root node of the scene graph
    */
-  def renderInteractive(surfaces: Iterable[Surface]) {
+  def renderInteractive(sceneRoot: SurfaceNode) {
     val frame = new JFrame("Render Output")
     val panel = new TexturePanel(buffer)
 
@@ -217,7 +226,7 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
     frame.pack()
     frame.setVisible(true)
 
-    val pipelineObjs = split(surfaces)
+    val pipelineObjs = split(sceneRoot)
     pipelineObjs.par.foreach(pipelineInfo => {
       renderSingle(pipelineInfo)
       SwingUtilities.invokeAndWait(new Runnable {

@@ -1,6 +1,6 @@
 package edu.utexas.cs.sdao.reyes.geom
 
-import edu.utexas.cs.sdao.reyes.core.{Matrix4, FilledBoundingSphere, Vector3}
+import edu.utexas.cs.sdao.reyes.core.{BoundingSphere, Matrix4, Vector3}
 import edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DisplacementShader
 import edu.utexas.cs.sdao.reyes.shading.ColorShaders.ColorShader
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
@@ -16,7 +16,7 @@ abstract class Surface(val displacementShader: DisplacementShader = Displacement
    * The bounding sphere can be larger than the surface, but must not be smaller.
    * @return a sphere containing the bounds of the surface
    */
-  def boundingSphere: FilledBoundingSphere
+  def boundingSphere: BoundingSphere
 
   /**
    * Creates a new split surface with this surface, unsplit,

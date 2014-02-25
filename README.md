@@ -24,6 +24,7 @@ Features
 * Spot and point lights
 * Shadow maps
 * Parallel rendering
+* Scene graph with hierarchical transforms and object instantiation
 
 Compiling
 =========

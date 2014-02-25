@@ -39,8 +39,15 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
   }
 
   def *(b: FilledBoundingSphere): FilledBoundingSphere = {
+    // Origin changes when rotating.
     val newOrigin = this * b.origin
-    val newRadius = ((this * (b.origin + Vector3.I * b.radius)) - newOrigin).length
+
+    // Radius changes when scaling.
+    val newI = ((this * (b.origin + Vector3.I * b.radius)) - newOrigin).length
+    val newJ = ((this * (b.origin + Vector3.J * b.radius)) - newOrigin).length
+    val newK = ((this * (b.origin + Vector3.K * b.radius)) - newOrigin).length
+    val newRadius = max(max(newI, newJ), newK)
+
     FilledBoundingSphere(newOrigin, newRadius)
   }
 

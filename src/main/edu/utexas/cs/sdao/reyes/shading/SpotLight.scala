@@ -109,6 +109,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
       val y1 = floor(pt.y).toInt
       val y2 = ceil(pt.y).toInt
 
+      // TODO: This small increment can mess up shadows on surfaces perpendicular to light.
       val z = pt.z + 0.1f // Add small increment to prevent z-fighting with previous rendering.
 
       val xTail = pt.x - x1

@@ -12,17 +12,17 @@ import edu.utexas.cs.sdao.reyes.geom.NullSurface
  *                will be calculated by combining the bounding spheres
  *                of the current surface and its hierarchy
  */
-class NullSurfaceNode(transformMatrix: Matrix4 = Matrix4.IDENTITY,
-                      children: Vector[SurfaceNode] = Vector.empty,
-                      bSphere: Option[BoundingSphere] = None)
+class NullNode(transformMatrix: Matrix4 = Matrix4.IDENTITY,
+               children: Vector[SurfaceNode] = Vector.empty,
+               bSphere: Option[BoundingSphere] = None)
   extends SurfaceNode(NullSurface, transformMatrix, children, bSphere) {}
 
-object NullSurfaceNode {
+object NullNode {
 
   def apply(transformMatrix: Matrix4 = Matrix4.IDENTITY,
             children: Vector[SurfaceNode] = Vector.empty,
             bSphere: Option[BoundingSphere] = None) = {
-    new NullSurfaceNode(transformMatrix, children, bSphere)
+    new NullNode(transformMatrix, children, bSphere)
   }
 
 }

@@ -6,7 +6,6 @@ import scala.math._
 
 case class Cylinder(radius: Float,
                     height: Float,
-                    origin: Vector3,
                     displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
                     color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
@@ -18,10 +17,10 @@ case class Cylinder(radius: Float,
    */
   def boundingSphere: FilledBoundingSphere =
     EmptyBoundingSphere
-      .expand(origin + Vector3(-radius, 0.0f, -radius))
-      .expand(origin + Vector3(radius, 0.0f, radius))
-      .expand(origin + Vector3(-radius, height, -radius))
-      .expand(origin + Vector3(radius, height, radius))
+      .expand(Vector3(-radius, 0.0f, -radius))
+      .expand(Vector3(radius, 0.0f, radius))
+      .expand(Vector3(-radius, height, -radius))
+      .expand(Vector3(radius, height, radius))
 
   /**
    * Gets the world coordinates at a certain UV coordinate.
@@ -30,7 +29,7 @@ case class Cylinder(radius: Float,
    * @return the world coordinates
    */
   def getVertex(u: Float, v: Float): Vector3 = {
-    getNormal(u, v) * radius + origin + Vector3(0.0f, (1.0f - v) * height, 0.0f)
+    getNormal(u, v) * radius + Vector3(0.0f, (1.0f - v) * height, 0.0f)
   }
 
   /**

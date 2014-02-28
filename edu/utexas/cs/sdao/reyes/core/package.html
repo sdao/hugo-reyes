@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>core - edu.utexas.cs.sdao.reyes.core</title>
+          <meta name="description" content="core - edu.utexas.cs.sdao.reyes.core" />
+          <meta name="keywords" content="core edu.utexas.cs.sdao.reyes.core" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'edu.utexas.cs.sdao.reyes.core.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="edu">edu</a>.<a href="../../../../package.html" class="extype" name="edu.utexas">utexas</a>.<a href="../../../package.html" class="extype" name="edu.utexas.cs">cs</a>.<a href="../../package.html" class="extype" name="edu.utexas.cs.sdao">sdao</a>.<a href="../package.html" class="extype" name="edu.utexas.cs.sdao.reyes">reyes</a></p>
+        <h1>core</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">core</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.core.BoundingBox" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BoundingBoxextendsAnyRef"></a>
+      <a id="BoundingBox:BoundingBox"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BoundingBox.html"><span class="name">BoundingBox</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The root class for empty and filled bounding boxes.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.BoundingSphere" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="BoundingSphereextendsAnyRef"></a>
+      <a id="BoundingSphere:BoundingSphere"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BoundingSphere.html"><span class="name">BoundingSphere</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The root class for empty and filled bounding spheres.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Color" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ColorextendsColorMapwithProductwithSerializable"></a>
+      <a id="Color:Color"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Color.html"><span class="name">Color</span></a><span class="params">(<span name="r">r: <span class="extype" name="scala.Float">Float</span></span>, <span name="g">g: <span class="extype" name="scala.Float">Float</span></span>, <span name="b">b: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <a href="ColorMap.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.ColorMap">ColorMap</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Defines a floating-point color in the RGB color space,
+with 32-bit precision for each component.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.ColorMap" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="ColorMapextendsAnyRef"></a>
+      <a id="ColorMap:ColorMap"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="ColorMap.html"><span class="name">ColorMap</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Maps UV coordinates to colors.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.FilledBoundingBox" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FilledBoundingBoxextendsBoundingBoxwithProductwithSerializable"></a>
+      <a id="FilledBoundingBox:FilledBoundingBox"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FilledBoundingBox.html"><span class="name">FilledBoundingBox</span></a><span class="params">(<span name="lowBound">lowBound: <a href="Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a> = <span class="symbol">Vector3.ZERO</span></span>, <span name="upBound">upBound: <a href="Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a> = <span class="symbol">Vector3.ZERO</span></span>)</span><span class="result"> extends <a href="BoundingBox.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.BoundingBox">BoundingBox</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A bounding box containing at least one point.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.FilledBoundingSphere" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="FilledBoundingSphereextendsBoundingSpherewithProductwithSerializable"></a>
+      <a id="FilledBoundingSphere:FilledBoundingSphere"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="FilledBoundingSphere.html"><span class="name">FilledBoundingSphere</span></a><span class="params">(<span name="origin">origin: <a href="Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a></span>, <span name="radius">radius: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <a href="BoundingSphere.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.BoundingSphere">BoundingSphere</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A bounding sphere containing at least one point.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Matrix4" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Matrix4extendsAnyRef"></a>
+      <a id="Matrix4:Matrix4"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Matrix4.html"><span class="name">Matrix4</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Defines a 4x4 matrix.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Texture" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TextureextendsColorMap"></a>
+      <a id="Texture:Texture"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Texture.html"><span class="name">Texture</span></a><span class="result"> extends <a href="ColorMap.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.ColorMap">ColorMap</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A wrapper around Java's BufferedImage that provides texture-specific functionality,
+such as bilinear filtering and coordinate flipping.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Vector2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vector2extendsProductwithSerializable"></a>
+      <a id="Vector2:Vector2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Vector2.html"><span class="name">Vector2</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Float">Float</span></span>, <span name="y">y: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A vector in 2-space.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Vector3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vector3extendsProductwithSerializable"></a>
+      <a id="Vector3:Vector3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Vector3.html"><span class="name">Vector3</span></a><span class="params">(<span name="x">x: <span class="extype" name="scala.Float">Float</span></span>, <span name="y">y: <span class="extype" name="scala.Float">Float</span></span>, <span name="z">z: <span class="extype" name="scala.Float">Float</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A vector in 3-space.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.ZBuffer" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ZBufferextendsAnyRef"></a>
+      <a id="ZBuffer:ZBuffer"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="ZBuffer.html"><span class="name">ZBuffer</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A z-buffer that measures the depth of rasterized objects.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.core.Color" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Color"></a>
+      <a id="Color:Color"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Color$.html"><span class="name">Color</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EmptyBoundingBox"></a>
+      <a id="EmptyBoundingBox:EmptyBoundingBox"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyBoundingBox$.html"><span class="name">EmptyBoundingBox</span></a><span class="result"> extends <a href="BoundingBox.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.BoundingBox">BoundingBox</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The empty bounding box.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.EmptyBoundingSphere" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EmptyBoundingSphere"></a>
+      <a id="EmptyBoundingSphere:EmptyBoundingSphere"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="EmptyBoundingSphere$.html"><span class="name">EmptyBoundingSphere</span></a><span class="result"> extends <a href="BoundingSphere.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.BoundingSphere">BoundingSphere</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">The empty bounding sphere.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.MathHelpers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="MathHelpers"></a>
+      <a id="MathHelpers:MathHelpers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="MathHelpers$.html"><span class="name">MathHelpers</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Helpers for performing math.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Matrix4" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Matrix4"></a>
+      <a id="Matrix4:Matrix4"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Matrix4$.html"><span class="name">Matrix4</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Texture" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Texture"></a>
+      <a id="Texture:Texture"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Texture$.html"><span class="name">Texture</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Vector2" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vector2"></a>
+      <a id="Vector2:Vector2"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Vector2$.html"><span class="name">Vector2</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.core.Vector3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Vector3"></a>
+      <a id="Vector3:Vector3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Vector3$.html"><span class="name">Vector3</span></a><span class="result"> extends <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>

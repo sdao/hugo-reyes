@@ -64,7 +64,7 @@ object ColorShaders {
       val totalLighting = lights.map(l => {
         val ray = l(vtx)
         val diffuse = -ray dot normal
-        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot -proj.eyeWorldSpace), hardness).toFloat * ray.length
+        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot -proj.transformToCameraNorm(vtx)), hardness).toFloat * ray.length
         (diffuse, specular)
       }).foldLeft((0.0f, 0.0f))((accum, cur) => (accum._1 + cur._1, accum._2 + cur._2))
 
@@ -76,6 +76,11 @@ object ColorShaders {
   /**
    * Creates a toon/cel shader, using Lambertian reflectance only,
    * with the specified surface map and the specified light.
+   *
+   * Note: this shader guesses edges by comparing the surface normal
+   * with the vector from the camera; this causes surfaces nearly perpendicular
+   * to the camera to appear completely black (as edges).
+   *
    * @param m the surface map sampled for non-edge colors
    * @param e the surface map sampled for edge colors
    * @param levels the number of levels of shading
@@ -93,7 +98,7 @@ object ColorShaders {
     val edgeOuter = clamp(0.0f, 1.0f, contour + smoothness / 2.0f)
 
     (vtx, normal, uv, proj) => {
-      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot -proj.eyeWorldSpace)
+      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot -proj.transformToCameraNorm(vtx))
 
       val surface = m.sampleColor(uv) * (lights.map(l => -l(vtx) dot normal).sum * levels).ceil / levels
       val edge = e.sampleColor(uv)
@@ -105,6 +110,11 @@ object ColorShaders {
   /**
    * Creates a toon/cel shader, using Lambertian reflectance only,
    * with the specified surface map and the specified light.
+   *
+   * Note: this shader guesses edges by comparing the surface normal
+   * with the vector from the camera; this causes surfaces nearly perpendicular
+   * to the camera to appear completely black (as edges).
+   *
    * @param diffuse the surface map sampled for non-edge colors
    * @param specular the surface map sampled for specular colors
    * @param e the surface map sampled for edge colors
@@ -129,14 +139,16 @@ object ColorShaders {
     val specularOuter = clampUnit(0.5f + smoothness / 2.0f)
 
     (vtx, normal, uv, proj) => {
+      val pointToEye = -proj.transformToCameraNorm(vtx)
+
       val totalLighting = lights.map(l => {
         val ray = l(vtx)
         val diffuse = -ray dot normal
-        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot -proj.eyeWorldSpace), hardness).toFloat * ray.length
+        val specular = pow(clampUnit(ray.normalize.reflect(normal) dot pointToEye), hardness).toFloat * ray.length
         (diffuse, specular)
       }).foldLeft((0.0f, 0.0f))((accum, cur) => (accum._1 + cur._1, accum._2 + cur._2))
 
-      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot -proj.eyeWorldSpace)
+      val surfaceComp = smoothstep(edgeInner, edgeOuter, normal dot pointToEye)
       val diffuseLevel = (totalLighting._1 * levels).ceil / levels
       val specularLevel = smoothstep(specularInner, specularOuter, totalLighting._2)
 

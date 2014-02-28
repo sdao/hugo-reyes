@@ -18,7 +18,7 @@ class SurfaceNode(surface: Surface,
                   children: Vector[SurfaceNode] = Vector.empty,
                   bSphere: Option[BoundingSphere] = None) {
 
-  lazy val bounds =
+  private lazy val bounds =
     bSphere match {
       case Some(b) => b
       case None => transformedChildren.foldLeft(transformedSurface.boundingSphere)((accum, cur) => accum.expand(cur.boundingSphere))

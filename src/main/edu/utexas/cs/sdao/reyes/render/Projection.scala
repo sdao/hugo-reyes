@@ -43,11 +43,6 @@ abstract class Projection(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    */
   val focalLength = (width / 2.0f) / tan(fieldOfView / 2.0f).toFloat // Trigonometry, what's that?!
 
-  /**
-   * Gets the camera's "eye" vector in world-space
-   */
-  val eyeWorldSpace = transformToWorld(Vector3.NegativeK)
-
   private val halfWidth = width / 2.0f
   private val halfHeight = height / 2.0f
 
@@ -62,6 +57,15 @@ abstract class Projection(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * @return the transformed vector in camera space
    */
   def transformToCamera(u: Vector3) = worldToCamera * u
+
+  /**
+   * Like transformToCamera, but normalizes the resulting vector.
+   * This is useful for obtaining the vector from the focal point to the
+   * given point.
+   * @param u the world space point to transform
+   * @return the transformed and normalized vector in camera space
+   */
+  def transformToCameraNorm(u: Vector3) = transformToCamera(u).normalize
 
   /**
    * Transforms a point from camera space back into world space.

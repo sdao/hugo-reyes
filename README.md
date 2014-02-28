@@ -25,6 +25,7 @@ Features
 * Shadow maps
 * Parallel rendering
 * Scene graph with hierarchical transforms and object instantiation
+* Bézier patches (degree 3)
 
 Compiling
 =========

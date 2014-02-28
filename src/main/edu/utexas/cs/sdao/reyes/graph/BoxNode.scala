@@ -28,18 +28,18 @@ object BoxNode {
     val frontBackPlane = Plane(width, height, displace, color)
     val leftRightPlane = Plane(height, length, displace, color)
 
-    val topNode = SurfaceNode(topBottomPlane, Matrix4.translation(Vector3(0.0f, height, 0.0f)))
-    val bottomNode = SurfaceNode(topBottomPlane, Matrix4.rotationZ(Pi.toFloat))
+    val topNode = SurfaceNode(topBottomPlane, Matrix4.translate(Vector3(0.0f, height, 0.0f)))
+    val bottomNode = SurfaceNode(topBottomPlane, Matrix4.rotateZ(Pi.toFloat))
 
     val frontNode = SurfaceNode(frontBackPlane,
-      Matrix4.rotationX(Pi.toFloat / 2.0f).translate(Vector3(0.0f, height / 2.0f, length / 2.0f)))
+      Matrix4.rotateX(Pi.toFloat / 2.0f).translate(Vector3(0.0f, height / 2.0f, length / 2.0f)))
     val backNode = SurfaceNode(frontBackPlane,
-      Matrix4.rotationX(-Pi.toFloat / 2.0f).translate(Vector3(0.0f, height / 2.0f, -length / 2.0f)))
+      Matrix4.rotateX(-Pi.toFloat / 2.0f).translate(Vector3(0.0f, height / 2.0f, -length / 2.0f)))
 
     val leftNode = SurfaceNode(leftRightPlane,
-      Matrix4.rotationZ(Pi.toFloat / 2.0f).translate(Vector3(-width / 2.0f, height / 2.0f, 0.0f)))
+      Matrix4.rotateZ(Pi.toFloat / 2.0f).translate(Vector3(-width / 2.0f, height / 2.0f, 0.0f)))
     val rightNode = SurfaceNode(leftRightPlane,
-      Matrix4.rotationZ(-Pi.toFloat / 2.0f).translate(Vector3(width / 2.0f, height / 2.0f, 0.0f)))
+      Matrix4.rotateZ(-Pi.toFloat / 2.0f).translate(Vector3(width / 2.0f, height / 2.0f, 0.0f)))
 
     NullNode(transform,
       Vector(topNode, bottomNode, frontNode, backNode, leftNode, rightNode),

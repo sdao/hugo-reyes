@@ -216,7 +216,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param rads the Euler angles of the rotation; rotation is performed in XYZ order
    * @return the new transformation matrix
    */
-  def rotate(rads: Vector3) = new Matrix4(mult(Matrix4.rotation(rads).data, data))
+  def rotate(rads: Vector3) = new Matrix4(mult(Matrix4.rotate(rads).data, data))
 
   /**
    * Produces a new transformation matrix that does all of the previous transformations,
@@ -225,7 +225,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param rads the radians to rotate counter-clockwise along the +X-axis
    * @return the new transformation matrix
    */
-  def rotateX(rads: Float) = new Matrix4(mult(Matrix4.rotationX(rads).data, data))
+  def rotateX(rads: Float) = new Matrix4(mult(Matrix4.rotateX(rads).data, data))
 
   /**
    * Produces a new transformation matrix that does all of the previous transformations,
@@ -234,7 +234,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param rads the radians to rotate counter-clockwise along the +Y-axis
    * @return the new transformation matrix
    */
-  def rotateY(rads: Float) = new Matrix4(mult(Matrix4.rotationY(rads).data, data))
+  def rotateY(rads: Float) = new Matrix4(mult(Matrix4.rotateY(rads).data, data))
 
   /**
    * Produces a new transformation matrix that does all of the previous transformations,
@@ -243,7 +243,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param rads the radians to rotate counter-clockwise along the +Z-axis
    * @return the new transformation matrix
    */
-  def rotateZ(rads: Float) = new Matrix4(mult(Matrix4.rotationZ(rads).data, data))
+  def rotateZ(rads: Float) = new Matrix4(mult(Matrix4.rotateZ(rads).data, data))
 
   /**
    * Produces a new transformation matrix that does all of the previous transformations,
@@ -261,7 +261,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param t the direction to translate in
    * @return the new transformation matrix
    */
-  def translate(t: Vector3) = new Matrix4(mult(Matrix4.translation(t).data, data))
+  def translate(t: Vector3) = new Matrix4(mult(Matrix4.translate(t).data, data))
 
   /**
    * Produces a new transformation matrix that does all of the previous transformations,
@@ -270,7 +270,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * @param s the amount to scale along each axis
    * @return the new transformation matrix
    */
-  def scale(s: Vector3) = new Matrix4(mult(Matrix4.scaling(s).data, data))
+  def scale(s: Vector3) = new Matrix4(mult(Matrix4.scale(s).data, data))
 
   /**
    * Gets the value of the matrix at the specified position.
@@ -333,7 +333,7 @@ object Matrix4 {
    * @param rads the angle to rotate
    * @return the rotation matrix
    */
-  def rotationX(rads: Float) = {
+  def rotateX(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
 
@@ -351,7 +351,7 @@ object Matrix4 {
    * @param rads the angle to rotate
    * @return the rotation matrix
    */
-  def rotationY(rads: Float) = {
+  def rotateY(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
 
@@ -369,7 +369,7 @@ object Matrix4 {
    * @param rads the angle to rotate
    * @return the rotation matrix
    */
-  def rotationZ(rads: Float) = {
+  def rotateZ(rads: Float) = {
     val c = cos(rads).toFloat
     val s = sin(rads).toFloat
 
@@ -385,8 +385,8 @@ object Matrix4 {
    * @param rads a vector containing the rotation orders
    * @return the rotation matrix
    */
-  def rotation(rads: Vector3) = {
-    rotationZ(rads.z) * rotationY(rads.y) * rotationX(rads.x)
+  def rotate(rads: Vector3) = {
+    rotateZ(rads.z) * rotateY(rads.y) * rotateX(rads.x)
   }
 
   /**
@@ -429,7 +429,7 @@ object Matrix4 {
    * @param amount the amount to translate along each axis
    * @return the translation matrix
    */
-  def translation(amount: Vector3) = {
+  def translate(amount: Vector3) = {
     new Matrix4(Array(1.0f, 0.0f, 0.0f, amount.x,
                       0.0f, 1.0f, 0.0f, amount.y,
                       0.0f, 0.0f, 1.0f, amount.z,
@@ -441,7 +441,7 @@ object Matrix4 {
    * @param factor the factor to scale by along each axis
    * @return the scaling matrix
    */
-  def scaling(factor: Vector3) = {
+  def scale(factor: Vector3) = {
     new Matrix4(Array(factor.x, 0.0f,     0.0f,     0.0f,
                       0.0f,     factor.y, 0.0f,     0.0f,
                       0.0f,     0.0f,     factor.z, 0.0f,

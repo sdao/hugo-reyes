@@ -26,6 +26,7 @@ Features
 * Parallel rendering
 * Scene graph with hierarchical transforms and object instantiation
 * Bézier patches (degree 3)
+* Nearly every parameter now animatable (only linear interpolation is currently supported)
 
 Compiling
 =========

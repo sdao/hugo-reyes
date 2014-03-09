@@ -2,34 +2,29 @@ package edu.utexas.cs.sdao.reyes.graph
 
 import edu.utexas.cs.sdao.reyes.core.{BoundingSphere, EmptyBoundingSphere, FilledBoundingSphere, Matrix4}
 import edu.utexas.cs.sdao.reyes.geom.{TransformedSurface, Surface}
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
 /**
  * Represents a node for a surface, along with any potential child nodes in its hierarchy.
  * @param surface the surface at the node
  * @param transformMatrix the transformation matrix for the node and its hierarchy
  * @param children the child nodes of the current node
- * @param bSphere a sphere that bounds the current surface and its
- *                entire hierarchy; if no bound is given, the naive bound
- *                will be calculated by combining the bounding spheres
- *                of the current surface and its hierarchy
+ * @param boundingSphere a sphere that bounds the current surface and its
+ *                       entire hierarchy; only provide this value if the actual bounding
+ *                       sphere of the hierarchy is smaller than the union of all of its
+ *                       members' bounding spheres
  */
 class SurfaceNode(surface: Surface,
-                  transformMatrix: Matrix4 = Matrix4.IDENTITY,
+                  transformMatrix: Animatable[Matrix4] = Matrix4.IDENTITY,
                   children: Vector[SurfaceNode] = Vector.empty,
-                  bSphere: Option[BoundingSphere] = None) {
-
-  private lazy val bounds =
-    bSphere match {
-      case Some(b) => b
-      case None => transformedChildren.foldLeft(transformedSurface.boundingSphere)((accum, cur) => accum.expand(cur.boundingSphere))
-    }
+                  val boundingSphere: Option[Animatable[BoundingSphere]] = None) {
 
   /**
    * The node's surface, transformed using the current transformation matrix.
    * @return the transformed surface
    */
   def transformedSurface: Surface = {
-    surface.transform(transformMatrix)
+    surface.transform(transformMatrix())
   }
 
   /**
@@ -38,7 +33,8 @@ class SurfaceNode(surface: Surface,
    * @return the transformed child nodes
    */
   def transformedChildren: Vector[SurfaceNode] = {
-    children.map(_.transform(transformMatrix))
+    val t = transformMatrix()
+    children.map(_.transform(t))
   }
 
   /**
@@ -47,25 +43,17 @@ class SurfaceNode(surface: Surface,
    * @return the transformed node
    */
   def transform(newTransform: Matrix4) = {
-    SurfaceNode(surface, newTransform * transformMatrix, children, bSphere)
+    SurfaceNode(surface, newTransform * transformMatrix(), children, boundingSphere)
   }
-
-  /**
-   * The bounding sphere of the node's surface and all descendant surfaces
-   * in the hierarchy.
-   * The bounding sphere can be larger than the surfaces, but must not be smaller.
-   * @return a sphere containing the bounds of the surfaces
-   */
-  def boundingSphere: BoundingSphere = bounds
 
 }
 
 object SurfaceNode {
 
   def apply(surface: Surface,
-            transformMatrix: Matrix4 = Matrix4.IDENTITY,
+            transformMatrix: Animatable[Matrix4] = Matrix4.IDENTITY,
             children: Vector[SurfaceNode] = Vector.empty,
-            bSphere: Option[BoundingSphere] = None) = {
+            bSphere: Option[Animatable[BoundingSphere]] = None) = {
     new SurfaceNode(surface, transformMatrix, children, bSphere)
   }
 

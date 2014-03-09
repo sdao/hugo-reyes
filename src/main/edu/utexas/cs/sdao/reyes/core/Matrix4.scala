@@ -1,13 +1,15 @@
 package edu.utexas.cs.sdao.reyes.core
 
 import scala.math._
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
 /**
  * Defines a 4x4 matrix.
  * @param data a 16-item array containing the matrix in row-major
  *             order, i.e. indices 0-3 are the first row, 4-7 the second row, etc.
  */
-class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
+class Matrix4(val data: Array[Float] = Array.ofDim[Float](16))
+  extends Animatable[Matrix4] {
 
   if (data.length != 16)
     throw new IllegalArgumentException("Dim of matrix array != 16")
@@ -249,7 +251,7 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
    * Produces a new transformation matrix that does all of the previous transformations,
    * and then looks in the specified direction.
    * In other words, a look-at matrix is left-multiplied to the current matrix.
-   * @param dir the direction to look at, relative to the curren position
+   * @param dir the direction to look at, relative to the curren translation
    * @return the new transformation matrix
    */
   def lookAt(dir: Vector3) = new Matrix4(mult(Matrix4.lookAt(dir).data, data))
@@ -273,12 +275,18 @@ class Matrix4(val data: Array[Float] = Array.ofDim[Float](16)) {
   def scale(s: Vector3) = new Matrix4(mult(Matrix4.scale(s).data, data))
 
   /**
-   * Gets the value of the matrix at the specified position.
+   * Gets the value of the matrix at the specified translation.
    * @param row the row of the desired value
    * @param col the column of the desired value
    * @return the desired value
    */
   def apply(row: Int, col: Int) = data(idx(row, col))
+
+  /**
+   * Gets the value of the parameter at the given time.
+   * @return the value of the parameter
+   */
+  def apply() = this
 
   override def toString: String = {
     val m00 = apply(0, 0)

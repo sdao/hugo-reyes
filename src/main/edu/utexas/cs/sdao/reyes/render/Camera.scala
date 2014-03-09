@@ -160,7 +160,13 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
     // Traverse scene hierarchy (BFS) and transform all nodes.
     while (nodeQueue.nonEmpty) {
       val node = nodeQueue.dequeue()
-      if (containsScreenBoundingBox(node.boundingSphere.project(this))) {
+      if (node.boundingSphere match {
+        // We don't have a better bounding sphere, so keep traversing.
+        // (We'll cull later at the surface level if necessary.)
+        case None => true
+        // We have a better bounding sphere, so try to cull right now.
+        case Some(bSphere) => containsScreenBoundingBox(bSphere().project(this))
+      }) {
         // Add current object to list.
         surfaces += node.transformedSurface
 

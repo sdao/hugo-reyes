@@ -3,9 +3,10 @@ package edu.utexas.cs.sdao.reyes.geom
 import edu.utexas.cs.sdao.reyes.core.{EmptyBoundingSphere, FilledBoundingSphere, FilledBoundingBox, Vector3}
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 import scala.math._
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
-case class Cylinder(radius: Float,
-                    height: Float,
+case class Cylinder(radius: Animatable[Float],
+                    height: Animatable[Float],
                     displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
                     color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
@@ -15,12 +16,15 @@ case class Cylinder(radius: Float,
    * The bounding sphere can be larger than the surface, but must not be smaller.
    * @return a sphere containing the bounds of the surface
    */
-  def boundingSphere: FilledBoundingSphere =
+  def boundingSphere: FilledBoundingSphere = {
+    val r = radius()
+    val h = height()
     EmptyBoundingSphere
-      .expand(Vector3(-radius, 0.0f, -radius))
-      .expand(Vector3(radius, 0.0f, radius))
-      .expand(Vector3(-radius, height, -radius))
-      .expand(Vector3(radius, height, radius))
+      .expand(Vector3(-r, 0.0f, -r))
+      .expand(Vector3(r, 0.0f, r))
+      .expand(Vector3(-r, h, -r))
+      .expand(Vector3(r, h, r))
+  }
 
   /**
    * Gets the world coordinates at a certain UV coordinate.
@@ -29,7 +33,7 @@ case class Cylinder(radius: Float,
    * @return the world coordinates
    */
   def getVertex(u: Float, v: Float): Vector3 = {
-    getNormal(u, v) * radius + Vector3(0.0f, (1.0f - v) * height, 0.0f)
+    getNormal(u, v) * radius() + Vector3(0.0f, (1.0f - v) * height(), 0.0f)
   }
 
   /**

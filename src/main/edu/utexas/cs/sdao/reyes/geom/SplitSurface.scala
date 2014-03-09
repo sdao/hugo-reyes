@@ -7,10 +7,10 @@ import edu.utexas.cs.sdao.reyes.render.{MicropolygonGrid, ProjectedMicropolygonG
 /**
  * Represents a split surface that is a portion of a parameterized surface.
  * @param surface the original surface
- * @param startU the starting U position
- * @param endU the ending U position
- * @param startV the starting V position
- * @param endV the ending V position
+ * @param startU the starting U translation
+ * @param endU the ending U translation
+ * @param startV the starting V translation
+ * @param endV the ending V translation
  * @param splitCount the number of times the current piece has been split
  *                   from the original
  */

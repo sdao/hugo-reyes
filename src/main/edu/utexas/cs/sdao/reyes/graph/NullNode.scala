@@ -2,6 +2,7 @@ package edu.utexas.cs.sdao.reyes.graph
 
 import edu.utexas.cs.sdao.reyes.core.{Matrix4, BoundingSphere}
 import edu.utexas.cs.sdao.reyes.geom.NullSurface
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
 /**
  * Represents a node with no surface, along with any potential child nodes in its hierarchy.
@@ -12,16 +13,16 @@ import edu.utexas.cs.sdao.reyes.geom.NullSurface
  *                will be calculated by combining the bounding spheres
  *                of the current surface and its hierarchy
  */
-class NullNode(transformMatrix: Matrix4 = Matrix4.IDENTITY,
+class NullNode(transformMatrix: Animatable[Matrix4] = Matrix4.IDENTITY,
                children: Vector[SurfaceNode] = Vector.empty,
-               bSphere: Option[BoundingSphere] = None)
+               bSphere: Option[Animatable[BoundingSphere]] = None)
   extends SurfaceNode(NullSurface, transformMatrix, children, bSphere) {}
 
 object NullNode {
 
-  def apply(transformMatrix: Matrix4 = Matrix4.IDENTITY,
+  def apply(transformMatrix: Animatable[Matrix4] = Matrix4.IDENTITY,
             children: Vector[SurfaceNode] = Vector.empty,
-            bSphere: Option[BoundingSphere] = None) = {
+            bSphere: Option[Animatable[BoundingSphere]] = None) = {
     new NullNode(transformMatrix, children, bSphere)
   }
 

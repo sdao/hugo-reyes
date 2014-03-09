@@ -3,8 +3,9 @@ package edu.utexas.cs.sdao.reyes.geom
 import edu.utexas.cs.sdao.reyes.core.{FilledBoundingSphere, FilledBoundingBox, Vector3, BoundingBox}
 import math._
 import edu.utexas.cs.sdao.reyes.shading.{DisplacementShaders, ColorShaders}
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
-case class Sphere(radius: Float,
+case class Sphere(radius: Animatable[Float],
                   displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
                   color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
@@ -15,7 +16,7 @@ case class Sphere(radius: Float,
    * @return a sphere containing the bounds of the surface
    */
   def boundingSphere: FilledBoundingSphere =
-    FilledBoundingSphere(Vector3.ZERO, radius)
+    FilledBoundingSphere(Vector3.ZERO, radius())
 
   /**
    * Gets the world coordinates at a certain UV coordinate.
@@ -26,7 +27,7 @@ case class Sphere(radius: Float,
   def getVertex(u: Float, v: Float): Vector3 = {
     // Spheres have a special property:
     // The vertex at a point on the unit sphere is the same as the normal.
-    getNormal(u, v) * radius
+    getNormal(u, v) * radius()
   }
 
   /**

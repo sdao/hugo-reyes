@@ -2,20 +2,21 @@ package edu.utexas.cs.sdao.reyes.geom
 
 import edu.utexas.cs.sdao.reyes.core._
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
+import edu.utexas.cs.sdao.reyes.anim.Animatable
 
 /**
  * A finite plane centered at the origin.
  * Its normal points in the Vector3.J direction, the U-axis
- * points in the Vector3.I position, and the V-axis points
- * in the Vector3.K position.
+ * points in the Vector3.I translation, and the V-axis points
+ * in the Vector3.K translation.
  *
  * @param width the width of the plane along the U-axis
  * @param length the length of the plane along the V-axis
  * @param displace the displacement shader
  * @param color the color shader
  */
-case class Plane(width: Float,
-                 length: Float,
+case class Plane(width: Animatable[Float],
+                 length: Animatable[Float],
                  displace: DisplacementShaders.DisplacementShader = DisplacementShaders.DEFAULT,
                  color: ColorShaders.ColorShader = ColorShaders.DEFAULT)
   extends Surface(displace, color) {
@@ -26,7 +27,7 @@ case class Plane(width: Float,
 
   private val normal = Vector3.J
 
-  private val zeroPoint = Vector3.ZERO - uAxis * width / 2.0f - vAxis * length / 2.0f
+  private val zeroPoint = Vector3.ZERO - uAxis * width() / 2.0f - vAxis * length() / 2.0f
 
   /**
    * The bounding sphere of the surface.
@@ -43,7 +44,7 @@ case class Plane(width: Float,
    * @return the world coordinates
    */
   def getVertex(u: Float, v: Float): Vector3 = {
-    zeroPoint + uAxis * width * u + vAxis * length * v
+    zeroPoint + uAxis * width() * u + vAxis * length() * v
   }
 
   /**

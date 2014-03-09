@@ -1,15 +1,12 @@
 package edu.utexas.cs.sdao.reyes.render
 
 import math._
-import java.awt.Dimension
 import edu.utexas.cs.sdao.reyes.core._
 import edu.utexas.cs.sdao.reyes.core.MathHelpers._
 import edu.utexas.cs.sdao.reyes.core.FilledBoundingBox
 import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
 import edu.utexas.cs.sdao.reyes.geom.{SplitSurface, Surface}
 import scala.collection.mutable
-import javax.swing.{SwingUtilities, JFrame}
-import edu.utexas.cs.sdao.reyes.ui.TexturePanel
 import edu.utexas.cs.sdao.reyes.graph.SurfaceNode
 
 /**
@@ -21,17 +18,14 @@ import edu.utexas.cs.sdao.reyes.graph.SurfaceNode
  * @param fieldOfView the camera's horizontal field of view in radians,
  *                    measured as the angle from the left of the visible screen to the right;
  *                    acceptable values are 0 < fieldOfView < Pi
- * @param width the width of the output image plane
- * @param height the height of the output image plane
+ * @param width the width of the camera's image plane
+ * @param height the height of the camera's image plane
  */
 class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
              fieldOfView: Float = toRadians(60.0).toFloat,
              width: Int = 800,
              height: Int = 600)
   extends Projection(cameraTransform, fieldOfView, width, height) {
-
-  protected lazy val buffer = Texture(width, height, flipped = true)
-  protected lazy val zBuffer = new ZBuffer(width, height)
 
   private val lock : AnyRef = new Object()
 
@@ -41,9 +35,10 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * whereas the z-component should be in camera space.
    *
    * @param boundingBox the bounding box to check
+   * @param zBuffer the z-buffer to check
    * @return whether the bounding box is occluded
    */
-  protected def estimateZBufferOcclusion(boundingBox: BoundingBox): Boolean = {
+  protected def estimateZBufferOcclusion(boundingBox: BoundingBox, zBuffer: ZBuffer): Boolean = {
     boundingBox match {
       case EmptyBoundingBox => true
       case FilledBoundingBox(lowBound, upBound) =>
@@ -71,37 +66,14 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
   }
 
   /**
-   * Returns a copy of the image buffer.
-   * If this function is overridden by a subclass, then imageDimensions must
-   * also be overridden.
-   * @return a copy of the image buffer
-   */
-  def image: Texture = buffer
-
-  /**
    * The dimensions, in pixel width and height, of the image returned by
-   * the function image.
-   * @return
+   * the rendering functions. If the images returned by the rendering function
+   * are larger; they will be downscaled.
+   * By default, this is simply the camera's width and height. Subclasses can
+   * override this function to downsample rendered images.
+   * @return the preferred image dimensions
    */
-  def imageDimensions: (Int, Int) = (width, height)
-
-  /**
-   * Copies the camera's internal z-buffer into an external buffer.
-   * The other buffer must have a width and height identical to the
-   * camera's width and height.
-   *
-   * @param otherBuffer the buffer to copy into; its contents will be replaced
-   */
-  def copyZBuffer(otherBuffer: ZBuffer): Unit = {
-    zBuffer.copyInto(otherBuffer)
-  }
-
-  /**
-   * Writes the real-sized image to a PNG file.
-   * @param name the name of the image file, preferably ending in ".png"
-   * @return whether the write succeeded
-   */
-  def writeImageFile(name: String) = image.writeToFile(name)
+  def outputDimensions: (Int, Int) = (width, height)
 
   /**
    * Splits primitive surfaces into smaller subsurfaces until they clear
@@ -185,20 +157,24 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * @param pipelineObj the pipeline object, including the surface to dice
    * @param displaceOnly whether to only run displacement shaders in the shading step
    *                     without running any color shaders
+   * @param buffer the buffer to render into
+   * @param zBuffer the z-buffer to render with
    */
-  private def renderSingle(pipelineObj: PipelineInfo,
-                           displaceOnly: Boolean = false): Unit = {
-    if (!estimateZBufferOcclusion(pipelineObj.boundingBox)) {
-      println(s"Rendering $pipelineObj")
+  private def renderChunk(pipelineObj: PipelineInfo,
+                           displaceOnly: Boolean = false,
+                           buffer: Texture,
+                           zBuffer: ZBuffer): Unit = {
+    if (!estimateZBufferOcclusion(pipelineObj.boundingBox, zBuffer)) {
+      /* println(s"Rendering $pipelineObj") */
       val dicedGrid = pipelineObj.dice
       val shadedGrid = dicedGrid.shade(this, displaceOnly = displaceOnly)
       val projectedGrid = shadedGrid.project(this)
       lock.synchronized {
         projectedGrid.rasterize(buffer, zBuffer)
       }
-    } else {
+    } /* else {
       println(s"Skipping $pipelineObj")
-    }
+    } */
   }
 
   /**
@@ -208,39 +184,26 @@ class Camera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * @param sceneRoot the root node of the scene graph
    * @param displaceOnly whether to only run displacement shaders in the shading step
    *                     without running any color shaders
+   * @param reportFunc a function to run each time a portion of the image is done rendering
+   * @return the resultant rendered texture and z-buffer
    */
   def render(sceneRoot: SurfaceNode,
-             displaceOnly: Boolean = false) = {
-    val pipelineObjs = split(sceneRoot)
-    pipelineObjs.par.foreach(pipelineInfo => { renderSingle(pipelineInfo, displaceOnly) })
-    println("Render complete.")
-  }
-
-  /**
-   * Renders all of the split surfaces in a list, displaying an
-   * image preview window as the rendering occurs.
-   * This function will split, dice, shade, and rasterize the split surfaces
-   * using the given camera.
-   * @param sceneRoot the root node of the scene graph
-   */
-  def renderInteractive(sceneRoot: SurfaceNode) {
-    val frame = new JFrame("Render Output")
-    val panel = new TexturePanel(buffer)
-
-    frame.setPreferredSize(new Dimension(imageDimensions._1, imageDimensions._2))
-    frame.add(panel)
-    frame.pack()
-    frame.setVisible(true)
+             displaceOnly: Boolean = false,
+             reportFunc: Texture => Unit = _ => {}): (Texture, ZBuffer) = {
+    val buffer = Texture(width, height, flipped = true)
+    val zBuffer = new ZBuffer(width, height)
 
     val pipelineObjs = split(sceneRoot)
     pipelineObjs.par.foreach(pipelineInfo => {
-      renderSingle(pipelineInfo)
-      SwingUtilities.invokeAndWait(new Runnable {
-        def run(): Unit = panel.repaint()
-      })
+      renderChunk(pipelineInfo, displaceOnly, buffer, zBuffer)
+      reportFunc(buffer)
     })
 
-    println("Render complete.")
+    // Resize only if output dimensions are different.
+    if (outputDimensions == (width, height))
+      (buffer, zBuffer)
+    else
+      (buffer.resize(outputDimensions), zBuffer)
   }
 
 }

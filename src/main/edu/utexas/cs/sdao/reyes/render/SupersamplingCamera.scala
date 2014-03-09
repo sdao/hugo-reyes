@@ -4,6 +4,8 @@ import edu.utexas.cs.sdao.reyes.core._
 import scala.math._
 import edu.utexas.cs.sdao.reyes.geom.Surface
 import edu.utexas.cs.sdao.reyes.core.EmptyBoundingBox
+import edu.utexas.cs.sdao.reyes.anim.Sequence
+import edu.utexas.cs.sdao.reyes.graph.SurfaceNode
 
 /**
  * A camera that supersamples when rendering the final image.
@@ -41,16 +43,17 @@ class SupersamplingCamera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
    * (but not the z-depth) by the supersampling factor.
    *
    * @param boundingBox the bounding box to check
+   * @param zBuffer the z-buffer to check
    * @return whether the bounding box is occluded
    */
-  override def estimateZBufferOcclusion(boundingBox: BoundingBox): Boolean = {
+  override def estimateZBufferOcclusion(boundingBox: BoundingBox, zBuffer: ZBuffer): Boolean = {
     boundingBox match {
       case EmptyBoundingBox => true
       case FilledBoundingBox(lowBound, upBound) =>
         super.estimateZBufferOcclusion(FilledBoundingBox(
           Vector3(lowBound.x * supersample, lowBound.y * supersample, lowBound.z),
           Vector3(upBound.x * supersample, upBound.y * supersample, upBound.z)
-        ))
+        ), zBuffer)
     }
   }
 
@@ -71,19 +74,14 @@ class SupersamplingCamera(cameraTransform: Matrix4 = Matrix4.IDENTITY,
   override def split(surfaces: Iterable[Surface]): Vector[PipelineInfo] = normalCam.split(surfaces)
 
   /**
-   * Returns a copy of the image buffer.
-   * If this function is overridden by a subclass, then imageDimensions must
-   * also be overridden.
-   * @return a copy of the image buffer
-   */
-  override def image: Texture = buffer.scale(logicalWidth, logicalHeight)
-
-  /**
    * The dimensions, in pixel width and height, of the image returned by
-   * the function image.
-   * @return
+   * the rendering functions. If the images returned by the rendering function
+   * are larger; they will be downscaled.
+   * By default, this is simply the camera's width and height. Subclasses can
+   * override this function to downsample rendered images.
+   * @return the preferred image dimensions
    */
-  override def imageDimensions: (Int, Int) = (logicalWidth, logicalHeight)
+  override def outputDimensions: (Int, Int) = (logicalWidth, logicalHeight)
 
   /**
    * Creates a camera from this projection.

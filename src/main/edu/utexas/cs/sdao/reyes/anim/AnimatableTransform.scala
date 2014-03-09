@@ -1,7 +1,7 @@
 package edu.utexas.cs.sdao.reyes.anim
 
 import edu.utexas.cs.sdao.reyes.core.{Vector3, Matrix4}
-import edu.utexas.cs.sdao.reyes.anim.StaticParams._
+import edu.utexas.cs.sdao.reyes.anim.Static._
 
 /**
  * A parameter that outputs transformation matrices that change over time.

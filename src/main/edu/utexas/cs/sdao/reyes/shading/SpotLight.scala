@@ -31,7 +31,7 @@ case class SpotLight(origin: Vector3, direction: Vector3,
                      attenuateConst: Float = 0.3f,
                      attenuateLin: Float = 0.6f,
                      attenuateQuad: Float = 0.1f)
-  extends Light(attenuateConst, attenuateLin, attenuateQuad) {
+  extends ShadowMappedLight(attenuateConst, attenuateLin, attenuateQuad) {
 
   if (hotspotAngle <= 0.0 || hotspotAngle >= outerAngle)
     throw new IllegalArgumentException("hotspotAngle out of range")
@@ -82,12 +82,12 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    */
   def renderShadowMap(root: SurfaceNode) = {
     val cam = shadowMapProjection.toCamera // Camera memory should be released out of scope.
-    cam.render(root, displaceOnly = true)
-    cam.copyZBuffer(shadowMap)
+    val result = cam.render(root, displaceOnly = true)
+    result._2.copyInto(shadowMap)
   }
 
   /**
-   * Given a floating-point coordinate to the z-buffer's dimensions,
+   * Given a floating-point coordinate in the z-buffer's dimensions,
    * returns a bilinearly filtered shadow multiplier value by
    * interpolating nearby points.
    *
@@ -95,7 +95,9 @@ case class SpotLight(origin: Vector3, direction: Vector3,
    * completely shadowed, whereas a value of 1.0 indicates that the
    * point is to be completely visible.
    *
-   * @param pt the point at which to sample
+   * @param pt the point at which to sample; this point should
+   *           already be projected into the (potentially-supersampled)
+   *           screen space using the light's viewpoint projection
    * @return the shadow multiplier
    */
   private def shadow(pt: Vector3): Float = {

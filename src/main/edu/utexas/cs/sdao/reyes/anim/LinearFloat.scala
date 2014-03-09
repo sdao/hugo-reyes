@@ -7,7 +7,7 @@ case class LinearFloat(startVal: Float,
                   endVal: Float,
                   startTime: Float,
                   endTime: Float,
-                  clock: Clock)
+                  clock: Timeline)
   extends Animatable[Float] {
 
   val timeSpan = endTime - startTime

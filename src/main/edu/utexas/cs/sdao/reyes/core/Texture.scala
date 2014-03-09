@@ -82,7 +82,7 @@ class Texture(backingImage: BufferedImage,
    * @param newHeight the height of the new scaled image
    * @return the new scaled image
    */
-  def scale(newWidth: Int, newHeight: Int): Texture = {
+  def resize(newWidth: Int, newHeight: Int): Texture = {
     val newImage = new BufferedImage(newWidth, newHeight, backingImage.getType)
 
     val g2 = newImage.createGraphics()
@@ -93,6 +93,8 @@ class Texture(backingImage: BufferedImage,
 
     new Texture(newImage, flipped)
   }
+
+  def resize(newDims: (Int, Int)): Texture = resize(newDims._1, newDims._2)
 
   /**
    * Writes the image to a PNG file.

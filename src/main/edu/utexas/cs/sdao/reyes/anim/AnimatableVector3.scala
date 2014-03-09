@@ -1,7 +1,7 @@
 package edu.utexas.cs.sdao.reyes.anim
 
 import edu.utexas.cs.sdao.reyes.core.Vector3
-import edu.utexas.cs.sdao.reyes.anim.StaticParams._
+import edu.utexas.cs.sdao.reyes.anim.Static._
 
 /**
  * A Vector3 parameter whose individual components can change over time.

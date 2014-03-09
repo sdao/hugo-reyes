@@ -6,7 +6,7 @@ import edu.utexas.cs.sdao.reyes.shading.DisplacementShaders._
 import edu.utexas.cs.sdao.reyes.shading.{ColorShaders, DisplacementShaders}
 import edu.utexas.cs.sdao.reyes.shading.ColorShaders._
 import edu.utexas.cs.sdao.reyes.anim.{Expression, AnimatableVector3, AnimatableTransform, Animatable}
-import edu.utexas.cs.sdao.reyes.anim.StaticParams._
+import edu.utexas.cs.sdao.reyes.anim.Static._
 import edu.utexas.cs.sdao.reyes.core.FilledBoundingSphere
 import scala.Some
 import edu.utexas.cs.sdao.reyes.geom.Plane
@@ -41,7 +41,7 @@ object BoxNode {
     val frontBackPlane = Plane(width, height, displace, color)
     val leftRightPlane = Plane(height, length, displace, color)
 
-    val topNode = SurfaceNode(topBottomPlane, AnimatableTransform(translation=AnimatableVector3(y=height)))
+    val topNode = SurfaceNode(topBottomPlane, AnimatableTransform(translation = AnimatableVector3(y = height)))
     val bottomNode = SurfaceNode(topBottomPlane, Matrix4.rotateZ(Pi.toFloat))
 
     val frontNode = SurfaceNode(frontBackPlane, AnimatableTransform(

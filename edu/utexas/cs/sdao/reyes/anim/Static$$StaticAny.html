@@ -2,9 +2,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html>
         <head>
-          <title>StaticVector3 - edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3</title>
-          <meta name="description" content="StaticVector3 - edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3" />
-          <meta name="keywords" content="StaticVector3 edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3" />
+          <title>StaticAny - edu.utexas.cs.sdao.reyes.anim.Static.StaticAny</title>
+          <meta name="description" content="StaticAny - edu.utexas.cs.sdao.reyes.anim.Static.StaticAny" />
+          <meta name="keywords" content="StaticAny edu.utexas.cs.sdao.reyes.anim.Static.StaticAny" />
           <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
           
       <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
@@ -12,7 +12,7 @@
       <script type="text/javascript">
          if(top === self) {
             var url = '../../../../../../index.html';
-            var hash = 'edu.utexas.cs.sdao.reyes.anim.Static$$StaticVector3';
+            var hash = 'edu.utexas.cs.sdao.reyes.anim.Static$$StaticAny';
             var anchor = window.location.hash;
             var anchor_opt = '';
             if (anchor.length >= 1)
@@ -26,7 +26,7 @@
       <div id="definition">
         <img src="../../../../../../lib/class_big.png" />
         <p id="owner"><a href="../../../../../package.html" class="extype" name="edu">edu</a>.<a href="../../../../package.html" class="extype" name="edu.utexas">utexas</a>.<a href="../../../package.html" class="extype" name="edu.utexas.cs">cs</a>.<a href="../../package.html" class="extype" name="edu.utexas.cs.sdao">sdao</a>.<a href="../package.html" class="extype" name="edu.utexas.cs.sdao.reyes">reyes</a>.<a href="package.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim">anim</a>.<a href="Static$.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static">Static</a></p>
-        <h1>StaticVector3</h1>
+        <h1>StaticAny</h1>
       </div>
 
       <h4 id="signature" class="signature">
@@ -35,13 +35,16 @@
         <span class="kind">class</span>
       </span>
       <span class="symbol">
-        <span class="name">StaticVector3</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>]</span>
+        <span class="name">StaticAny</span><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny.T">T</span>]</span>
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A static Vector3 value parameter.</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>An animatable parameter that just returns a constant, static value.</p><p>Use this as a wrapper around values when you want to use non-animating
+parameters in any context that requires an <code>Animatable[T]</code>.
+</p></div><dl class="paramcmts block"><dt class="tparam">T</dt><dd class="cmt"><p>the type of the parameter
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
-          <div class="superTypes hiddenContent"><a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
+          <div class="superTypes hiddenContent"><a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny.T">T</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
         
 
@@ -59,7 +62,7 @@
                 <span class="filtertype">Inherited<br />
                 </span>
                 <ol id="linearization">
-                  <li class="in" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3"><span>StaticVector3</span></li><li class="in" name="edu.utexas.cs.sdao.reyes.anim.Animatable"><span>Animatable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                  <li class="in" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny"><span>StaticAny</span></li><li class="in" name="edu.utexas.cs.sdao.reyes.anim.Animatable"><span>Animatable</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
                 </ol>
               </div><div id="ancestors">
             <span class="filtertype"></span>
@@ -79,20 +82,19 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="&lt;init&gt;(x:edu.utexas.cs.sdao.reyes.core.Vector3):edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3"></a>
-      <a id="&lt;init&gt;:StaticVector3"></a>
+              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(x:T):edu.utexas.cs.sdao.reyes.anim.Static.StaticAny[T]"></a>
+      <a id="&lt;init&gt;:StaticAny[T]"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">StaticVector3</span><span class="params">(<span name="x">x: <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a></span>)</span>
+        <span class="name">StaticAny</span><span class="params">(<span name="x">x: <span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny.T">T</span></span>)</span>
       </span>
       </h4>
-      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>the static value
-</p></dd></dl></div>
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">x</dt><dd class="cmt"><p>the static value</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -167,20 +169,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
-      <a id="apply():edu.utexas.cs.sdao.reyes.core.Vector3"></a>
-      <a id="apply():Vector3"></a>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny#apply" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="apply():T"></a>
+      <a id="apply():T"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">def</span>
       </span>
       <span class="symbol">
-        <span class="name">apply</span><span class="params">()</span><span class="result">: <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a></span>
+        <span class="name">apply</span><span class="params">()</span><span class="result">: <span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny.T">T</span></span>
       </span>
       </h4>
-      <p class="shortcomment cmt">Gets the value of the parameter at the given time.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the value of the parameter at the given time.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the value of the parameter
-</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3">StaticVector3</a> → <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a></dd></dl></div>
+      <p class="shortcomment cmt">Gets the value of the parameter at the current time.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the value of the parameter at the current time.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the current value of the parameter
+</p></dd></dl><dl class="attributes block"> <dt>Definition Classes</dt><dd><a href="" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny">StaticAny</a> → <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a></dd></dl></div>
     </li><li name="scala.Any#asInstanceOf" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="asInstanceOf[T0]:T0"></a>
       <a id="asInstanceOf[T0]:T0"></a>
@@ -429,7 +431,7 @@
 
         <div id="inheritedMembers">
         <div class="parent" name="edu.utexas.cs.sdao.reyes.anim.Animatable">
-              <h3>Inherited from <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>]</h3>
+              <h3>Inherited from <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticAny.T">T</span>]</h3>
             </div><div class="parent" name="scala.AnyRef">
               <h3>Inherited from <span class="extype" name="scala.AnyRef">AnyRef</span></h3>
             </div><div class="parent" name="scala.Any">

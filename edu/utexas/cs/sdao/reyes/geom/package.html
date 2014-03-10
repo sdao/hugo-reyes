@@ -1,0 +1,239 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>geom - edu.utexas.cs.sdao.reyes.geom</title>
+          <meta name="description" content="geom - edu.utexas.cs.sdao.reyes.geom" />
+          <meta name="keywords" content="geom edu.utexas.cs.sdao.reyes.geom" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'edu.utexas.cs.sdao.reyes.geom.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="edu">edu</a>.<a href="../../../../package.html" class="extype" name="edu.utexas">utexas</a>.<a href="../../../package.html" class="extype" name="edu.utexas.cs">cs</a>.<a href="../../package.html" class="extype" name="edu.utexas.cs.sdao">sdao</a>.<a href="../package.html" class="extype" name="edu.utexas.cs.sdao.reyes">reyes</a></p>
+        <h1>geom</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">geom</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.geom.BezierPatch" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="BezierPatchextendsSurface"></a>
+      <a id="BezierPatch:BezierPatch"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="BezierPatch.html"><span class="name">BezierPatch</span></a><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Defines a Bézier patch of degree (3, 3), that is, one with
+four control points along each parameter.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.Cylinder" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="CylinderextendsSurfacewithProductwithSerializable"></a>
+      <a id="Cylinder:Cylinder"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Cylinder.html"><span class="name">Cylinder</span></a><span class="params">(<span name="radius">radius: <a href="../anim/Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="height">height: <a href="../anim/Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="displace">displace: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DEFAULT">...</span></span>, <span name="color">color: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Color.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Color">Color</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.ColorShaders.DEFAULT">...</span></span>)</span><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.Plane" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PlaneextendsSurfacewithProductwithSerializable"></a>
+      <a id="Plane:Plane"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Plane.html"><span class="name">Plane</span></a><span class="params">(<span name="width">width: <a href="../anim/Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="length">length: <a href="../anim/Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="displace">displace: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DEFAULT">...</span></span>, <span name="color">color: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Color.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Color">Color</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.ColorShaders.DEFAULT">...</span></span>)</span><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A finite plane centered at the origin.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.Sphere" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SphereextendsSurfacewithProductwithSerializable"></a>
+      <a id="Sphere:Sphere"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sphere.html"><span class="name">Sphere</span></a><span class="params">(<span name="radius">radius: <a href="../anim/Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>]</span>, <span name="displace">displace: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.DisplacementShaders.DEFAULT">...</span></span>, <span name="color">color: (<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>, <a href="../core/Vector2.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector2">Vector2</a>, <a href="../render/Projection.html" class="extype" name="edu.utexas.cs.sdao.reyes.render.Projection">Projection</a>) ⇒ <a href="../core/Color.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Color">Color</a> = <span class="defval" name="edu.utexas.cs.sdao.reyes.shading.ColorShaders.DEFAULT">...</span></span>)</span><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.SplitDirection" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SplitDirectionextendsAnyRef"></a>
+      <a id="SplitDirection:SplitDirection"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="SplitDirection.html"><span class="name">SplitDirection</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Specifies the axis to split on.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.SplitSurface" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SplitSurfaceextendsProductwithSerializable"></a>
+      <a id="SplitSurface:SplitSurface"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="SplitSurface.html"><span class="name">SplitSurface</span></a><span class="params">(<span name="surface">surface: <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a></span>, <span name="startU">startU: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.0</span></span>, <span name="endU">endU: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>, <span name="startV">startV: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.0</span></span>, <span name="endV">endV: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">1.0</span></span>, <span name="splitCount">splitCount: <span class="extype" name="scala.Int">Int</span> = <span class="symbol">0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a split surface that is a portion of a parameterized surface.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.Surface" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="SurfaceextendsAnyRef"></a>
+      <a id="Surface:Surface"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Surface.html"><span class="name">Surface</span></a><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A surface parameterized over UV coordinates.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.TransformedSurface" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TransformedSurfaceextendsSurface"></a>
+      <a id="TransformedSurface:TransformedSurface"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="TransformedSurface.html"><span class="name">TransformedSurface</span></a><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a surface that has been transformed by a matrix.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.geom.NullSurface" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NullSurface"></a>
+      <a id="NullSurface:NullSurface"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="NullSurface$.html"><span class="name">NullSurface</span></a><span class="result"> extends <a href="Surface.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.Surface">Surface</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A surface that will never be drawn and takes up zero space.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.SplitU" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SplitU"></a>
+      <a id="SplitU:SplitU"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SplitU$.html"><span class="name">SplitU</span></a><span class="result"> extends <a href="SplitDirection.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.SplitDirection">SplitDirection</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Split the U-axis, i.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.geom.SplitV" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SplitV"></a>
+      <a id="SplitV:SplitV"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="SplitV$.html"><span class="name">SplitV</span></a><span class="result"> extends <a href="SplitDirection.html" class="extype" name="edu.utexas.cs.sdao.reyes.geom.SplitDirection">SplitDirection</a> with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Split the V-axis, i.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>

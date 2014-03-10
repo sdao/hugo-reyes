@@ -1,0 +1,213 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>anim - edu.utexas.cs.sdao.reyes.anim</title>
+          <meta name="description" content="anim - edu.utexas.cs.sdao.reyes.anim" />
+          <meta name="keywords" content="anim edu.utexas.cs.sdao.reyes.anim" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../../../../../../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../../../../../../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../../../../../../index.html';
+            var hash = 'edu.utexas.cs.sdao.reyes.anim.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../../../../../../lib/package_big.png" />
+        <p id="owner"><a href="../../../../../package.html" class="extype" name="edu">edu</a>.<a href="../../../../package.html" class="extype" name="edu.utexas">utexas</a>.<a href="../../../package.html" class="extype" name="edu.utexas.cs">cs</a>.<a href="../../package.html" class="extype" name="edu.utexas.cs.sdao">sdao</a>.<a href="../package.html" class="extype" name="edu.utexas.cs.sdao.reyes">reyes</a></p>
+        <h1>anim</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">anim</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        
+        
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Animatable" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="Animatable[T]extendsAnyRef"></a>
+      <a id="Animatable[T]:Animatable[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">trait</span>
+      </span>
+      <span class="symbol">
+        <a href="Animatable.html"><span class="name">Animatable</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <span class="extype" name="scala.AnyRef">AnyRef</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A parameter that can change over time.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.AnimatableTransform" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnimatableTransformextendsAnimatable[edu.utexas.cs.sdao.reyes.core.Matrix4]withProductwithSerializable"></a>
+      <a id="AnimatableTransform:AnimatableTransform"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnimatableTransform.html"><span class="name">AnimatableTransform</span></a><span class="params">(<span name="translation">translation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="rotation">rotation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="scale">scale: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ONE)">...</span></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Matrix4.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Matrix4">Matrix4</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A parameter that outputs transformation matrices that change over time.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.AnimatableVector3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnimatableVector3extendsAnimatable[edu.utexas.cs.sdao.reyes.core.Vector3]withProductwithSerializable"></a>
+      <a id="AnimatableVector3:AnimatableVector3"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnimatableVector3.html"><span class="name">AnimatableVector3</span></a><span class="params">(<span name="x">x: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticFloat(0.0)">...</span></span>, <span name="y">y: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticFloat(0.0)">...</span></span>, <span name="z">z: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticFloat(0.0)">...</span></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A Vector3 parameter whose individual components can change over time.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Expression" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Expression[T]extendsAnimatable[T]withProductwithSerializable"></a>
+      <a id="Expression[T]:Expression[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Expression.html"><span class="name">Expression</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="params">(<span name="param">param: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Expression.T">T</span>]</span>, <span name="expr">expr: (<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Expression.T">T</span>) ⇒ <span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Expression.T">T</span></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Expression.T">T</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A parameter that takes the value from another animatable parameter
+and transforms it.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LinearFloatextendsAnimatable[Float]withProductwithSerializable"></a>
+      <a id="LinearFloat:LinearFloat"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="LinearFloat.html"><span class="name">LinearFloat</span></a><span class="params">(<span name="startVal">startVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="endVal">endVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="clock">clock: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A float parameter that changes linearly over time.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="SequenceextendsProductwithSerializable"></a>
+      <a id="Sequence:Sequence"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Sequence.html"><span class="name">Sequence</span></a><span class="params">(<span name="frames">frames: <span class="extype" name="scala.Vector">Vector</span>[<a href="../core/Texture.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Texture">Texture</a>]</span>, <span name="timeline">timeline: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">Represents a sequence of rendered textures in an animation.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Static" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Static[T]extendsAnimatable[T]"></a>
+      <a id="Static[T]:Static[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="Static.html"><span class="name">Static</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.T">T</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Timeline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="TimelineextendsProductwithSerializable"></a>
+      <a id="Timeline:Timeline"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Timeline.html"><span class="name">Timeline</span></a><span class="params">(<span name="fps">fps: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">24.0</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.0</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span> = <span class="symbol">0.0</span></span>)</span><span class="result"> extends <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+      </span>
+      </h4>
+      <p class="comment cmt">A timeline that keeps track of the elapsed time in an animation.</p>
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Static" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Static"></a>
+      <a id="Static:Static"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="Static$.html"><span class="name">Static</span></a>
+      </span>
+      </h4>
+      <p class="comment cmt">Utilities for using static values in animatable parameters.</p>
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../../../../../../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../../../../../../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../../../../../../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../../../../../../lib/template.js"></script>
+    </body>
+      </html>

@@ -39,8 +39,8 @@
       </span>
       </h4>
       
-          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a sequence of rendered textures in an animation.
-</p></div><div class="toggleContainer block">
+          <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>Represents a sequence of rendered textures in an animation.</p></div><dl class="paramcmts block"><dt class="param">frames</dt><dd class="cmt"><p>the vector of frames in the sequence</p></dd><dt class="param">timeline</dt><dd class="cmt"><p>the timeline associated with the sequence
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -80,7 +80,7 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+              <ol><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="&lt;init&gt;(frames:Vector[edu.utexas.cs.sdao.reyes.core.Texture],timeline:edu.utexas.cs.sdao.reyes.anim.Timeline):edu.utexas.cs.sdao.reyes.anim.Sequence"></a>
       <a id="&lt;init&gt;:Sequence"></a>
       <h4 class="signature">
@@ -92,7 +92,8 @@
         <span class="name">Sequence</span><span class="params">(<span name="frames">frames: <span class="extype" name="scala.Vector">Vector</span>[<a href="../core/Texture.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Texture">Texture</a>]</span>, <span name="timeline">timeline: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">frames</dt><dd class="cmt"><p>the vector of frames in the sequence</p></dd><dt class="param">timeline</dt><dd class="cmt"><p>the timeline associated with the sequence
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -261,7 +262,7 @@ Otherwise, throws an <code>IndexOutOfBoundException</code>.</p></div><dl class="
     </span>)</span>
               
         </dd></dl></div>
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#firstFrame" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#firstFrame" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="firstFrame:edu.utexas.cs.sdao.reyes.core.Texture"></a>
       <a id="firstFrame:Texture"></a>
       <h4 class="signature">
@@ -273,7 +274,9 @@ Otherwise, throws an <code>IndexOutOfBoundException</code>.</p></div><dl class="
         <span class="name">firstFrame</span><span class="result">: <a href="../core/Texture.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Texture">Texture</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Gets the first frame in the sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the first frame in the sequence.
+Useful for single-sequence frames.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>
+</p></dd></dl></div>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#frames" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="frames:Vector[edu.utexas.cs.sdao.reyes.core.Texture]"></a>
       <a id="frames:Vector[Texture]"></a>
@@ -286,7 +289,7 @@ Otherwise, throws an <code>IndexOutOfBoundException</code>.</p></div><dl class="
         <span class="name">frames</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[<a href="../core/Texture.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Texture">Texture</a>]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the vector of frames in the sequence</p>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#get" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="get(secs:Float):Option[edu.utexas.cs.sdao.reyes.core.Texture]"></a>
       <a id="get(Float):Option[Texture]"></a>
@@ -356,7 +359,7 @@ Otherwise, returns <code>None</code>.</p></div><dl class="paramcmts block"><dt c
       </span>
       </h4>
       
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#length" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#length" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="length:Int"></a>
       <a id="length:Int"></a>
       <h4 class="signature">
@@ -368,7 +371,10 @@ Otherwise, returns <code>None</code>.</p></div><dl class="paramcmts block"><dt c
         <span class="name">length</span><span class="result">: <span class="extype" name="scala.Int">Int</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Gets the number of rendered frames in the sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Gets the number of rendered frames in the sequence.
+This may differ from the length of the timeline, depending on
+how many frames are actually rendered.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>the number of frames in the sequence
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#ne" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="ne(x$1:AnyRef):Boolean"></a>
       <a id="ne(AnyRef):Boolean"></a>
@@ -433,8 +439,9 @@ Otherwise, returns <code>None</code>.</p></div><dl class="paramcmts block"><dt c
         <span class="name">timeline</span><span class="result">: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>
       </span>
       </h4>
-      
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#toIndexedSeq" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <p class="shortcomment cmt">the timeline associated with the sequence
+</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.Sequence#toIndexedSeq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="toIndexedSeq:Vector[(Int,edu.utexas.cs.sdao.reyes.core.Texture)]"></a>
       <a id="toIndexedSeq:Vector[(Int,Texture)]"></a>
       <h4 class="signature">
@@ -446,7 +453,9 @@ Otherwise, returns <code>None</code>.</p></div><dl class="paramcmts block"><dt c
         <span class="name">toIndexedSeq</span><span class="result">: <span class="extype" name="scala.Vector">Vector</span>[(<span class="extype" name="scala.Int">Int</span>, <a href="../core/Texture.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Texture">Texture</a>)]</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">Gets an indexed-sequence representation of the sequence.</p><div class="fullcomment"><div class="comment cmt"><p>Gets an indexed-sequence representation of the sequence.</p></div><dl class="paramcmts block"><dt>returns</dt><dd class="cmt"><p>an indexed sequence of tuples; the first item is the frame number
+        and the second item is the actual frame
+</p></dd></dl></div>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

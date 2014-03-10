@@ -43,11 +43,12 @@
 directly modifiable by an outsider. The state changes as an
 animated scene renders and the timeline advances.</p><p>Note: the start time does not correspond to frame 0. The time
 0.0 seconds corresponds to frame 0; all other values will be
-interpolated based on the frame rate.
+interpolated based on the frame rate.</p><p>Use the default <code>startTime</code> and <code>endTime</code> parameters for a single-frame
+(static) sequence.
 </p></div><dl class="paramcmts block"><dt class="param">fps</dt><dd class="cmt"><p>the frame rate of the animation</p></dd><dt class="param">startTime</dt><dd class="cmt"><p>the start time of the animation;
-                 the animation will begin at the closest frame on or after this time,
+                 the animation will begin at the closest frame to this time,
                  which can be queried through the <code>firstFrameTime</code> value</p></dd><dt class="param">endTime</dt><dd class="cmt"><p>the end time of the animation;
-               the animation will end at the closest frame on or before this time,
+               the animation will end at the closest frame to this time,
                which can be queries through the <code>lastFrameTime</code> value
 </p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
@@ -102,9 +103,9 @@ interpolated based on the frame rate.
       </span>
       </h4>
       <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">fps</dt><dd class="cmt"><p>the frame rate of the animation</p></dd><dt class="param">startTime</dt><dd class="cmt"><p>the start time of the animation;
-                 the animation will begin at the closest frame on or after this time,
+                 the animation will begin at the closest frame to this time,
                  which can be queried through the <code>firstFrameTime</code> value</p></dd><dt class="param">endTime</dt><dd class="cmt"><p>the end time of the animation;
-               the animation will end at the closest frame on or before this time,
+               the animation will end at the closest frame to this time,
                which can be queries through the <code>lastFrameTime</code> value
 </p></dd></dl></div>
     </li></ol>
@@ -226,7 +227,7 @@ interpolated based on the frame rate.
       </span>
       </h4>
       <p class="shortcomment cmt">the end time of the animation;
-               the animation will end at the closest frame on or before this time,
+               the animation will end at the closest frame to this time,
                which can be queries through the <code>lastFrameTime</code> value
 </p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
@@ -458,7 +459,7 @@ interpolated based on the frame rate.
       </span>
       </h4>
       <p class="shortcomment cmt">the start time of the animation;
-                 the animation will begin at the closest frame on or after this time,
+                 the animation will begin at the closest frame to this time,
                  which can be queried through the <code>firstFrameTime</code> value</p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>

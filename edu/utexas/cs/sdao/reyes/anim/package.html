@@ -80,10 +80,23 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <a href="AnimatableTransform.html"><span class="name">AnimatableTransform</span></a><span class="params">(<span name="translation">translation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="rotation">rotation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="scale">scale: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector(edu.utexas.cs.sdao.reyes.core.Vector3.ONE)">...</span></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Matrix4.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Matrix4">Matrix4</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <a href="AnimatableTransform.html"><span class="name">AnimatableTransform</span></a><span class="params">(<span name="translation">translation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="rotation">rotation: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3(edu.utexas.cs.sdao.reyes.core.Vector3.ZERO)">...</span></span>, <span name="scale">scale: <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Vector3.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Vector3">Vector3</a>] = <span class="defval" name="edu.utexas.cs.sdao.reyes.anim.Static.StaticVector3(edu.utexas.cs.sdao.reyes.core.Vector3.ONE)">...</span></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<a href="../core/Matrix4.html" class="extype" name="edu.utexas.cs.sdao.reyes.core.Matrix4">Matrix4</a>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       <p class="comment cmt">A parameter that outputs transformation matrices that change over time.</p>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.AnimatableVector" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="AnimatableVector[T]extendsAnimatable[Vector[T]]"></a>
+      <a id="AnimatableVector[T]:AnimatableVector[T]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="AnimatableVector.html"><span class="name">AnimatableVector</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Vector">Vector</span>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.AnimatableVector.T">T</span>]]</span>
+      </span>
+      </h4>
+      <p class="comment cmt">A Vector (collection) parameter whose individual elements can change over time.</p>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.AnimatableVector3" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="AnimatableVector3extendsAnimatable[edu.utexas.cs.sdao.reyes.core.Vector3]withProductwithSerializable"></a>
       <a id="AnimatableVector3:AnimatableVector3"></a>
@@ -149,7 +162,7 @@ and transforms it.</p>
         <a href="Static.html"><span class="name">Static</span></a><span class="tparams">[<span name="T">T</span>]</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="edu.utexas.cs.sdao.reyes.anim.Static.T">T</span>]</span>
       </span>
       </h4>
-      
+      <p class="comment cmt">An animatable parameter that just returns a constant, static value.</p>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.Timeline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="TimelineextendsProductwithSerializable"></a>
       <a id="Timeline:Timeline"></a>

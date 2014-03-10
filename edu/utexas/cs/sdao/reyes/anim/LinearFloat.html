@@ -35,12 +35,16 @@
         <span class="kind">case class</span>
       </span>
       <span class="symbol">
-        <span class="name">LinearFloat</span><span class="params">(<span name="startVal">startVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="endVal">endVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="clock">clock: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
+        <span class="name">LinearFloat</span><span class="params">(<span name="startVal">startVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="endVal">endVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="timeline">timeline: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span><span class="result"> extends <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>] with <span class="extype" name="scala.Product">Product</span> with <span class="extype" name="scala.Serializable">Serializable</span></span>
       </span>
       </h4>
       
           <div id="comment" class="fullcommenttop"><div class="comment cmt"><p>A float parameter that changes linearly over time.
-</p></div><div class="toggleContainer block">
+Note that the value is interpolated even before the starting time
+and after the ending time; the values are not clamped to
+the starting and ending values outside of the given range.
+</p></div><dl class="paramcmts block"><dt class="param">startVal</dt><dd class="cmt"><p>the value returned at the <code>startTime</code></p></dd><dt class="param">endVal</dt><dd class="cmt"><p>the value returned at the <code>endTime</code></p></dd><dt class="param">startTime</dt><dd class="cmt"><p>the starting time</p></dd><dt class="param">endTime</dt><dd class="cmt"><p>the ending time; must be after the ending time.</p></dd><dt class="param">timeline</dt><dd class="cmt"><p>the linked timeline on which this parameter changes
+</p></dd></dl><div class="toggleContainer block">
           <span class="toggle">Linear Supertypes</span>
           <div class="superTypes hiddenContent"><span class="extype" name="scala.Serializable">Serializable</span>, <span class="extype" name="java.io.Serializable">Serializable</span>, <span class="extype" name="scala.Product">Product</span>, <span class="extype" name="scala.Equals">Equals</span>, <a href="Animatable.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Animatable">Animatable</a>[<span class="extype" name="scala.Float">Float</span>], <span class="extype" name="scala.AnyRef">AnyRef</span>, <span class="extype" name="scala.Any">Any</span></div>
         </div></div>
@@ -80,8 +84,8 @@
         <div id="allMembers">
         <div id="constructors" class="members">
               <h3>Instance Constructors</h3>
-              <ol><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="&lt;init&gt;(startVal:Float,endVal:Float,startTime:Float,endTime:Float,clock:edu.utexas.cs.sdao.reyes.anim.Timeline):edu.utexas.cs.sdao.reyes.anim.LinearFloat"></a>
+              <ol><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#&lt;init&gt;" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
+      <a id="&lt;init&gt;(startVal:Float,endVal:Float,startTime:Float,endTime:Float,timeline:edu.utexas.cs.sdao.reyes.anim.Timeline):edu.utexas.cs.sdao.reyes.anim.LinearFloat"></a>
       <a id="&lt;init&gt;:LinearFloat"></a>
       <h4 class="signature">
       <span class="modifier_kind">
@@ -89,10 +93,11 @@
         <span class="kind">new</span>
       </span>
       <span class="symbol">
-        <span class="name">LinearFloat</span><span class="params">(<span name="startVal">startVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="endVal">endVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="clock">clock: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span>
+        <span class="name">LinearFloat</span><span class="params">(<span name="startVal">startVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="endVal">endVal: <span class="extype" name="scala.Float">Float</span></span>, <span name="startTime">startTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="endTime">endTime: <span class="extype" name="scala.Float">Float</span></span>, <span name="timeline">timeline: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>)</span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt"></p><div class="fullcomment"><div class="comment cmt"></div><dl class="paramcmts block"><dt class="param">startVal</dt><dd class="cmt"><p>the value returned at the <code>startTime</code></p></dd><dt class="param">endVal</dt><dd class="cmt"><p>the value returned at the <code>endTime</code></p></dd><dt class="param">startTime</dt><dd class="cmt"><p>the starting time</p></dd><dt class="param">endTime</dt><dd class="cmt"><p>the ending time; must be after the ending time.</p></dd><dt class="param">timeline</dt><dd class="cmt"><p>the linked timeline on which this parameter changes
+</p></dd></dl></div>
     </li></ol>
             </div>
 
@@ -194,19 +199,6 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>Any</dd></dl></div>
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#clock" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="clock:edu.utexas.cs.sdao.reyes.anim.Timeline"></a>
-      <a id="clock:Timeline"></a>
-      <h4 class="signature">
-      <span class="modifier_kind">
-        <span class="modifier"></span>
-        <span class="kind">val</span>
-      </span>
-      <span class="symbol">
-        <span class="name">clock</span><span class="result">: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>
-      </span>
-      </h4>
-      
     </li><li name="scala.AnyRef#clone" visbl="prt" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="clone():Object"></a>
       <a id="clone():AnyRef"></a>
@@ -238,7 +230,7 @@
         <span class="name">endTime</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the ending time; must be after the ending time.</p>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#endVal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="endVal:Float"></a>
       <a id="endVal:Float"></a>
@@ -251,7 +243,7 @@
         <span class="name">endVal</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the value returned at the <code>endTime</code></p>
     </li><li name="scala.AnyRef#eq" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="eq(x$1:AnyRef):Boolean"></a>
       <a id="eq(AnyRef):Boolean"></a>
@@ -361,7 +353,7 @@
         <span class="name">startTime</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the starting time</p>
     </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#startVal" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
       <a id="startVal:Float"></a>
       <a id="startVal:Float"></a>
@@ -374,7 +366,7 @@
         <span class="name">startVal</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the value returned at the <code>startTime</code></p>
     </li><li name="scala.AnyRef#synchronized" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="synchronized[T0](x$1:=&gt;T0):T0"></a>
       <a id="synchronized[T0](⇒T0):T0"></a>
@@ -388,19 +380,20 @@
       </span>
       </h4>
       <div class="fullcomment"><dl class="attributes block"> <dt>Definition Classes</dt><dd>AnyRef</dd></dl></div>
-    </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#timeSpan" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
-      <a id="timeSpan:Float"></a>
-      <a id="timeSpan:Float"></a>
+    </li><li name="edu.utexas.cs.sdao.reyes.anim.LinearFloat#timeline" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="timeline:edu.utexas.cs.sdao.reyes.anim.Timeline"></a>
+      <a id="timeline:Timeline"></a>
       <h4 class="signature">
       <span class="modifier_kind">
         <span class="modifier"></span>
         <span class="kind">val</span>
       </span>
       <span class="symbol">
-        <span class="name">timeSpan</span><span class="result">: <span class="extype" name="scala.Float">Float</span></span>
+        <span class="name">timeline</span><span class="result">: <a href="Timeline.html" class="extype" name="edu.utexas.cs.sdao.reyes.anim.Timeline">Timeline</a></span>
       </span>
       </h4>
-      
+      <p class="shortcomment cmt">the linked timeline on which this parameter changes
+</p>
     </li><li name="scala.AnyRef#wait" visbl="pub" data-isabs="false" fullComment="yes" group="Ungrouped">
       <a id="wait():Unit"></a>
       <a id="wait():Unit"></a>

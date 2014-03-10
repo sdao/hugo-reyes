@@ -5,6 +5,8 @@ import edu.utexas.cs.sdao.reyes.core.Texture
 
 /**
  * Represents a sequence of rendered textures in an animation.
+ * @param frames the vector of frames in the sequence
+ * @param timeline the timeline associated with the sequence
  */
 case class Sequence(frames: Vector[Texture],
                     timeline: Timeline) {
@@ -56,10 +58,26 @@ case class Sequence(frames: Vector[Texture],
    */
   def get(secs: Float): Option[Texture] = get(timeline.timeToFrame(secs))
 
+  /**
+   * Gets the first frame in the sequence.
+   * Useful for single-sequence frames.
+   * @return
+   */
   def firstFrame: Texture = frames(0)
 
+  /**
+   * Gets the number of rendered frames in the sequence.
+   * This may differ from the length of the timeline, depending on
+   * how many frames are actually rendered.
+   * @return the number of frames in the sequence
+   */
   def length: Int = frames.length
 
+  /**
+   * Gets an indexed-sequence representation of the sequence.
+   * @return an indexed sequence of tuples; the first item is the frame number
+   *         and the second item is the actual frame
+   */
   def toIndexedSeq: Vector[(Int, Texture)] = {
     (0 until frames.length).map(idx => (indexToFrame(idx), frames(idx))).toVector
   }

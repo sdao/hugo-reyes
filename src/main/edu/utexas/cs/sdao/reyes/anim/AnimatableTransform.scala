@@ -5,7 +5,7 @@ import edu.utexas.cs.sdao.reyes.anim.Static._
 
 /**
  * A parameter that outputs transformation matrices that change over time.
- * This parameter calculated a transformation matrix that scales first,
+ * This parameter calculates a transformation matrix that scales first,
  * then rotates, then translates. (In matrix terms, the resultant
  * transformation matrix is the translation matrix, multiplied by the rotation
  * matrix, then multiplied by the scaling matrix, in that order.)

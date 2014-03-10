@@ -21,12 +21,15 @@ import java.awt.Dimension
  * 0.0 seconds corresponds to frame 0; all other values will be
  * interpolated based on the frame rate.
  *
+ * Use the default `startTime` and `endTime` parameters for a single-frame
+ * (static) sequence.
+ *
  * @param fps the frame rate of the animation
  * @param startTime the start time of the animation;
- *                  the animation will begin at the closest frame on or after this time,
+ *                  the animation will begin at the closest frame to this time,
  *                  which can be queried through the `firstFrameTime` value
  * @param endTime the end time of the animation;
- *                the animation will end at the closest frame on or before this time,
+ *                the animation will end at the closest frame to this time,
  *                which can be queries through the `lastFrameTime` value
  */
 case class Timeline(fps: Float = 24.0f,

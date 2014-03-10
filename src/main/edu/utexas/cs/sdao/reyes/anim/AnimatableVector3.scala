@@ -7,8 +7,8 @@ import edu.utexas.cs.sdao.reyes.anim.Static._
  * A Vector3 parameter whose individual components can change over time.
  */
 case class AnimatableVector3(x: Animatable[Float] = 0.0f,
-                        y: Animatable[Float] = 0.0f,
-                        z: Animatable[Float] = 0.0f)
+                             y: Animatable[Float] = 0.0f,
+                             z: Animatable[Float] = 0.0f)
   extends Animatable[Vector3] {
 
   /**

@@ -5,7 +5,7 @@ import java.awt.{Color, Graphics2D, Graphics}
 import edu.utexas.cs.sdao.reyes.core.Texture
 
 /**
- * A JPanel subclass that displays a texture
+ * A JPanel subclass that displays a texture.
  * @param img the texture to display
  */
 class TexturePanel(private var img: Option[Texture] = None) extends JPanel {

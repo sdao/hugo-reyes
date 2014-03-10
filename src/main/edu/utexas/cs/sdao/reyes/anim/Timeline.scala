@@ -31,14 +31,14 @@ import java.awt.Dimension
  */
 case class Timeline(fps: Float = 24.0f,
                     startTime: Float = 0.0f,
-                    endTime: Float) {
+                    endTime: Float = 0.0f) {
 
   private val lock = new Object()
 
   /**
    * The frame number of the first frame in this animation sequence.
    */
-  val firstFrame = ceil(startTime * fps).toInt
+  val firstFrame = timeToFrame(startTime)
 
   /**
    * The actual starting time of the animation; this is the time of the first frame.
@@ -48,7 +48,7 @@ case class Timeline(fps: Float = 24.0f,
   /**
    * The frame number of the last frame in this animation sequence.
    */
-  val lastFrame = floor(endTime * fps).toInt
+  val lastFrame = timeToFrame(endTime)
 
   /**
    * The actual ending time of the animation; this is the time of the last frame.
